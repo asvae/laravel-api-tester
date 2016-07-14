@@ -22,7 +22,10 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
      */
     public function map(Router $router)
     {
-        $router->group(['namespace' => $this->getNamespace()], function () {
+        $router->group([
+            'namespace' => $this->getNamespace(),
+            'middleware' => ['web'],
+        ], function () {
             $this->requireRoutes();
         });
     }
