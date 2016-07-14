@@ -44,10 +44,7 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
      */
     protected function getNamespace()
     {
-        $className = explode('\\', static::class);
-        $className = array_slice($className, 0, -2);
-
-        return implode('\\', $className).'\Http\Controllers';
+        return 'Asvae\ApiTester\Http\Controllers';
     }
 
     /**
@@ -55,10 +52,6 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
      */
     protected function requireRoutes()
     {
-        $className = explode('\\', static::class);
-        $className = array_slice($className, 1, -2);
-        $className = implode('/', $className);
-
-        require app_path($className).'/Http/routes.php';
+        require __DIR__.'/../Http/routes.php';
     }
 }
