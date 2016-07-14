@@ -7,6 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiTesterController extends Controller
 {
+    public function __construct()
+    {
+        if (! config('app.debug')){
+            abort(404);
+        }
+    }
+
     public function index()
     {
         return view('api-tester::api-tester');
