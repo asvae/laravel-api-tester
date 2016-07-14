@@ -34,7 +34,6 @@
     .api-tester-main {
         padding: 15px;
         display: flex;
-        flex-wrap: wrap;
     }
 
     .api-tester-main .api-tester-poster {

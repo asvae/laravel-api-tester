@@ -13,3 +13,7 @@ After updating composer, add the ServiceProvider to the providers array in confi
 ```
 Asvae\ApiTester\ServiceProvider::class,
 ```
+
+## Usage
+
+Go to `http://your-site/api-tester` and see the interface.
