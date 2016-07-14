@@ -17,3 +17,5 @@ Asvae\ApiTester\ServiceProvider::class,
 ## Usage
 
 Go to `http://your-site/api-tester` and see the interface.
+
+![Interface](http://i.imgur.com/XGqXNaI.png) 
