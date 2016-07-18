@@ -1,6 +1,6 @@
 # Laravel Api Tester
 
-![Interface](http://i.imgur.com/XGqXNaI.png) 
+![Interface](http://i.imgur.com/q1AAPlh.gifv) 
 
 ## Live demo
 Try it out: [laravel-api-tester.asva.by](http://laravel-api-tester.asva.by/)
