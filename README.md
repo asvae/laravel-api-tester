@@ -18,6 +18,16 @@ Asvae\ApiTester\ServiceProvider::class,
 
 That's it. Go to `[your site]/api-tester` and start testing routes. 
 
+## Config
+
+By default, the package is bound to `APP_DEBUG``.env` value. But you can easily override it. First, publish config:
+
+```
+php artisan vendor:publish --provider="Asvae\ApiTester\ServiceProvider"
+```
+
+Then edit `config/api-tester.php` as you please.
+
 ## Features
 1) Display all the routes for application.
 2) Live search and sortable columns.

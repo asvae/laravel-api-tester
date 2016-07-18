@@ -9,8 +9,8 @@ class ApiTesterController extends Controller
 {
     public function __construct()
     {
-        if (! config('app.debug')){
-            abort(404);
+        if (! config('api-tester.enabled')){
+            abort(500, 'Api tester is disabled.');
         }
     }
 
@@ -71,7 +71,7 @@ class ApiTesterController extends Controller
         return $contentTypes[$ext];
     }
 
-    public function testRoutes($type)
+    public function testRoutes($type, \Illuminate\Http\Request $request)
     {
         switch ($type) {
             case 'abort':
@@ -80,6 +80,8 @@ class ApiTesterController extends Controller
                 return 'some static';
             case 'json':
                 return response()->json(['i', 'am', 'json']);
+            case 'request':
+                return $request->all();
         }
     }
 }

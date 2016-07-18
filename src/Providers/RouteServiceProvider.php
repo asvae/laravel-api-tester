@@ -23,7 +23,7 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
     public function map(Router $router)
     {
         $router->group([
-            'namespace' => $this->getNamespace(),
+            'namespace'  => $this->getNamespace(),
             'middleware' => ['web'],
         ], function () {
             $this->requireRoutes();
@@ -34,10 +34,8 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
     {
         parent::boot($router);
 
-        $this->loadViewsFrom(__DIR__.'/../resources/assets/views', 'api-tester');
-        $this->publishes([
-            __DIR__.'/../resources/assets/build' => public_path('vendor/api-tester'),
-        ], 'public');
+        $this->loadViewsFrom(__DIR__.'/../resources/assets/views',
+            'api-tester');
     }
 
     /**
