@@ -21,10 +21,6 @@ class ApiTesterController extends Controller
 
     public function routes()
     {
-        if (! config('app.debug')) {
-            abort(404);
-        }
-
         $routes = [];
         foreach (\Route::getRoutes() as $route) {
             /** @var \Illuminate\Routing\Route $route */

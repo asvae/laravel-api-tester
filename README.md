@@ -32,7 +32,7 @@ php artisan vendor:publish --provider="Asvae\ApiTester\ServiceProvider"
 And edit `config/api-tester.php` as you please.
 
 ## Features
-* Display all the routes for application.
+* Display routes for your application.
 * Live search and sortable columns.
 * CSRF token is handled for you.
 * Define request body in [JSON editor](https://github.com/josdejong/jsoneditor).

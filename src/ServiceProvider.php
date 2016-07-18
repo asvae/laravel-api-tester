@@ -6,8 +6,6 @@ use Asvae\ApiTester\Providers\RouteServiceProvider;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    protected $defer = true;
-
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
