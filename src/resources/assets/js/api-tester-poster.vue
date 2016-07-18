@@ -37,13 +37,13 @@
 
 
         <iframe style="width: 100%; height: 700px;"
-                v-if="responseError"
-                :srcdoc="response"
+                v-if="! response.isJson"
+                :srcdoc="response.data"
         ></iframe>
 
         <pre style="width: 100%"
-             v-if="! responseError"
-             v-text="response | json"
+             v-if="response.isJson"
+             v-text="response.data | json"
         ></pre>
 </template>
 
@@ -57,8 +57,10 @@
             return {
                 request: '',
                 jsonRequest: {},
-                response: '',
-                responseError: false,
+                response: {
+                    isJson: false,
+                    data: '',
+                },
                 showError: false,
             }
         },
@@ -105,14 +107,15 @@
                 }
 
                 ajaxHelper(this.requestData.method, this.requestData.path, request, this)
-                        .then(function (response) {
-                                    this.responseError = false
-                                    this.response = response
-                                },
-                                function (response) {
-                                    this.responseError = true
-                                    this.response = response.responseText
-                                })
+                        .always(function (data, status, xhr) {
+
+                            if (data.responseText !== undefined){
+                                data = data.responseText
+                            }
+
+                            this.response.isJson = typeof data !== 'string'
+                            this.response.data = data
+                        })
             }
         },
     }
