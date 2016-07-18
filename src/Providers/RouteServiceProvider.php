@@ -24,7 +24,7 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
     {
         $router->group([
             'namespace'  => $this->getNamespace(),
-            'middleware' => ['web'],
+            'middleware' => config('api-tester.middleware'),
         ], function () {
             $this->requireRoutes();
         });

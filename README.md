@@ -34,6 +34,7 @@ And edit `config/api-tester.php` as you please.
 ## Features
 * Display all the routes for application.
 * Live search and sortable columns.
+* CSRF token is handled for you.
 * Define request body in [JSON editor](https://github.com/josdejong/jsoneditor).
 * Preview response depending on type (html or json).
 * [Material design lite](https://getmdl.io/) as theme.
