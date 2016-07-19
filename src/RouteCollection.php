@@ -12,51 +12,70 @@ use Illuminate\Support\Collection;
 class RouteCollection extends Collection
 {
     /**
-     * Return collection of routes that matched pattern
+     * Include routes that match patterns.
      *
-     * @param array $matches
+     * @param array <array|string> $patterns
      *
      * @return static
      */
-    public function filterMatch(array $matches = [])
+    public function filterMatch(array $patterns = [])
     {
-        if (!empty($matches)) {
-            return $this->filter(function ($route, $key) use ($matches) {
-                $isMatched = true;
-
-                foreach ($matches as $match) {
-
-                    foreach ($route as $index => $value) {
-                        if (!array_key_exists($index, $match)) {
-                            continue;
-                        }
-
-                        if (!preg_match($match[$index], $value)) {
-                            $isMatched = false;
-                        }
-                    }
-                }
-
-                return $isMatched;
-            });
+        // String pattern is assumed to be path.
+        foreach ($patterns as $key => $pattern) {
+            if (is_string($pattern)) {
+                $patterns[$key] = ['path' => $pattern];
+            }
         }
 
-        return $this;
+        return $this->filter(function ($route) use ($patterns) {
+            // If any of patterns matches the route passes.
+            foreach ($patterns as $pattern) {
+                if ($this->isRouteMatchesPattern($route, $pattern)) {
+                    return true;
+                }
+            }
+
+            // If all patterns don't match - route is filtered out.
+            return false;
+        });
+    }
+
+
+    /**
+     * Exclude routes that match patterns.
+     *
+     * @param array <array|string> $patterns
+     *
+     * @return static
+     */
+    public function filterExcept(array $patterns = [])
+    {
+        if (empty($patterns)) {
+            return $this;
+        }
+
+        $toExclude = $this->filterMatch($patterns)->keys()->toArray();
+
+        return $this->except($toExclude);
     }
 
     /**
-     * Return collection of routes except matched pattern
-     *
-     * @param array $exceptions
-     *
-     * @return static
+     * @param array $route
+     * @param array $pattern
+     * @return bool
      */
-    public function filterExcept(array $exceptions = [])
+    private function isRouteMatchesPattern(array $route, array $pattern)
     {
-        if (!empty($exceptions)) {
-            return $this->except($this->filterMatch($exceptions)->keys()->toArray());
+        foreach ($route as $key => $value) {
+            if (! array_key_exists($key, $pattern)) {
+                continue;
+            }
+
+            $regex = '~'.$pattern[$key].'~';
+
+            return ! ! preg_match($regex, $value);
         }
 
-        return $this;
+        return true;
     }
 }

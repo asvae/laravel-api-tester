@@ -26,47 +26,65 @@ return [
 
     'middleware' => ['web'],
 
-
     /*
     |--------------------------------------------------------------------------
-    | Middleware
+    | Route repository
     |--------------------------------------------------------------------------
     |
-    | Define list of middleware(s), that should be used for api-tester.
-    | CRSF token will be handled automatically.
+    | Specify class for RouteRepository.
     |
     */
+
     'repository' => \Asvae\ApiTester\DefaultRouteRepository::class,
 
     /*
     |--------------------------------------------------------------------------
-    | Matching pattern
+    | Default route
     |--------------------------------------------------------------------------
-    | Represent only routes that matching given pattern.
     |
-    | Example:
-    |
-    | 'match' => [
-    |     [
-    |         'path' => '#api/v(1|2|3)/.*#',
-    |         'name' => '#.*#',
-              'method' => '#(GET|POST|PUT|PATCH|DELETE)#'
-    |      ]
-    ]  ]
+    | Define the route for api router.
+    | http://your-site.com/[route]
     |
     */
-    'match'      => [
 
-    ],
+    'route' => 'api-tester',
 
     /*
     |--------------------------------------------------------------------------
-    | Except pattern
+    | Filter routes
     |--------------------------------------------------------------------------
-    | Except routes that matching given pattern.
+    | All your routes will be filtered via given patterns. Both include and
+    | exclude are always applied. You can also use regex when needed.
+    |
+    | ## Examples
+    |
+    | ### Include all
+    | 'include' => [[]]
+    |
+    | ### Include some routes
+    | 'include' => [
+    |      'api/users',
+    |      'api/sales',
+    |      // ...
+    |  ]
+    |
+    | ### Include advanced
+    | 'include' => [
+    |      [
+    |         'path' => 'api/v(1|2|3)/.*',
+    |         'name' => '.*',
+    |         'method' => '(GET|POST|PUT|PATCH|DELETE)'
+    |      ],
+    |      // ...
+    |  ]
+    |
+    | ### Include all except 'users'
+    | 'include' => [[]],
+    | 'exclude' => ['api/users'],
     |
     */
-    'except'     => [
 
-    ],
+    'include' => [[]],
+
+    'exclude' => [],
 ];

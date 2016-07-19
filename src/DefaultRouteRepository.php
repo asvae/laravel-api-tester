@@ -5,11 +5,6 @@ namespace Asvae\ApiTester;
 use Asvae\ApiTester\Contracts\RouteRepositoryInterface;
 use Illuminate\Routing\Router;
 
-/**
- * Class DefaultRouteRepository
- *
- * @package \Asvae\ApiTester
- */
 class DefaultRouteRepository implements RouteRepositoryInterface
 {
 

@@ -23,8 +23,8 @@ class ApiTesterController extends Controller
     public function routes(RouteRepositoryInterface $repository)
     {
         $data = $repository->get(
-            config('api-tester.match'),
-            config('api-tester.except')
+            config('api-tester.include'),
+            config('api-tester.exclude')
         );
 
         return response()->json(compact('data'));
