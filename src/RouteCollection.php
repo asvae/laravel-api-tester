@@ -71,7 +71,7 @@ class RouteCollection extends Collection
                 continue;
             }
 
-            $regex = '~'.$pattern[$key].'~';
+            $regex = '#'.$pattern[$key].'#';
 
             return ! ! preg_match($regex, $value);
         }
