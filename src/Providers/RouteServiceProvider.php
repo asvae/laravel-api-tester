@@ -9,13 +9,6 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
     /**
      * Define the routes for the application.
      *
-     * Module
-     * ├ Http
-     * │ └ routes.php
-     * │
-     * └ Providers
-     *    └ [static]
-     *
      * @param  Router $router
      *
      * @return void

@@ -41,6 +41,8 @@ class DefaultRouteRepository implements RouteRepositoryInterface
      */
     public function get($match = [], $except = [])
     {
-        return $this->routes->filterMatch($match)->filterExcept($except)->values();
+        return $this->routes->filterMatch($match)
+            ->filterExcept($except)
+            ->values();
     }
 }
