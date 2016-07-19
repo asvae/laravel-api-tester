@@ -44,5 +44,8 @@ And edit `config/api-tester.php` as you please.
 ## Feedback
 Don't hesitate to raise an issue if something doesn't work or you have a feature request. You're welcome to.
 
+## Timeline
+* 19.07.2016 (1.0.10) - add filters (thanks @greabock).
+
 ## Tests
 *Coming...*
