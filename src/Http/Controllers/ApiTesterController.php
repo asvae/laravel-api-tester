@@ -2,15 +2,16 @@
 
 namespace Asvae\ApiTester\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use Asvae\ApiTester\Contracts\RouteRepositoryInterface;
 
 class ApiTesterController extends Controller
 {
     public function __construct()
     {
-        if (! config('api-tester.enabled')){
-            abort(500, 'Api tester is disabled.');
+        if (!config('api-tester.enabled')) {
+            abort(403, 'Api tester is disabled.');
         }
     }
 
@@ -19,55 +20,17 @@ class ApiTesterController extends Controller
         return view('api-tester::api-tester');
     }
 
-    public function routes()
+    public function routes(RouteRepositoryInterface $repository)
     {
-        $routes = [];
-        foreach (\Route::getRoutes() as $route) {
-            /** @var \Illuminate\Routing\Route $route */
-            $routes[] = [
-                'method' => $route->getMethods()[0],
-                'path'   => $route->getPath(),
-                'action' => $route->getActionName(),
-            ];
-        }
+        $data = $repository->get(
+            config('api-tester.match'),
+            config('api-tester.except')
+        );
 
-        return response()->json(['data' => $routes]);
+        return response()->json(compact('data'));
     }
 
-    public function assets($file = '')
-    {
-
-        $contents = file_get_contents(__DIR__.'/../../resources/assets/build/'.$file);
-
-        if (! preg_match('%^([a-z_\-\.]+?)$%', $file)) {
-            abort(404);
-        }
-
-        $response = new Response($contents, 200,
-            ['Content-Type' => $this->getFileContentType($file)]);
-
-        $response->setSharedMaxAge(31536000);
-        $response->setMaxAge(31536000);
-        $response->setExpires(new \DateTime('+1 year'));
-
-        return $response;
-    }
-
-    protected function getFileContentType($file)
-    {
-        $array = explode('.', $file);
-        $ext = end($array);
-
-        $contentTypes = [
-            'css' => 'text/css',
-            'js'  => 'text/javascript',
-            'svg' => 'image/svg+xml',
-        ];
-
-        return $contentTypes[$ext];
-    }
-
-    public function testRoutes($type, \Illuminate\Http\Request $request)
+    public function testRoutes($type, Request $request)
     {
         switch ($type) {
             case 'abort':

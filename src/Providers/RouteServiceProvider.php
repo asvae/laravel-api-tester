@@ -34,7 +34,7 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
     {
         parent::boot($router);
 
-        $this->loadViewsFrom(__DIR__.'/../resources/assets/views',
+        $this->loadViewsFrom(__DIR__.'/../../resources/assets/views',
             'api-tester');
     }
 
