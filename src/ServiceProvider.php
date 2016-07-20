@@ -20,7 +20,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/api-tester.php' => config_path('api-tester.php'),
+            __DIR__.'/../config/api-tester.php' => config_path('api-tester.php'),
         ], 'config');
     }
 }
