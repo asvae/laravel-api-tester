@@ -81,7 +81,7 @@
                 // Let's find out what to display first.
                 this.routes.forEach(function (route) {
                     if (
-                            route.method.toUpperCase().includes(search)
+                            route.method.join(',').toUpperCase().includes(search)
                             || route.path.toUpperCase().includes(search)
                             || route.action.toUpperCase().includes(search)
                     ) {
@@ -99,7 +99,9 @@
         },
         methods: {
             onClick (route){
-                this.$emit('selected', _.clone(route))
+                let selected =  _.clone(route)
+                selected.method = selected.method[0]
+                this.$emit('selected', selected)
                 this.selected = _.clone(route)
             },
             updateRoutes (){

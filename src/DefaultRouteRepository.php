@@ -21,7 +21,7 @@ class DefaultRouteRepository implements RouteRepositoryInterface
             /** @var \Illuminate\Routing\Route $route */
             $this->routes->push([
                 'name'   => $route->getName(),
-                'method' => $route->getMethods()[0],
+                'method' => $route->getMethods(),
                 'path'   => $route->getPath(),
                 'action' => $route->getActionName(),
             ]);

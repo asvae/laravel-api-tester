@@ -71,6 +71,10 @@ class RouteCollection extends Collection
                 continue;
             }
 
+            if(is_array($value)){
+                $value = implode(',', $value);
+            }
+
             $regex = '#'.$pattern[$key].'#';
 
             return ! ! preg_match($regex, $value);
