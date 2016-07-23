@@ -45,6 +45,7 @@
              v-if="response.isJson"
              v-text="response.data | json"
         ></pre>
+    </div>
 </template>
 
 <script>
