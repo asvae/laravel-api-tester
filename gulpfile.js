@@ -1,8 +1,7 @@
 var elixir = require('laravel-elixir')
-require('laravel-elixir-webpack-ex')
 
 elixir(function (mix) {
-    mix.webpack('api-tester.js', require('./webpack.config.js'), 'resources/assets/build/', 'resources/assets/js/' )
+    mix.browserify('api-tester.js', './resources/assets/build/api-tester.js')
 
     var filesToCopy = [
         './node_modules/material-design-lite/dist/material.min.js',
@@ -10,6 +9,7 @@ elixir(function (mix) {
         './node_modules/jsoneditor/dist/jsoneditor.min.js',
         './node_modules/jsoneditor/dist/jsoneditor.min.css',
     ]
+
     mix.copy(filesToCopy, 'resources/assets/build')
 });
 
