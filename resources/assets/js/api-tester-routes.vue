@@ -28,22 +28,24 @@
 
             <aside class="menu">
                 <ul class="menu-list">
-                    <li>
-                        <a v-for="route in routesToDisplay"
-                           @click="onClick(route)"
-                           transition="fade-out"
-                           class="route columns"
-                           :class="{selected: selected === route}"
-                        >
-                            <div class="column is-narrow">
-                                <button class="button is-small is-active"
-                                        v-text="route.method"
-                                ></button>
+                    <li v-for="route in routesToDisplay"
+                        transition="fade-in"
+                        class="route"
+                        :class="{selected: selected === route}"
+                    >
+                        <a @click="onClick(route)">
+                            <div class="columns">
+                                <div class="column is-narrow">
+                                    <button class="button is-small is-active"
+                                            @click.stop="onSend(route)"
+                                            v-text="route.method"
+                                    ></button>
+                                </div>
+                                <div class="column is-bold"
+                                     v-text="route.path"
+                                     style="white-space: nowrap"
+                                ></div>
                             </div>
-                            <div class="column is-bold"
-                                 v-text="route.path"
-                                 style="white-space: nowrap"
-                            ></div>
                         </a>
                     </li>
                 </ul>
@@ -113,16 +115,28 @@
             }
         },
         methods: {
-            onClick (route){
+            onSend(route){
                 // We pass the cloned one away and keep the original
                 // in order to figure out, which one was selected.
+                this.$emit('sent', _.clone(route))
+                this.selected = route
+            },
+            onClick (route){
+
                 this.$emit('selected', _.clone(route))
                 this.selected = route
             },
             updateRoutes (){
                 ajaxHelper('POST', '_api-tester/routes', null, this)
                         .then(function (response) {
-                            this.routes = response.data
+                            let routes = response.data
+                            let order = 0
+
+                            this.routes = _.map(routes, function (route){
+                                route.type = 'route'
+                                route.order = order++
+                                return route
+                            })
                         })
             },
             setSorting(param){
@@ -135,7 +149,6 @@
                     this.asc = true
                     this.sort = param
                 }
-
             }
         }
     }

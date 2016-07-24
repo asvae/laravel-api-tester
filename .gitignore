@@ -3,4 +3,4 @@
 /vendor/
 /composer.lock
 *.map
-/resources/assets/build/tmp/
+/resources/assets/tmp/

@@ -21,10 +21,14 @@
                 </div>
             </div>
 
-                <div class="json-editor" style="height: 400px"></div>
+            <!-- For some reason the form ignores top down submit -->
+            <input type="submit" class="is-hidden"/>
+
+            <div class="json-editor" style="height: 400px"></div>
 
             <div class="is-pulled-right">
-                <button class="button is-primary" type="submit">Send</button>
+                <button class="button is-primary" type="submit"
+                >Send</button>
                 <button class="button" type="button"
                         @click="$options.editor.set('')"
                 >Clear</button>
