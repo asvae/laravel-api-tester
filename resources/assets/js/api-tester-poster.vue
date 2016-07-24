@@ -1,50 +1,58 @@
 <template>
     <div class="api-tester-poster">
 
-        <form @submit.prevent="submit">
-            <mdl-textfield :floating-label="!! requestData.method"
-                           label="Method"
-                           :value.sync="requestData.method"
-            ></mdl-textfield>
-            <mdl-textfield :floating-label="!! requestData.path"
-                           label="Path"
-                           :value.sync="requestData.path"
-            ></mdl-textfield>
+        <form @submit.prevent="submit" class="box">
+            <div class="columns">
+                <div class="column is-half">
+                    <input class="input"
+                           type="text"
+                           placeholder="Method"
+                           title="Method"
+                           v-model="requestData.method"
+                    >
+                </div>
+                <div class="column is-half">
+                    <input class="input"
+                           type="text"
+                           placeholder="Path"
+                           title="Path"
+                           v-model="requestData.path"
+                    >
+                </div>
+            </div>
 
-            <!-- EDITOR -->
-            <div class="mdl-shadow--2dp">
                 <div class="json-editor" style="height: 400px"></div>
-            </div>
 
-
-            <div class="buttons">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                        type="submit"
-                >Send
-                </button>
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                        type="button"
+            <div class="is-pulled-right">
+                <button class="button is-primary" type="submit">Send</button>
+                <button class="button" type="button"
                         @click="$options.editor.set('')"
-                >Clear
-                </button>
+                >Clear</button>
             </div>
-            <div class="error"
-                 v-if="showError"
-                 transition="fade-out"
-            >Your JSON is incorrect!
+
+            <div class="tile is-parent">
+                <div class="tile is-12">
+                    <div class="error"
+                         v-if="showError"
+                         transition="fade-out"
+                    >Your JSON is incorrect!
+                    </div>
+                </div>
             </div>
         </form>
 
+        <div class="box">
+            <iframe style="width: 100%; height: 700px;"
+                    v-if="! response.isJson"
+                    :srcdoc="response.data"
+            ></iframe>
 
-        <iframe style="width: 100%; height: 700px;"
-                v-if="! response.isJson"
-                :srcdoc="response.data"
-        ></iframe>
-
-        <pre style="width: 100%"
-             v-if="response.isJson"
-             v-text="response.data | json"
-        ></pre>
+            <pre style="white-space: pre-wrap"
+                    v-if="response.isJson"
+                 v-text="response.data | json"
+            ></pre>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -109,7 +117,7 @@
                 ajaxHelper(this.requestData.method, this.requestData.path, request, this)
                         .always(function (data, status, xhr) {
 
-                            if (data.responseText !== undefined){
+                            if (data.responseText !== undefined) {
                                 data = data.responseText
                             }
 

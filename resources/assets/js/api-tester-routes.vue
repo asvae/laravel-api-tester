@@ -1,47 +1,63 @@
 <template>
     <div class="api-tester-routes">
-        <form action="#" @submit.prevent="">
-            <mdl-textfield :floating-label="!! search"
-                           label="Search"
-                           :value.sync="search"
-            ></mdl-textfield>
+        <!-- Search -->
+        <form action="#" @submit.prevent class="box">
+            <input class="input"
+                   type="text"
+                   placeholder="Search"
+                   title="Search"
+                   v-model="search"
+            >
         </form>
-        <table class="mdl-data-table mdl-js-datea-table mdl-shadow--2dp"
-               style='width:100%'>
-            <tr>
-                <td v-for="column in columns"
-                    @click="setSorting(column)"
-                    style="width: 50px"
+
+        <div class="box">
+            <!-- Sort order -->
+            <div class="columns">
+                <a v-for="column in columns"
+                   class="column"
+                   @click="setSorting(column)"
+                   style="width: 50px"
                 >
                     {{ column | uppercase }}
                     <vm-sort-orderer :value="asc"
                                      v-if="sort === column"
                                      @change="asc = $arguments[0]"
                     ></vm-sort-orderer>
-                </td>
-            </tr>
-            <tr v-for="route in routesToDisplay"
-                @click="onClick(route)"
-                transition="fade-out"
-            >
-                <td colspan="3" :class="{selected: selected === route}">
-                    <div>
-                        <span class="method mdl-color--primary mdl-color-text--primary-contrast"
-                              v-text="route.method"
-                        ></span>
-                        <span class="path" v-text="route.path"></span>
-                    </div>
-                    <div class="action" v-text="route.action"></div>
-                </td>
-            </tr>
-            <tr v-if="! routesToDisplay.length">
-                <td colspan="3">
+                </a>
+            </div>
+
+            <aside class="menu">
+                <ul class="menu-list">
+                    <li>
+                        <a v-for="route in routesToDisplay"
+                           @click="onClick(route)"
+                           transition="fade-out"
+                           class="route columns"
+                           :class="{selected: selected === route}"
+                        >
+                            <div class="column is-narrow">
+                                <button class="button is-small is-active"
+                                        v-text="route.method"
+                                ></button>
+                            </div>
+                            <div class="column is-bold"
+                                 v-text="route.path"
+                                 style="white-space: nowrap"
+                            ></div>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <div v-if="! routesToDisplay.length">
+                <div>
                     <div>
                         Nothing found...
                     </div>
-                </td>
-            </tr>
-        </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -62,7 +78,6 @@
                 columns: [
                     'method',
                     'path',
-                    'action',
                 ],
             }
         },
@@ -99,8 +114,10 @@
         },
         methods: {
             onClick (route){
+                // We pass the cloned one away and keep the original
+                // in order to figure out, which one was selected.
                 this.$emit('selected', _.clone(route))
-                this.selected = _.clone(route)
+                this.selected = route
             },
             updateRoutes (){
                 ajaxHelper('POST', '_api-tester/routes', null, this)
@@ -122,31 +139,11 @@
             }
         }
     }
-
-
 </script>
 
 <style scoped>
-    table.mdl-data-table tr > td,
-    table.mdl-data-table tr > th {
-        text-align: left;
-        cursor: pointer;
-    }
-
-    td.selected {
+    .route.selected {
         border-left: 2px solid rgb(255, 82, 82);
         background-color: #eef9f2;
-    }
-
-    .method {
-        padding: 2px 5px;
-    }
-
-    .path {
-        font-weight: bold;
-    }
-
-    .action {
-        font-size: 90%;
     }
 </style>

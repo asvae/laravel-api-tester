@@ -1,15 +1,22 @@
 var elixir = require('laravel-elixir')
 
+var paths = {
+    js: [],
+    css: [],
+}
+
+// JSONEditor
+paths.js.push('./node_modules/jsoneditor/dist/jsoneditor.js')
+paths.css.push('./node_modules/jsoneditor/dist/jsoneditor.min.css')
+
 elixir(function (mix) {
-    mix.browserify('api-tester.js', './resources/assets/build/api-tester.js')
+    mix.sass('./node_modules/bulma/bulma.sass', './resources/assets/tmp')
+    paths.css.push('./resources/assets/tmp/bulma.css')
 
-    var filesToCopy = [
-        './node_modules/material-design-lite/dist/material.min.js',
-        './node_modules/material-design-lite/dist/material.cyan-red.min.css',
-        './node_modules/jsoneditor/dist/jsoneditor.min.js',
-        './node_modules/jsoneditor/dist/jsoneditor.min.css',
-    ]
+    mix.browserify('api-tester.js', './resources/assets/tmp/app.js')
+    paths.js.push('./resources/assets/tmp/app.js')
 
-    mix.copy(filesToCopy, 'resources/assets/build')
+    mix.scripts(paths.js, './resources/assets/build/api-tester.js', './')
+    mix.styles(paths.css, './resources/assets/build/api-tester.css', './')
 });
 

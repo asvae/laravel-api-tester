@@ -7,7 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="token" content="{{ csrf_token() }}">
 
-    <link media="all" type="text/css" rel="stylesheet" href="{{ '/_api-tester/assets/material.cyan-red.min.css' }}">
+    <link media="all" type="text/css" rel="stylesheet" href="{{ '/_api-tester/assets/api-tester.css' }}">
+
     <title>Laravel api tester</title>
 </head>
 <body>
@@ -15,9 +16,7 @@
     <vm-api-tester-main></vm-api-tester-main>
 </div>
 
-<link media="all" type="text/css" rel="stylesheet" href="{{ '/_api-tester/assets/jsoneditor.min.css' }}">
-<script src="{{ '/_api-tester/assets/material.min.js' }}"></script>
-<script src="{{ '/_api-tester/assets/jsoneditor.min.js' }}"></script>
 <script src="{{ '/_api-tester/assets/api-tester.js' }}"></script>
+
 </body>
 </html>

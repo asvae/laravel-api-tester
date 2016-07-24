@@ -2,3 +2,5 @@
 /node_modules/
 /vendor/
 /composer.lock
+*.map
+/resources/assets/build/tmp/

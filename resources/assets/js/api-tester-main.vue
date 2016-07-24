@@ -1,11 +1,17 @@
 <template>
     <div class="api-tester-main">
-        <api-tester-routes
-                @selected="request = $arguments[0]"
-        ></api-tester-routes>
-        <api-tester-poster
-                :request-data="request"
-        ></api-tester-poster>
+        <div class="columns">
+            <div class="column is-narrow">
+                <api-tester-routes
+                        @selected="request = $arguments[0]"
+                ></api-tester-routes>
+            </div>
+            <div class="column">
+                <api-tester-poster
+                        :request-data="request"
+                ></api-tester-poster>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -31,15 +37,12 @@
         transition: all .3s ease;
     }
 
-    .api-tester-main {
-        padding: 15px;
-        display: flex;
-    }
-
     .api-tester-main .api-tester-poster {
         margin-left: 15px;
-        flex-grow: 1;
-        min-width: 25%;
+    }
+
+    .api-tester-main {
+        padding: 15px;
     }
 
     .api-tester-main .fade-out-enter,
