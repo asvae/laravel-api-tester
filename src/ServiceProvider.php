@@ -7,14 +7,22 @@ use Asvae\ApiTester\Contracts\RouteRepositoryInterface;
 use Asvae\ApiTester\Contracts\StorageInterface;
 use Asvae\ApiTester\Providers\RouteServiceProvider;
 use Asvae\ApiTester\Storages\JsonStorage;
-use Illuminate\Foundation\Application;
+use Illuminate\Contracts\Foundation\Application;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     public function register()
     {
+        if (!defined('API_TESTER_PATH')) {
+            define('API_TESTER_PATH', realpath(__DIR__ . '/../'));
+        }
+
         $this->app->register(RouteServiceProvider::class);
-        $this->mergeConfigFrom(__DIR__ . '/../config/api-tester.php',
+
+        $this->mergeConfigFrom(API_TESTER_PATH . '/config/api-tester.php',
+            'api-tester');
+
+        $this->loadViewsFrom(API_TESTER_PATH . '/resources/views',
             'api-tester');
 
         $this->app->bind(
@@ -27,15 +35,15 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             config('api-tester.repositories.requests')
         );
 
-        $this->app->bind(StorageInterface::class, function(Application $app){
+        $this->app->bind(StorageInterface::class, function (Application $app) {
             $app->make(JsonStorage::class, [config('api-tester.storage.path'), config('api-tester.storage.file')]);
         });
-
     }
 
     public function boot()
     {
-        $this->publishes([__DIR__ . '/config/api-tester.php' => config_path('api-tester.php'),], 'config');
-        $this->loadViewsFrom(__DIR__ . '/../resources/assets/views', 'api-tester');
+        $this->publishes([
+            API_TESTER_PATH . '/config/api-tester.php' => config_path('api-tester.php'),
+        ], 'config');
     }
 }
