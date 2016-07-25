@@ -9,7 +9,6 @@ class AssetsController extends Controller
 {
     const SECONDS_IN_YEAR = 60*60*24*365;
 
-
     public function index($file)
     {
         $root = __DIR__.'/../../../resources/assets/build';

@@ -1,0 +1,29 @@
+.list-sort {
+  &-enter, &-leave {
+    /*
+    the state right after enter (enter from this state)
+    and the state right before leave (leave to this state)
+    */
+    opacity: 0;
+  }
+  &-enter-active, &-leave-active {
+    transition: opacity .5s ease; /* applied during enter/leave transition */
+  }
+  &-transition {
+    transition: transform .5s cubic-bezier(.55,0,.1,1); /* applied during moving transition */
+  }
+  &-move {
+    border-color: red;
+    transition: transform .5s cubic-bezier(.55,0,.1,1); /* applied during moving transition */
+  }
+}
+
+.fade-in {
+  &-transition {
+    transition: all 0.4s ease;
+  }
+  &-enter, &-leave {
+    opacity: 0;
+  }
+}
+

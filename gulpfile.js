@@ -1,15 +1,22 @@
 var elixir = require('laravel-elixir')
-require('laravel-elixir-webpack-ex')
+
+var paths = {
+    js: [],
+    css: [],
+}
+
+// JSONEditor
+paths.js.push('./node_modules/jsoneditor/dist/jsoneditor.js')
+paths.css.push('./node_modules/jsoneditor/dist/jsoneditor.min.css')
 
 elixir(function (mix) {
-    mix.webpack('api-tester.js', require('./webpack.config.js'), 'resources/assets/build/', 'resources/assets/js/' )
+    mix.sass('api-tester.scss', './resources/assets/tmp')
+    paths.css.push('./resources/assets/tmp/api-tester.css')
 
-    var filesToCopy = [
-        './node_modules/material-design-lite/dist/material.min.js',
-        './node_modules/material-design-lite/dist/material.cyan-red.min.css',
-        './node_modules/jsoneditor/dist/jsoneditor.min.js',
-        './node_modules/jsoneditor/dist/jsoneditor.min.css',
-    ]
-    mix.copy(filesToCopy, 'resources/assets/build')
+    mix.browserify('api-tester.js', './resources/assets/tmp/app.js')
+    paths.js.push('./resources/assets/tmp/app.js')
+
+    mix.scripts(paths.js, './resources/assets/build/api-tester.js', './')
+    mix.styles(paths.css, './resources/assets/build/api-tester.css', './')
 });
 

@@ -1,5 +1,5 @@
 <template>
-    <span v-text="value ?  '&#9660;': '&#9650;'"></span>
+    <span v-text="value ? '▲' : '▼'"></span>
 </template>
 
 <script>

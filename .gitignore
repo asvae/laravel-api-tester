@@ -2,5 +2,8 @@
 /node_modules/
 /vendor/
 /composer.lock
+*.map
+/resources/assets/tmp/
+
 /phpunit.bat
 /tests/tmp/
