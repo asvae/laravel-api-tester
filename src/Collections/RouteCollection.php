@@ -1,6 +1,6 @@
 <?php
 
-namespace Asvae\ApiTester;
+namespace Asvae\ApiTester\Collections;
 
 use Illuminate\Support\Collection;
 

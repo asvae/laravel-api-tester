@@ -51,6 +51,8 @@
     import ajaxHelper from './ajax-helper'
     import vmSortOrderer from './sort-orderer.vue'
 
+    let base = $('base').prop('href')
+
     export default {
         data: function () {
             return {
@@ -105,7 +107,7 @@
                 this.selected = _.clone(route)
             },
             updateRoutes (){
-                ajaxHelper('POST', '_api-tester/routes', null, this)
+                ajaxHelper('GET', base+'routes', null, this)
                         .then(function (response) {
                             this.routes = response.data
                         })

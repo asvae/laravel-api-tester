@@ -2,9 +2,10 @@
 
 namespace Asvae\ApiTester\Providers;
 
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as BaseRouteServiceProvider;
 use Illuminate\Routing\Router;
 
-class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\RouteServiceProvider
+class RouteServiceProvider extends BaseRouteServiceProvider
 {
     /**
      * Define the routes for the application.
@@ -16,6 +17,8 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
     public function map(Router $router)
     {
         $router->group([
+            'as'         => 'api-tester.',
+            'prefix'     => config('api-tester.route'),
             'namespace'  => $this->getNamespace(),
             'middleware' => config('api-tester.middleware'),
         ], function () {
@@ -26,9 +29,6 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
     public function boot(Router $router)
     {
         parent::boot($router);
-
-        $this->loadViewsFrom(__DIR__.'/../../resources/assets/views',
-            'api-tester');
     }
 
     /**
@@ -46,6 +46,6 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
      */
     protected function requireRoutes()
     {
-        require __DIR__.'/../Http/routes.php';
+        require __DIR__ . '/../Http/routes.php';
     }
 }

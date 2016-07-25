@@ -6,18 +6,18 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="token" content="{{ csrf_token() }}">
+    <base href="{{ url(config('api-tester.route')).'/' }}">
 
-    <link media="all" type="text/css" rel="stylesheet" href="{{ '/_api-tester/assets/material.cyan-red.min.css' }}">
+    <link media="all" type="text/css" rel="stylesheet" href="{{ route('api-tester.file', ['file' => 'material.cyan-red.min.css']) }}">
+    <link media="all" type="text/css" rel="stylesheet" href="{{ route('api-tester.file', ['file' => 'jsoneditor.min.css']) }}">
     <title>Laravel api tester</title>
 </head>
 <body>
 <div id="api-tester">
     <vm-api-tester-main></vm-api-tester-main>
 </div>
-
-<link media="all" type="text/css" rel="stylesheet" href="{{ '/_api-tester/assets/jsoneditor.min.css' }}">
-<script src="{{ '/_api-tester/assets/material.min.js' }}"></script>
-<script src="{{ '/_api-tester/assets/jsoneditor.min.js' }}"></script>
-<script src="{{ '/_api-tester/assets/api-tester.js' }}"></script>
+  <script src="{{ route('api-tester.file', ['file' => 'material.min.js'])}}"></script>
+  <script src="{{ route('api-tester.file', ['file' => 'jsoneditor.min.js'])}}"></script>
+  <script src="{{ route('api-tester.file', ['file' => 'api-tester.js']) }}"></script>
 </body>
 </html>

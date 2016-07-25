@@ -9,14 +9,21 @@ class AssetsController extends Controller
 {
     const SECONDS_IN_YEAR = 60*60*24*365;
 
-    public function index($file = '')
-    {
-        // Permit only safe characters in filename.
-        if (! preg_match('%^([a-z_\-\.]+?)$%', $file)) {
-            abort(404);
-        }
 
-        $contents = file_get_contents(__DIR__.'/../../../resources/assets/build/'.$file);
+    public function index($file)
+    {
+        $root = __DIR__.'/../../../resources/assets/build';
+
+        return $this->file($file, $root);
+    }
+
+    public function image($file){
+        $root = __DIR__.'/../../../resources/assets/build/img';
+        return $this->file($file, $root);
+    }
+
+    protected function file($file, $root){
+        $contents =  file_get_contents($root.DIRECTORY_SEPARATOR.$file);
         $response = response($contents, 200, [
             'Content-Type' => $this->getFileContentType($file)
         ]);

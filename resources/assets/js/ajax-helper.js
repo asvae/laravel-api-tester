@@ -5,7 +5,7 @@ export default function (method, url, data, context, headers){
     if(!headers){
         headers = {}
     }
-    
+
     headers['X-CSRF-TOKEN'] = token
 
     return $.ajax({

@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'enabled' => env('APP_DEBUG', false),
+    'enabled'    => env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -23,19 +23,27 @@ return [
     | CRSF token will be handled automatically.
     |
     */
-
     'middleware' => ['web'],
+
+
+    'storage'      => [
+        'path' => 'api-tester',
+        'file' => 'requests.db',
+    ],
+
 
     /*
     |--------------------------------------------------------------------------
-    | Route repository
+    | Repositories
     |--------------------------------------------------------------------------
     |
-    | Specify class for RouteRepository.
+    | Specify class for RouteRepository and RequestRepository.
     |
     */
-
-    'repository' => \Asvae\ApiTester\DefaultRouteRepository::class,
+    'repositories' => [
+        'routes'   => Asvae\ApiTester\Repositories\RouteLaravelRepository::class,
+        'requests' => Asvae\ApiTester\Repositories\RequestRepository::class
+    ],
 
     /*
     |--------------------------------------------------------------------------

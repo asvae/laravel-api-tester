@@ -1,6 +1,6 @@
 <?php
 
-use Asvae\ApiTester\RouteCollection;
+use Asvae\ApiTester\Collections\RouteCollection;
 
 /**
  * Class RouteCollectionTest
@@ -28,19 +28,23 @@ class RouteCollectionTest extends TestCase
     {
         $routes = $this->fakeRoutes([
             [
-                'method' => 'GET',
+                'method' => ['GET', 'HEAD'],
                 'path'   => 'user',
             ],
             [
-                'method' => 'GET',
+                'method' => ['GET', 'HEAD'],
                 'path'   => 'user/{id}',
             ],
             [
-                'method' => 'POST',
+                'method' => ['POST'],
                 'path'   => 'user',
             ],
             [
-                'method' => 'DELETE',
+                'method' => ['DELETE'],
+                'path'   => 'user/{id}',
+            ],
+            [
+                'method' => ['PUT', 'PATCH'],
                 'path'   => 'user/{id}',
             ],
             [
@@ -65,9 +69,9 @@ class RouteCollectionTest extends TestCase
 
     public function testMatchRoute()
     {
-        $this->assertEquals(1,
-            $this->routes->filterMatch(['article'])->count());
-        $this->assertEquals(4, $this->routes->filterMatch(['user'])->count());
+        $this->assertEquals(1, $this->routes->filterMatch(['article'])->count());
+
+        $this->assertEquals(5, $this->routes->filterMatch(['user'])->count());
     }
 
     public function testMatchMethod()
@@ -92,7 +96,7 @@ class RouteCollectionTest extends TestCase
 
     public function testMatchEmptyPattern()
     {
-        $this->assertEquals(5, $this->routes->filterMatch([[]])->count());
+        $this->assertEquals(6, $this->routes->filterMatch([[]])->count());
     }
 
     public function testExcept()
@@ -101,6 +105,6 @@ class RouteCollectionTest extends TestCase
             ['method' => 'POST'],
             ['method' => 'DELETE'],
         ])->count();
-        $this->assertEquals(3, $count);
+        $this->assertEquals(4, $count);
     }
 }

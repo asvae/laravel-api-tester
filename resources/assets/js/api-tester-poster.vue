@@ -107,7 +107,7 @@
                     return
                 }
 
-                ajaxHelper(this.requestData.method, this.requestData.path, request, this)
+                ajaxHelper(this.requestData.method, location.origin+'/'+this.requestData.path, request, this)
                         .always(function (data, status, xhr) {
 
                             if (data.responseText !== undefined){
