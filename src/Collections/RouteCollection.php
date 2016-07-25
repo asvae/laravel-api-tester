@@ -28,7 +28,7 @@ class RouteCollection extends Collection
         }
 
         return $this->filter(function ($route) use ($patterns) {
-            // If any of patterns matches the route passes.
+            // If any of patterns matches - route passes.
             foreach ($patterns as $pattern) {
                 if ($this->isRouteMatchesPattern($route, $pattern)) {
                     return true;
