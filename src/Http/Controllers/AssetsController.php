@@ -7,8 +7,6 @@ use Illuminate\Routing\Controller;
 
 class AssetsController extends Controller
 {
-    const SECONDS_IN_YEAR = 60*60*24*365;
-
     public function index($file)
     {
         $root = __DIR__.'/../../../resources/assets/build';
@@ -28,8 +26,9 @@ class AssetsController extends Controller
         ]);
 
         // Browser will cache files for 1 year.
-        $response->setSharedMaxAge(static::SECONDS_IN_YEAR);
-        $response->setMaxAge(static::SECONDS_IN_YEAR);
+        $secondsInYear = 60*60*24*365;
+        $response->setSharedMaxAge($secondsInYear);
+        $response->setMaxAge($secondsInYear);
         $response->setExpires(new DateTime('+1 year'));
 
         return $response;
