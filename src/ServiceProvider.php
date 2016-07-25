@@ -25,6 +25,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->loadViewsFrom(API_TESTER_PATH . '/resources/views',
             'api-tester');
 
+        $this->app->singleton(StorageInterface::class, function(Application $app) {
+            return $app->make(JsonStorage::class, ['path' => config('api-tester.storage.path'),'filename' => config('api-tester.storage.file')]);
+        });
+
+
         $this->app->bind(
             RouteRepositoryInterface::class,
             config('api-tester.repositories.routes')
@@ -35,9 +40,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             config('api-tester.repositories.requests')
         );
 
-        $this->app->bind(StorageInterface::class, function (Application $app) {
-            $app->make(JsonStorage::class, [config('api-tester.storage.path'), config('api-tester.storage.file')]);
-        });
+        $this->app->make(RequestRepositoryInterface::class);
+
+
+
+
+
+
     }
 
     public function boot()

@@ -5,7 +5,6 @@ namespace Asvae\ApiTester\Repositories;
 use Asvae\ApiTester\Collections\RequestCollection;
 use Asvae\ApiTester\Contracts\RequestRepositoryInterface;
 use Asvae\ApiTester\Contracts\StorageInterface;
-use Asvae\ApiTester\JsonStorage;
 use Illuminate\Filesystem\Filesystem;
 
 
