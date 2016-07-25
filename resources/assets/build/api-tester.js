@@ -73334,7 +73334,7 @@ exports.default = {
                 return;
             }
 
-            (0, _ajaxHelper2.default)(this.requestData.method, this.requestData.path, request, this).always(function (data, status, xhr) {
+            (0, _ajaxHelper2.default)(this.requestData.method, '/' + this.requestData.path, request, this).always(function (data, status, xhr) {
 
                 if (data.responseText !== undefined) {
                     data = data.responseText;
