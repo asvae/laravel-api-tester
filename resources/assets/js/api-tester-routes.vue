@@ -98,7 +98,7 @@
                 // Let's find out what to display first.
                 this.routes.forEach(function (route) {
                     if (
-                            route.method.toUpperCase().includes(search)
+                            route.method.join(',').toUpperCase().includes(search)
                             || route.path.toUpperCase().includes(search)
                             || route.action.toUpperCase().includes(search)
                     ) {
@@ -108,7 +108,17 @@
                 // Then sort it.
                 if (this.sort) {
                     toDisplay = toDisplay.sort(function (a, b) {
-                        return a[sort].localeCompare(b[sort]) * (asc ? -1 : 1)
+                        let comparingA = a[sort]
+                        let comparingB = b[sort]
+
+                        if(Array.isArray(comparingA)){
+                            comparingA = comparingA.join(',')
+                        }
+                        if(Array.isArray(comparingB)){
+                            comparingB = comparingB.join(',')
+                        }
+
+                        return comparingA.localeCompare(comparingB) * (asc ? -1 : 1)
                     })
                 }
                 return toDisplay
@@ -122,12 +132,13 @@
                 this.selected = route
             },
             onClick (route){
-
-                this.$emit('selected', _.clone(route))
+                let clone = _.clone(route)
+                clone.method = clone.method[0]
+                this.$emit('selected',clone)
                 this.selected = route
             },
             updateRoutes (){
-                ajaxHelper('POST', '_api-tester/routes', null, this)
+                ajaxHelper('GET', 'routes', null, this)
                         .then(function (response) {
                             let routes = response.data
                             let order = 0
