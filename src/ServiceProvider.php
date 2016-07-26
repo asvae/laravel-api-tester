@@ -26,27 +26,18 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             'api-tester');
 
         $this->app->singleton(StorageInterface::class, function(Application $app) {
-            return $app->make(JsonStorage::class, ['path' => config('api-tester.storage.path'),'filename' => config('api-tester.storage.file')]);
+            return $app->make(JsonStorage::class, ['path' => storage_path(config('api-tester.storage.path')),'filename' => config('api-tester.storage.file')]);
         });
 
-
-        $this->app->bind(
+        $this->app->singleton(
             RouteRepositoryInterface::class,
             config('api-tester.repositories.routes')
         );
 
-        $this->app->bind(
+        $this->app->singleton(
             RequestRepositoryInterface::class,
             config('api-tester.repositories.requests')
         );
-
-        $this->app->make(RequestRepositoryInterface::class);
-
-
-
-
-
-
     }
 
     public function boot()

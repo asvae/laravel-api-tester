@@ -52,6 +52,8 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $request = $this->requests->insert($data);
 
+        $this->flush();
+
         return $request;
     }
 
@@ -62,9 +64,11 @@ class RequestRepository implements RequestRepositoryInterface
      * @param       $data
      * @return array
      */
-    public function update($id, $data)
+    public function update($data, $id)
     {
-        $request = $this->requests->update($id, $data);
+        $request = $this->requests->update($data, $id);
+
+        $this->flush();
 
         return $request;
     }
@@ -108,6 +112,7 @@ class RequestRepository implements RequestRepositoryInterface
     public function delete($id)
     {
         $this->requests->delete($id);
+        $this->flush();
     }
 
     /**
