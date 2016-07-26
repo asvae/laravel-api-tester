@@ -3,7 +3,7 @@
 [![Integration tests](https://travis-ci.org/asvae/laravel-spa-boilerplate.svg)](https://travis-ci.org/asvae/laravel-spa-boilerplate)
 [![Unit tests](https://travis-ci.org/asvae/laravel-api-tester.svg)](https://travis-ci.org/asvae/laravel-api-tester)
 
-![Interface](http://i.imgur.com/XGqXNaI.png) 
+![Interface](http://i.imgur.com/WFa88g9.png) 
 
 ## Live demo
 Try it out: [laravel-api-tester.asva.by](http://laravel-api-tester.asva.by/)
@@ -51,4 +51,7 @@ Don't hesitate to raise an issue if something doesn't work or you have a feature
 * 19.07.2016 (1.0.10) - add filters (thanks [greabock](https://github.com/greabock)).
 
 ## Tests
-*Coming...*
+We do unit tests as well as integration tests, which is rare for laravel libraries. Check badges on the top for details
+
+## Licence
+MIT
