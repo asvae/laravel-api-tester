@@ -30,6 +30,11 @@
 
             <div class="is-pulled-right">
                 <button class="button is-primary"
+                        type="button"
+                        @click="update"
+                        v-text="'Update'"
+                ></button>
+                <button class="button is-primary"
                         type="submit"
                         v-text="'Send'"
                 ></button>
@@ -128,6 +133,13 @@
             },
             save (){
                 this.$api.ajax('POST', 'requests', this.request)
+                    .then(function (data) {
+                        this.setCurrentRequest(data.data)
+                        this.loadRequests()
+                    })
+            },
+            update (){
+                this.$api.ajax('PUT', 'requests/' + this.request.id, this.request)
                     .then(function (data) {
                         this.setCurrentRequest(data.data)
                         this.loadRequests()
