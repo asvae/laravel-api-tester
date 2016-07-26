@@ -3,7 +3,7 @@
 [![Integration tests](https://travis-ci.org/asvae/laravel-spa-boilerplate.svg)](https://travis-ci.org/asvae/laravel-spa-boilerplate)
 [![Unit tests](https://travis-ci.org/asvae/laravel-api-tester.svg)](https://travis-ci.org/asvae/laravel-api-tester)
 
-![Interface](http://i.imgur.com/SqItf56.png) 
+![Interface](http://i.imgur.com/GwPAvXI.png) 
 
 ## Live demo
 Try it out: [laravel-api-tester.asva.by](http://laravel-api-tester.asva.by/)
