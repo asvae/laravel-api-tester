@@ -1,5 +1,5 @@
 <template>
-    <div class="api-tester-routes">
+    <div class="api-tester-requests">
 
         <!-- Search -->
         <form action="#" @submit.prevent class="box">
@@ -30,30 +30,35 @@
 
             <aside class="menu">
                 <ul class="menu-list">
-                    <li v-for="route in routesToDisplay"
+                    <li v-for="request in requestsToDisplay"
                         transition="fade-in"
-                        class="route"
-                        :class="{selected: selected === route}"
+                        class="request"
+                        :class="{selected: selected === request}"
                     >
-                        <a @click="setCurrentRequestFromRoute(route)">
+                        <a>
                             <div class="columns">
                                 <div class="column is-narrow">
                                     <button class="button is-small is-active"
-                                            @click.stop="setCurrentRequestFromRoute(route), scheduleRequest(true)"
-                                            v-text="route.methods[0]"
+                                            @click="setCurrentRequest(request), scheduleRequest(true)"
+                                            v-text="request.method"
                                     ></button>
                                 </div>
-                                <div class="column is-bold"
-                                     v-text="route.path"
-                                     style="white-space: nowrap"
-                                ></div>
+                                <a @click="setCurrentRequest(request)"
+                                   class="column is-bold"
+                                   v-text="request.path"
+                                   style="white-space: nowrap"
+                                ></a>
+                                <a class="column is-narrow"
+                                   v-text="'X'"
+                                   @click.stop="deleteRequest(request)"
+                                ></a>
                             </div>
                         </a>
                     </li>
                 </ul>
             </aside>
 
-            <div v-if="! routesToDisplay.length">
+            <div v-if="! requestsToDisplay.length">
                 <div>
                     <div>
                         Nothing found...
@@ -87,7 +92,7 @@
         },
         vuex: {
             getters: {
-                routes: (store) => store.routes
+                requests: state => state.requests,
             },
             actions,
         },
@@ -95,23 +100,21 @@
             vmSortOrderer
         },
         ready (){
-            this.loadRoutes()
+            this.loadRequests()
         },
         computed: {
-            routesToDisplay () {
+            requestsToDisplay () {
                 let toDisplay = []
                 let sort = this.sort
                 let asc = this.asc
                 let search = this.search.toUpperCase()
                 // Let's find out what to display first.
-                this.routes.forEach(function (route) {
+                this.requests.forEach(function (request) {
                     if (
-                            route.methods.join(',').toUpperCase().includes(search)
-                            || route.path.toUpperCase().includes(search)
-                            || route.action.toUpperCase().includes(search)
-                            || (route.name && route.name.toUpperCase().includes(search))
+                            request.method.toUpperCase().includes(search)
+                            || request.path.toUpperCase().includes(search)
                     ) {
-                        toDisplay.push(route)
+                        toDisplay.push(request)
                     }
                 })
                 // Then sort it.
@@ -120,10 +123,10 @@
                         let comparingA = a[sort]
                         let comparingB = b[sort]
 
-                        if(Array.isArray(comparingA)){
+                        if (Array.isArray(comparingA)) {
                             comparingA = comparingA.join(',')
                         }
-                        if(Array.isArray(comparingB)){
+                        if (Array.isArray(comparingB)) {
                             comparingB = comparingB.join(',')
                         }
 
@@ -150,7 +153,7 @@
 </script>
 
 <style scoped>
-    .route.selected {
+    .request.selected {
         border-left: 2px solid rgb(255, 82, 82);
         background-color: #eef9f2;
     }

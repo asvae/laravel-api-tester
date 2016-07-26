@@ -2,42 +2,42 @@
     <div class="api-tester-main">
         <div class="columns">
             <div class="column is-narrow">
-                <api-tester-routes
+                <vm-routes
                         @wants-send="makeRequest($arguments[0])"
-                        @wants-run="$children[1].submit()"
-                ></api-tester-routes>
+                        @wants-run="$children[2].submit()"
+                ></vm-routes>
+            </div>
+            <div class="column is-narrow">
+                <vm-requests
+                        @wants-send="makeRequest($arguments[0])"
+                ></vm-requests>
             </div>
             <div class="column">
-                <api-tester-poster
-                        :request-data="request"
-                ></api-tester-poster>
+                <vm-poster
+                        :request-data.sync="request"
+                ></vm-poster>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import apiTesterRoutes from './api-tester-routes.vue'
-    import apiTesterPoster from './api-tester-poster.vue'
+    import vmRoutes from './api-tester-routes.vue'
+    import vmPoster from './api-tester-poster.vue'
+    import vmRequests from './api-tester-requests.vue'
+
 
     export default {
         data (){
             return {
-                request: {method: 'GET', route: '/'}
+                request: {method: 'GET', path: '/'}
             }
         },
         components: {
-            apiTesterRoutes,
-            apiTesterPoster,
+            vmRoutes,
+            vmPoster,
+            vmRequests,
         },
-        methods: {
-            makeRequest(route){
-                this.request = {
-                    method: route.methods[0],
-                    path: route.path,
-                }
-            }
-        }
     }
 </script>
 
@@ -51,6 +51,7 @@
         background-color: rgb(0, 188, 212);
         border: none;
     }
+
     .api-tester-main .jsoneditor {
         border: none;
     }

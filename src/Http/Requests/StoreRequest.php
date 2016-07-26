@@ -15,7 +15,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'method'  => 'string|in:GET,HEAD,POST,PUT,PATCH,DELETE|required',
-            'headers' => 'array|required',
+            'headers' => 'array',
             'path'    => 'string|required',
         ];
     }

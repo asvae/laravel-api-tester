@@ -1,14 +1,16 @@
 <template>
     <div class="api-tester-poster">
 
-        <form @submit.prevent="submit" class="box">
-            <div class="columns">
+        <form @submit.prevent="submit"
+              class="box"
+        >
+            <div class="columns" v-if="request">
                 <div class="column is-half">
                     <input class="input"
                            type="text"
                            placeholder="Method"
                            title="Method"
-                           v-model="requestData.method"
+                           v-model="request.method"
                     >
                 </div>
                 <div class="column is-half">
@@ -16,7 +18,7 @@
                            type="text"
                            placeholder="Path"
                            title="Path"
-                           v-model="requestData.path"
+                           v-model="request.path"
                     >
                 </div>
             </div>
@@ -27,11 +29,20 @@
             <div class="json-editor" style="height: 400px"></div>
 
             <div class="is-pulled-right">
-                <button class="button is-primary" type="submit"
-                >Send</button>
-                <button class="button" type="button"
+                <button class="button is-primary"
+                        type="submit"
+                        v-text="'Send'"
+                ></button>
+                <button class="button is-primary"
+                        type="button"
+                        @click="save"
+                        v-text="'Save'"
+                ></button>
+                <button class="button"
+                        type="button"
                         @click="$options.editor.set('')"
-                >Clear</button>
+                        v-text="'Clear'"
+                ></button>
             </div>
 
             <div class="tile is-parent">
@@ -52,7 +63,7 @@
             ></iframe>
 
             <pre style="white-space: pre-wrap"
-                    v-if="response.isJson"
+                 v-if="response.isJson"
                  v-text="response.data | json"
             ></pre>
         </div>
@@ -60,14 +71,36 @@
 </template>
 
 <script>
-    import ajaxHelper from './ajax-helper'
     import $ from 'jquery'
+    import _ from 'lodash'
+
+    import * as actions from './vuex/actions.js'
 
     export default {
-        editor: null,
+        editor: null, // Json editor instance is bound to component.
+        vuex: {
+            getters: {
+                currentRequest: state => state.currentRequest,
+                isRequestScheduled: state => state.isRequestScheduled,
+            },
+            actions,
+        },
+        watch: {
+            currentRequest(request){
+                this.request = _.clone(request)
+            },
+            request(request){
+                this.parseRequest(request)
+            },
+            isRequestScheduled (isScheduled){
+                if (isScheduled){
+                    this.submit()
+                }
+            }
+        },
         data (){
             return {
-                request: '',
+                request: null,
                 jsonRequest: {},
                 response: {
                     isJson: false,
@@ -76,22 +109,11 @@
                 showError: false,
             }
         },
-        props: {
-            requestData: {
-                type: Object,
-                default (){
-                    return {method: 'GET', path: '/',}
-                }
-            }
-        },
         ready() {
             let container = $(this.$el).find('.json-editor')[0]
             this.$options.editor = new JSONEditor(container, {mode: 'code'})
-        },
-        watch: {
-            request(request){
-                this.parseRequest(request)
-            }
+
+            this.request = this.currentRequest
         },
         methods: {
             parseRequest (request){
@@ -104,7 +126,16 @@
                     this.isRequestError = true
                 }
             },
+            save (){
+                this.$api.ajax('POST', 'requests', this.request)
+                    .then(function (data) {
+                        this.setCurrentRequest(data.data)
+                        this.loadRequests()
+                    })
+            },
             submit (){
+                this.scheduleRequest(false)
+
                 let request
 
                 try {
@@ -118,16 +149,15 @@
                     return
                 }
 
-                ajaxHelper(this.requestData.method, '/'+this.requestData.path, request, this)
-                        .always(function (data, status, xhr) {
+                this.$api.ajax(this.request.method, '/' + this.request.path, request)
+                    .always(function (data) {
+                        if (data.responseText !== undefined) {
+                            data = data.responseText
+                        }
 
-                            if (data.responseText !== undefined) {
-                                data = data.responseText
-                            }
-
-                            this.response.isJson = typeof data !== 'string'
-                            this.response.data = data
-                        })
+                        this.response.isJson = typeof data !== 'string'
+                        this.response.data = data
+                    })
             }
         },
     }
