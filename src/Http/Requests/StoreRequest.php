@@ -14,13 +14,14 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'method' => 'string|in:GET,HEAD,POST,PUT,PATCH,DELETE|required',
-            'headers' => 'array',
-            'path' => 'string|required',
+            'method'  => 'string|in:GET,HEAD,POST,PUT,PATCH,DELETE|required',
+            'headers' => 'array|required',
+            'path'    => 'string|required',
         ];
     }
 
-    public function authorize(){
+    public function authorize()
+    {
         return true;
     }
 }

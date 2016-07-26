@@ -7,7 +7,8 @@ Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
 Route::resource('routes', 'RouteController', ['only' => ['index']]);
 
 Route::resource('requests', 'RequestController',
-    ['only' => ['index', 'store', 'update', 'delete']]);
+    ['only' => ['index', 'store', 'update', 'destroy']]
+);
 
 Route::group(['prefix' => 'assets'], function () {
     $filePattern = '^([a-z_\-\.]+?)$';

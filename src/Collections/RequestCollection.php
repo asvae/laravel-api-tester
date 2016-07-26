@@ -31,9 +31,9 @@ class RequestCollection extends Collection
      */
     public function update($request, $id)
     {
-        $key = $this->where('id', $id)->keys()->first();
+        $key = $this->where('id', $id, false)->keys()->first();
 
-        $request = $request + $this->where('id', $id)->first();
+        $request = $request + $this->where('id', $id, false)->first();
 
         $this->put($key, $request);
 

@@ -50,6 +50,7 @@ class RequestController extends Controller
     {
         $data = $this->repository->store($request->only([
             'path',
+            'method',
             'params',
             'headers',
             'body'
@@ -58,7 +59,7 @@ class RequestController extends Controller
         return response(compact('data'), 201);
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         $this->repository->delete($id);
 
@@ -77,7 +78,7 @@ class RequestController extends Controller
             return response("not found", 404);
         }
 
-        $data = $this->repository->update($id, $request->all());
+        $data = $this->repository->update($request->all(), $id);
 
         return response(compact('data'));
     }

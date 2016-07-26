@@ -23,8 +23,9 @@ interface RequestRepositoryInterface
      *
      * @param $data
      *
+     * @return mixed
      */
-    public function update($id, $data);
+    public function update($data, $id);
 
     /**
      * @param int $id
