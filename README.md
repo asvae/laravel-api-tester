@@ -48,7 +48,7 @@ And edit `config/api-tester.php` as you please.
 Don't hesitate to raise an issue if something doesn't work or you have a feature request. You're welcome to.
 
 ## Timeline
-* 19.07.2016 (1.0.10) - add filters (thanks [greabock](https://github.com/greabock)).
+* 1.0.10 (19.07.2016) - add filters (thanks [greabock](https://github.com/greabock)).
 
 ## Tests
 We do unit tests as well as integration tests, which is rare for laravel libraries. Check badges on the top for details
