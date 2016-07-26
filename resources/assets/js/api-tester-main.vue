@@ -3,8 +3,8 @@
         <div class="columns">
             <div class="column is-narrow">
                 <api-tester-routes
-                        @selected="request = $arguments[0]"
-                        @sent="request = $arguments[0], $children[1].submit()"
+                        @wants-send="makeRequest($arguments[0])"
+                        @wants-run="$children[1].submit()"
                 ></api-tester-routes>
             </div>
             <div class="column">
@@ -30,6 +30,14 @@
             apiTesterRoutes,
             apiTesterPoster,
         },
+        methods: {
+            makeRequest(route){
+                this.request = {
+                    method: route.methods[0],
+                    path: route.path,
+                }
+            }
+        }
     }
 </script>
 

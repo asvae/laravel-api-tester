@@ -33,12 +33,12 @@
                         class="route"
                         :class="{selected: selected === route}"
                     >
-                        <a @click="onClick(route)">
+                        <a @click="send(route)">
                             <div class="columns">
                                 <div class="column is-narrow">
                                     <button class="button is-small is-active"
-                                            @click.stop="onSend(route)"
-                                            v-text="route.method"
+                                            @click.stop="run(route)"
+                                            v-text="route.methods[0]"
                                     ></button>
                                 </div>
                                 <div class="column is-bold"
@@ -98,7 +98,7 @@
                 // Let's find out what to display first.
                 this.routes.forEach(function (route) {
                     if (
-                            route.method.join(',').toUpperCase().includes(search)
+                            route.methods.join(',').toUpperCase().includes(search)
                             || route.path.toUpperCase().includes(search)
                             || route.action.toUpperCase().includes(search)
                     ) {
@@ -125,17 +125,15 @@
             }
         },
         methods: {
-            onSend(route){
-                // We pass the cloned one away and keep the original
-                // in order to figure out, which one was selected.
-                this.$emit('sent', _.clone(route))
+            send(route){
+                // We pass the cloned route away and keep the original.
+                // So that it's possible to figure out which one was selected.
+                this.$emit('wants-send', _.clone(route))
                 this.selected = route
             },
-            onClick (route){
-                let clone = _.clone(route)
-                clone.method = clone.method[0]
-                this.$emit('selected',clone)
-                this.selected = route
+            run (route){
+                this.send(route)
+                this.$emit('wants-run')
             },
             updateRoutes (){
                 ajaxHelper('GET', 'routes', null, this)

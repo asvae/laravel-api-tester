@@ -22,7 +22,7 @@ class RouteLaravelRepository implements RouteRepositoryInterface
             /** @var \Illuminate\Routing\Route $route */
             $this->routes->push([
                 'name'   => $route->getName(),
-                'method' => $route->getMethods(),
+                'methods' => $route->getMethods(),
                 'path'   => $route->getPath(),
                 'action' => $route->getActionName(),
             ]);
