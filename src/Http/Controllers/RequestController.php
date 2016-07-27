@@ -50,6 +50,9 @@ class RequestController extends Controller
     {
         $data = $this->repository->store($request->only([
             'path',
+            'name',
+
+
             'method',
             'params',
             'headers',
