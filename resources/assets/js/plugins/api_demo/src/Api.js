@@ -67,11 +67,17 @@ export default class Api {
 
         headers['X-CSRF-TOKEN'] = ENV.token
 
+        if (method.toUpperCase() !== 'GET'){
+            data = JSON.stringify(data)
+        }
+
         return $.ajax({
             url,
             data,
             method,
             headers,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
             context: this._vm,
         })
     }
@@ -90,7 +96,7 @@ export default class Api {
         accessor.activateUrl(route)
 
         return $.ajax({
-            url: '/api/' + route,
+            url: route,
             data: JSON.stringify(data),
             method: 'POST',
             headers: {

@@ -12,7 +12,7 @@ export default new Vue({
     },
     vuex: {
         getters: {
-            urls: state => state.apiDemo.activeUrls
+            urls: state => state.api.activeUrls
         },
         actions
     },
