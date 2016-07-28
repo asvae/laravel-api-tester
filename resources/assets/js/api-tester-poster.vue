@@ -166,9 +166,7 @@
                     })
             },
             update (){
-                console.log(this.request)
-
-                this.$api.ajax('POST', 'requests' + this.request.id, this.request)
+                this.$api.ajax('POST', 'requests/' + this.request.id, this.request)
                     .then(function (data) {
                         this.setCurrentRequest(data.data)
                         this.loadRequests()
