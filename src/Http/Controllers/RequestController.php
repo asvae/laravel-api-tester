@@ -3,9 +3,9 @@
 namespace Asvae\ApiTester\Http\Controllers;
 
 use Asvae\ApiTester\Contracts\RequestRepositoryInterface;
+use Asvae\ApiTester\Entities\RequestEntity;
 use Asvae\ApiTester\Http\Requests\StoreRequest;
 use Asvae\ApiTester\Http\Requests\UpdateRequest;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 /**
@@ -42,44 +42,61 @@ class RequestController extends Controller
 
     /**
      *
-     * @param \Asvae\ApiTester\Http\Requests\StoreRequest $request
+     * @param \Asvae\ApiTester\Http\Requests\StoreRequest $storeRequest
      *
-     * @return int
+     * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $storeRequest)
     {
-        $data = $this->repository->store($request->only([
-            'path',
-            'method',
-            'params',
-            'headers',
-            'body'
-        ]));
+        $request = new RequestEntity($storeRequest->all());
 
-        return response(compact('data'), 201);
+        $this->repository->persist($request);
+
+        $this->repository->flush();
+
+        return response(['data' => $request->toArray()], 201);
     }
 
-    public function destroy($id)
+    /**
+     * @param $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function destroy($request)
     {
-        $this->repository->delete($id);
+        $toRemove = $this->repository->find($request);
+
+        if (!$toRemove instanceof RequestEntity) {
+            return response(null, 404);
+        }
+
+        $this->repository->remove($toRemove);
+
+        $this->repository->flush();
 
         return response(null, 204);
     }
 
     /**
-     * @param \Asvae\ApiTester\Http\Requests\UpdateRequest $request
-     * @param  int                                         $id
+     * @param \Asvae\ApiTester\Http\Requests\UpdateRequest $httpRequest
+     * @param  string                                      $request
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\Response
+     * @internal param int $id
+     *
      */
-    public function update(UpdateRequest $request, $id)
+    public function update(UpdateRequest $httpRequest, $request)
     {
-        if (!$this->repository->exists($id)) {
-            return response("not found", 404);
+        $requestEntity = $this->repository->find($request);
+
+        if (!$requestEntity instanceof RequestEntity) {
+            return response(404);
         }
 
-        $data = $this->repository->update($request->all(), $id);
+        $requestEntity->fill($httpRequest->all());
 
-        return response(compact('data'));
+        $this->repository->flush();
+
+        return response(['data' => $requestEntity->toArray()], 200);
     }
 }

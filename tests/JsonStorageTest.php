@@ -39,9 +39,9 @@ class JsonStorageTest extends TestCase
         $this->dir = __DIR__ . '/tmp';
         $this->filename = 'test.db';
 
-        $this->referenceData =  [
-            ['some_data'=>1],
-            ['other_data'=>2],
+        $this->referenceData = [
+            ['some_data' => 1],
+            ['other_data' => 2],
             ["one_more_data\n"]
         ];
 
@@ -72,8 +72,8 @@ class JsonStorageTest extends TestCase
     public function testGettingData()
     {
         mkdir($this->dir, 0755, true);
-        
-        file_put_contents($this->dir. DIRECTORY_SEPARATOR . $this->filename, $this->referenceContent);
+
+        file_put_contents($this->dir . DIRECTORY_SEPARATOR . $this->filename, $this->referenceContent);
 
         $data = $this->storage->get();
 

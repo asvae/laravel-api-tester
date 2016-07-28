@@ -5,6 +5,7 @@ namespace Asvae\ApiTester\Repositories;
 use Asvae\ApiTester\Collections\RequestCollection;
 use Asvae\ApiTester\Contracts\RequestRepositoryInterface;
 use Asvae\ApiTester\Contracts\StorageInterface;
+use Asvae\ApiTester\Entities\RequestEntity;
 use Illuminate\Filesystem\Filesystem;
 
 
@@ -16,112 +17,108 @@ use Illuminate\Filesystem\Filesystem;
 class RequestRepository implements RequestRepositoryInterface
 {
     /**
+     * @type \Asvae\ApiTester\Collections\RequestCollection
+     */
+    protected $requests;
+
+    /**
      * @type \Asvae\ApiTester\Contracts\StorageInterface
      */
     protected $storage;
 
     /**
-     * @type \Asvae\ApiTester\Collections\RequestCollection
+     * RequestRepository constructor.
+     *
+     * @param \Asvae\ApiTester\Contracts\StorageInterface    $storage
+     * @param \Asvae\ApiTester\Collections\RequestCollection $requests
      */
-    protected $requests;
-
-    public function __construct(RequestCollection $collection, StorageInterface $storage)
+    public function __construct(StorageInterface $storage, RequestCollection $requests)
     {
         $this->storage = $storage;
-        $this->requests = $collection;
-
-        $this->load($storage->get());
+        $this->requests = $requests;
+        $this->load();
     }
 
     /**
-     * @return \Asvae\ApiTester\Collections\RequestCollection
+     * Get data from storage and load it into collection.
+     * @return void
      */
-    public function all()
+    protected function load()
     {
-        return $this->requests->all();
+        $this->requests->load($this->getDataFromStorage());
     }
 
     /**
-     * Add new request
+     * Replace existing collection with data loaded from storage.
+     */
+    protected function reload()
+    {
+        $this->requests = $this->requests->make($this->getDataFromStorage());
+    }
+
+    /**
+     * Get all stored data storage.
      *
-     * @param array $data
+     * @return mixed
+     */
+    protected function getDataFromStorage()
+    {
+        return $this->storage->get();
+    }
+
+    /**
+     * @param int $id
      *
      * @return array
      */
-    public function store(array $data)
+    public function find($id)
     {
-        $request = $this->requests->insert($data);
-
-        $this->flush();
-
-        return $request;
+        return $this->requests->find($id);
     }
 
     /**
-     * Update request with given id
+     * @param \Asvae\ApiTester\Entities\RequestEntity $request
      *
-     * @param array $id
-     * @param       $data
-     * @return array
+     * @return mixed
      */
-    public function update($data, $id)
+    public function persist(RequestEntity $request)
     {
-        $request = $this->requests->update($data, $id);
-
-        $this->flush();
-
-        return $request;
+        $request->setId(str_random());
+        $this->requests->insert($request);
     }
 
     /**
-     * Check request with given id exists
-     *
      * @param int $id
      *
      * @return bool
      */
     public function exists($id)
     {
-        return ! $this->requests->where('id', (int) $id)->isEmpty();
+        return $this->requests->has($id);
     }
 
     /**
-     * Get request by id
-     *
-     * @param int $id
-     * @return array
-     */
-    public function get($id)
-    {
-        return $this->requests->where('id', (string) $id)->first();
-    }
-
-    /**
-     * Flush collection to file
-     */
-    public function flush()
-    {
-        $this->storage->put($this->requests);
-    }
-
-    /**
-     * @param $id
-     *
      * @return mixed
      */
-    public function delete($id)
+    public function all()
     {
-        $this->requests->delete($id);
+        return $this->requests->values();
+    }
+
+    /**
+     * @param \Asvae\ApiTester\Entities\RequestEntity $request
+     */
+    public function remove(RequestEntity $request)
+    {
+        $this->requests->forget($request->getId());
         $this->flush();
     }
 
     /**
-     * Load data to collection from JSON file
-     *
-     * @param $data
+     * @return void
      */
-    private function load($data)
+    public function flush()
     {
-        $this->requests->load($data);
+        $this->storage->put($this->requests);
     }
 }

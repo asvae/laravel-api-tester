@@ -2,45 +2,44 @@
 
 namespace Asvae\ApiTester\Contracts;
 
+use Asvae\ApiTester\Entities\RequestEntity;
+
 interface RequestRepositoryInterface
 {
     /**
-     * @param int $id
+     * @param $id
      *
-     * @return array
+     * @return \Asvae\ApiTester\Entities\RequestEntity
      */
-    public function get($id);
+    public function find($id);
 
     /**
-     * @param $data
+     * @param \Asvae\ApiTester\Entities\RequestEntity $request
      *
-     * @return array
+     * @return void
      */
-    public function store(array $data);
+    public function persist(RequestEntity $request);
 
     /**
      * @param $id
-     *
-     * @param $data
-     *
-     * @return mixed
-     */
-    public function update($data, $id);
-
-    /**
-     * @param int $id
      *
      * @return bool
      */
     public function exists($id);
 
     /**
-     * @return mixed
+     * @return \Asvae\ApiTester\Collections\RequestCollection|\Asvae\ApiTester\Entities\RequestEntity[]
      */
     public function all();
 
     /**
-     * @param $id
+     * @return void
      */
-    public function delete($id);
+    public function flush();
+
+    /**
+     * @param \Asvae\ApiTester\Entities\RequestEntity $request
+     */
+    public function remove(RequestEntity $request);
+
 }

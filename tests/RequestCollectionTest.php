@@ -1,5 +1,6 @@
 <?php
 use Asvae\ApiTester\Collections\RequestCollection;
+use Asvae\ApiTester\Entities\RequestEntity;
 
 /**
  * Class RequestCollectionTest
@@ -56,35 +57,13 @@ class RequestCollectionTest extends TestCase
      */
     public function testFind()
     {
-        $requests = $this->requests->make($this->generateData());
+        $this->requests->load($this->generateData());
 
-        $id = $this->getRandomId();
-        $request = $requests->find($id);
-        $this->assertEquals($request['path'], str_replace('{param}', $id, $this->sample['path']));
-    }
+        $request = $this->requests->first();
 
-    /**
-     * Check RequestCollection::update() method
-     */
-    public function testUpdate()
-    {
-        $id = $this->getRandomId();
-        $requests = $this->requests->make($this->generateData());
+        $test = $this->requests->find($request['id']);
 
-        $testData = [
-            'path'    => 'test/test',
-            'headers' => ['X-Example' => 'example']
-        ] + $this->sample;
-
-        $requests->update($testData, $id);
-
-        $request = $requests->where('id', $id)->first();
-
-        $this->assertEquals($request['id'], $id);
-
-        $this->assertEquals($request['path'], $testData['path']);
-        $this->assertEquals($request['headers'], $testData['headers']);
-        $this->assertEquals($request['body'], $testData['body']);
+        $this->assertTrue($request === $test);
     }
 
     /**
@@ -92,35 +71,21 @@ class RequestCollectionTest extends TestCase
      */
     public function testInsert()
     {
-        $requests = $this->requests->make($this->generateData());
+        $this->requests->load($this->generateData());
 
         $testData = [
-            'path'    => 'test/test',
-            'headers' => ['X-Example' => 'example']
-        ] + $this->sample;
+                        'path'    => 'test/test',
+                        'headers' => ['X-Example' => 'example']
+                    ] + $this->sample;
 
-        $expectedId = $requests->max('id') + 1;
+        $request = new RequestEntity($testData);
 
-        $result = $requests->insert($testData);
+        $result = $this->requests->insert($request);
 
-        $this->assertEquals($expectedId, $result['id']);
-        $this->assertEquals($testData['path'], $result['path']);
-        $this->assertEquals($testData['headers'], $result['headers']);
-        $this->assertEquals($testData['body'], $result['body']);
+        $test = $this->requests->where('id', $request['id'])->first();
 
-        $request = $requests->where('id', $expectedId)->first();
-
-        $this->assertEquals($request, $result);
-    }
-
-    public function testDelete(){
-        $requests = $this->requests->make($this->generateData());
-        $id = $this->getRandomId();
-
-        $requests->delete($id);
-
-        $this->assertEquals(true, $requests->where('id', $id)->isEmpty());
-        $this->assertEquals($this->requestsCount -1, $requests->count());
+        $this->assertEquals($result, $request);
+        $this->assertEquals($request, $test);
     }
 
     private function generateData()
@@ -138,10 +103,5 @@ class RequestCollectionTest extends TestCase
         }
 
         return $data;
-    }
-
-    private function getRandomId()
-    {
-        return random_int(1, $this->requestsCount);
     }
 }

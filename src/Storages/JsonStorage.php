@@ -3,6 +3,8 @@
 namespace Asvae\ApiTester\Storages;
 
 use Asvae\ApiTester\Contracts\StorageInterface;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Filesystem\Filesystem;
 
 /**
@@ -96,9 +98,11 @@ class JsonStorage implements StorageInterface
     }
 
     /**
-     * Convert data array to json rows and put to file.
+     * Convert data array to json lines and put to file.
      *
-     * @param \Traversable|array $data
+     * @param array|\Illuminate\Contracts\Support\Arrayable[]|\Illuminate\Contracts\Support\Jsonable[]|\Traversable $data
+     *
+     * @return mixed|void
      */
     public function put($data)
     {
@@ -153,9 +157,31 @@ class JsonStorage implements StorageInterface
         $content = '';
 
         foreach ($data as $row) {
-            $content .= json_encode($row) . static::ROW_DELIMITER;
+            $content .= $this->convertToJson($row) . static::ROW_DELIMITER;
         }
 
         return $content;
+    }
+
+    /**
+     * @param $data
+     *
+     * @return null|string
+     */
+    private function convertToJson($data)
+    {
+        if (is_array($data)) {
+            return json_encode($data);
+        }
+
+        if ($data instanceof Jsonable) {
+            return $data->toJson();
+        }
+
+        if ($data instanceof Arrayable) {
+            return json_encode($data->toArray());
+        }
+
+        return null;
     }
 }

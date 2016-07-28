@@ -2,66 +2,51 @@
 
 namespace Asvae\ApiTester\Collections;
 
+use Asvae\ApiTester\Entities\RequestEntity;
 use Illuminate\Support\Collection;
 
 /**
  * Class RequestCollection
  *
- * TODO: Clear, optimize.
- *
  * @package \Asvae\ApiTester
  */
 class RequestCollection extends Collection
 {
-    public function find($id){
-        return $this->where('id', (int) $id)->first();
+    /**
+     * Find specific request by passed identificator.
+     *
+     * @param string $id
+     *
+     * @return \Asvae\ApiTester\Entities\RequestEntity|null
+     */
+    public function find($id)
+    {
+        return $this->offsetExists($id) ? $this->offsetGet($id) : null;
     }
 
-    public function insert($request){
-        $id = $this->max('id');
-        $request['id'] = ++$id;
-        $this->push($request);
+    /**
+     * Put new RequestEntity to collection.
+     *
+     * @param \Asvae\ApiTester\Entities\RequestEntity $request
+     *
+     * @return \Asvae\ApiTester\Entities\RequestEntity
+     */
+    public function insert(RequestEntity $request)
+    {
+        $this->put($request->getId(), $request);
 
         return $request;
     }
 
     /**
-     * @param $request
-     * @param $id
-     */
-    public function update($request, $id)
-    {
-        $key = $this->where('id', $id, false)->keys()->first();
-
-        $request = $request + $this->where('id', $id, false)->first();
-
-        $this->put($key, $request);
-
-        return $request;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function delete($id)
-    {
-        $keys = [];
-
-        foreach($this as $key => $request){
-            if($id === $request['id']){
-                $keys[] = $key;
-            }
-        }
-
-        $this->forget($keys);
-    }
-
-    /**
+     * Load data to collection.
+     *
      * @param $data
      */
-    public function load($data){
-        foreach($data as $request){
-            $this->push($request);
+    public function load($data)
+    {
+        foreach ($data as $row) {
+            $this->put($row['id'], RequestEntity::createExisting($row));
         }
     }
 }

@@ -32,7 +32,8 @@ class RouteServiceProvider extends BaseRouteServiceProvider
         parent::boot($router);
     }
 
-    protected function getMiddlewares(){
+    protected function getMiddlewares()
+    {
         $middlewares = config('api-tester.middleware');
         $middlewares[] = DebugState::class;
 
