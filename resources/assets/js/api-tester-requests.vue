@@ -30,31 +30,9 @@
 
             <aside class="menu">
                 <ul class="menu-list">
-                    <li v-for="request in requestsToDisplay"
-                        transition="fade-in"
-                        class="request"
-                        :class="{selected: selected === request}"
-                    >
-                        <a>
-                            <div class="columns">
-                                <div class="column is-narrow">
-                                    <button class="button is-small is-active"
-                                            @click="setCurrentRequest(request), scheduleRequest(true)"
-                                            v-text="request.method"
-                                    ></button>
-                                </div>
-                                <a @click="setCurrentRequest(request)"
-                                   class="column is-bold"
-                                   v-text="request.path"
-                                   style="white-space: nowrap"
-                                ></a>
-                                <a class="column is-narrow"
-                                   v-text="'X'"
-                                   @click.stop="deleteRequest(request)"
-                                ></a>
-                            </div>
-                        </a>
-                    </li>
+                    <vm-request v-for="request in requestsToDisplay"
+                                :request="request"
+                    ></vm-request>
                 </ul>
             </aside>
 
@@ -74,13 +52,13 @@
     import $ from 'jquery'
     import _ from 'lodash'
     import vmSortOrderer from './sort-orderer.vue'
+    import vmRequest from './request.vue'
 
-    import * as actions from './vuex/actions.js'
+    import {loadRequests} from './vuex/actions.js'
 
     export default {
         data: function () {
             return {
-                selected: null,
                 search: '',
                 sort: null,
                 asc: true,
@@ -93,11 +71,15 @@
         vuex: {
             getters: {
                 requests: state => state.requests,
+                currentRequest: state => state.currentRequest,
             },
-            actions,
+            actions: {
+                loadRequests
+            }
         },
         components: {
-            vmSortOrderer
+            vmRequest,
+            vmSortOrderer,
         },
         ready (){
             this.loadRequests()
@@ -152,9 +134,6 @@
     }
 </script>
 
-<style scoped>
-    .request.selected {
-        border-left: 2px solid rgb(255, 82, 82);
-        background-color: #eef9f2;
-    }
+<style>
+
 </style>

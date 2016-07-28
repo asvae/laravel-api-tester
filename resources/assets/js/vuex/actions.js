@@ -31,6 +31,8 @@ export const setCurrentRequestFromRoute = ({dispatch}, route) => {
     let request = {
         method: route.methods[0],
         path: route.path,
+        name: "",
+        body: "",
     }
     
     dispatch('SET_CURRENT_REQUEST', request)

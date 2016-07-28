@@ -1,10 +1,11 @@
 <template>
     <div class="api-tester-poster">
 
-        <form @submit.prevent="submit"
+        <form @submit.prevent="send"
               class="box"
+              v-if="request"
         >
-            <div class="columns" v-if="request">
+            <div class="columns is-multiline">
                 <div class="column is-half">
                     <input class="input"
                            type="text"
@@ -21,42 +22,60 @@
                            v-model="request.path"
                     >
                 </div>
+                <div class="column is-half">
+                    <input class="input"
+                           type="text"
+                           placeholder="Name"
+                           title="Name"
+                           v-model="request.name"
+                    >
+                </div>
+                <div class="column is-half">
+                    <pre v-text="request.id | json"></pre>
+                </div>
+
+                <input type="submit" class="is-hidden"/>
+
+                <div class="column is-full">
+                    <vm-json-editor :json="request.body"
+                                    style="height: 300px"
+                                    @changed="request.body = $arguments[0], changed = true"
+                    ></vm-json-editor>
+                </div>
             </div>
 
             <!-- For some reason the form ignores top down submit -->
-            <input type="submit" class="is-hidden"/>
 
-            <div class="json-editor" style="height: 400px"></div>
-
-            <div class="is-pulled-right">
-                <button class="button is-primary"
-                        type="button"
-                        @click="update"
-                        v-text="'Update'"
-                ></button>
-                <button class="button is-primary"
-                        type="submit"
-                        v-text="'Send'"
-                ></button>
-                <button class="button is-primary"
-                        type="button"
-                        @click="save"
-                        v-text="'Save'"
-                ></button>
-                <button class="button"
-                        type="button"
-                        @click="$options.editor.set('')"
-                        v-text="'Clear'"
-                ></button>
-            </div>
-
-            <div class="tile is-parent">
-                <div class="tile is-12">
+            <div class="columns">
+                <div class="column">
                     <div class="error"
                          v-if="showError"
                          transition="fade-out"
                     >Your JSON is incorrect!
                     </div>
+                </div>
+                <div class="column is-narrow">
+                    <button class="button is-primary"
+                            type="submit"
+                            v-text="'Send'"
+                    ></button>
+                    <button class="button is-primary"
+                            type="button"
+                            v-if="request.id"
+                            @click="update"
+                            v-text="'Update'"
+                    ></button>
+                    <button class="button is-primary"
+                            type="button"
+                            @click="save"
+                            v-if="! request.id"
+                            v-text="'Save'"
+                    ></button>
+                    <button class="button"
+                            type="button"
+                            @click="$options.editor.set('')"
+                            v-text="'Clear'"
+                    ></button>
                 </div>
             </div>
         </form>
@@ -67,10 +86,9 @@
                     :srcdoc="response.data"
             ></iframe>
 
-            <pre style="white-space: pre-wrap"
-                 v-if="response.isJson"
-                 v-text="response.data | json"
-            ></pre>
+            <vm-json-viewer response.isJson
+                            :json="response.data"
+            ></vm-json-viewer>
         </div>
     </div>
 </template>
@@ -78,11 +96,16 @@
 <script>
     import $ from 'jquery'
     import _ from 'lodash'
+    import vmJsonEditor from './json-editor.vue'
+    import vmJsonViewer from './json-viewer.vue'
 
     import * as actions from './vuex/actions.js'
 
     export default {
-        editor: null, // Json editor instance is bound to component.
+        components: {
+            vmJsonEditor,
+            vmJsonViewer,
+        },
         vuex: {
             getters: {
                 currentRequest: state => state.currentRequest,
@@ -90,22 +113,26 @@
             },
             actions,
         },
+        ready (){
+            this.refresh()
+        },
         watch: {
-            currentRequest(request){
-                this.request = _.clone(request)
+            currentRequest(){
+                this.refresh()
             },
             request(request){
                 this.parseRequest(request)
             },
             isRequestScheduled (isScheduled){
-                if (isScheduled){
-                    this.submit()
+                if (isScheduled) {
+                    this.send()
                 }
             }
         },
         data (){
             return {
                 request: null,
+                changed: false,
                 jsonRequest: {},
                 response: {
                     isJson: false,
@@ -114,13 +141,11 @@
                 showError: false,
             }
         },
-        ready() {
-            let container = $(this.$el).find('.json-editor')[0]
-            this.$options.editor = new JSONEditor(container, {mode: 'code'})
-
-            this.request = this.currentRequest
-        },
         methods: {
+            refresh (){
+                this.request = _.cloneDeep(this.currentRequest)
+                this.changed = false
+            },
             parseRequest (request){
                 try {
                     let escaped = decodeURI(request)
@@ -132,6 +157,8 @@
                 }
             },
             save (){
+                console.log(this.request)
+
                 this.$api.ajax('POST', 'requests', this.request)
                     .then(function (data) {
                         this.setCurrentRequest(data.data)
@@ -139,29 +166,22 @@
                     })
             },
             update (){
-                this.$api.ajax('PUT', 'requests/' + this.request.id, this.request)
+                console.log(this.request)
+
+                this.$api.ajax('POST', 'requests' + this.request.id, this.request)
                     .then(function (data) {
                         this.setCurrentRequest(data.data)
                         this.loadRequests()
                     })
             },
-            submit (){
+            send (){
                 this.scheduleRequest(false)
 
-                let request
+                let path = this.request.path
+                // Process routes that have leading slash.
+                path = path === '/' ? path : '/' + path
 
-                try {
-                    request = this.$options.editor.get()
-                }
-                catch (e) {
-                    this.showError = true
-                    setTimeout(function () {
-                        this.showError = false
-                    }.bind(this), 3000)
-                    return
-                }
-
-                this.$api.ajax(this.request.method, '/' + this.request.path, request)
+                this.$api.ajax(this.request.method, path, this.request.body)
                     .always(function (data) {
                         if (data.responseText !== undefined) {
                             data = data.responseText
