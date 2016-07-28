@@ -1,24 +1,19 @@
 <?php
 use Asvae\ApiTester\Collections\RequestCollection;
 use Asvae\ApiTester\Entities\RequestEntity;
+use Mockery as m;
 
-/**
- * Class RequestCollectionTest
- *
- * @package \\${NAMESPACE}
- */
 class RequestCollectionTest extends TestCase
 {
-
     /**
      * @type RequestCollection
      */
     protected $requests;
 
     /**
-     * @type
+     * @type array
      */
-    protected $sample;
+    protected $exampleRequest;
 
     /**
      * @type int
@@ -28,12 +23,8 @@ class RequestCollectionTest extends TestCase
     public function setUp()
     {
         $this->requests = new RequestCollection();
-
-        $this->requests;
-
         $this->requestsCount = 10;
-
-        $this->sample = [
+        $this->exampleRequest = [
             'path'    => 'example/{param}',
             'headers' => [],
             'body'    => [],
@@ -41,51 +32,51 @@ class RequestCollectionTest extends TestCase
     }
 
     /**
-     * Check RequestCollection::load() method
+     * @covers Asvae\ApiTester\Collections\RequestCollection::load()
      */
     public function testLoad()
     {
+        $this->assertEquals(0, $this->requests->count());
+
         $this->requests->load($this->generateData());
 
         $this->assertEquals(10, $this->requests->count());
-        $this->assertEquals(10, $this->requests->max('id'));
-        $this->assertEquals(55, $this->requests->sum('id'));
     }
 
     /**
-     * Check RequestCollection::find() method
+     * @covers Asvae\ApiTester\Collections\RequestCollection::find()
      */
     public function testFind()
     {
-        $this->requests->load($this->generateData());
+        $this->hydrateRequest();
 
         $request = $this->requests->first();
+        $foundRequest = $this->requests->find($request['id']);
 
-        $test = $this->requests->find($request['id']);
-
-        $this->assertTrue($request === $test);
+        $this->assertTrue($request === $foundRequest);
     }
 
     /**
-     * Check RequestCollection::insert() method
+     * @covers Asvae\ApiTester\Collections\RequestCollection::insert()
      */
     public function testInsert()
     {
+        $this->hydrateRequest();
+        $request = m::mock(RequestEntity::class)->shouldReceive([
+                'getId'        => 5,
+                'offsetGet'    => 5,
+                'offsetExists' => true,
+            ])->andSet('id', 5)->mock();
+
+        $this->requests->insert($request);
+        $foundRequest = $this->requests->where('id', $request['id'])->first();
+
+        $this->assertEquals($request, $foundRequest);
+    }
+
+    private function hydrateRequest()
+    {
         $this->requests->load($this->generateData());
-
-        $testData = [
-                        'path'    => 'test/test',
-                        'headers' => ['X-Example' => 'example']
-                    ] + $this->sample;
-
-        $request = new RequestEntity($testData);
-
-        $result = $this->requests->insert($request);
-
-        $test = $this->requests->where('id', $request['id'])->first();
-
-        $this->assertEquals($result, $request);
-        $this->assertEquals($request, $test);
     }
 
     private function generateData()
@@ -96,10 +87,11 @@ class RequestCollectionTest extends TestCase
 
             $request = [
                 'id'   => $i,
-                'path' => str_replace('{param}', $i, $this->sample['path']),
+                'path' => str_replace('{param}', $i,
+                    $this->exampleRequest['path']),
             ];
 
-            $data[] = $request + $this->sample;
+            $data[] = $request + $this->exampleRequest;
         }
 
         return $data;

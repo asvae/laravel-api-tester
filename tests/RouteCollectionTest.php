@@ -3,8 +3,7 @@
 use Asvae\ApiTester\Collections\RouteCollection;
 
 /**
- * Class RouteCollectionTest
- * @covers \Asvae\ApiTester\RouteCollection
+ * @covers Asvae\ApiTester\Collections\RouteCollection
  */
 class RouteCollectionTest extends TestCase
 {
@@ -106,5 +105,11 @@ class RouteCollectionTest extends TestCase
             ['method' => 'DELETE'],
         ])->count();
         $this->assertEquals(4, $count);
+    }
+
+    public function testEmptyExcept()
+    {
+        $count = $this->routes->filterExcept()->count();
+        $this->assertEquals(6, $count);
     }
 }
