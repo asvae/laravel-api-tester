@@ -1,11 +1,10 @@
 <template>
-    <div class="api-tester-poster">
-
-        <form @submit.prevent="send"
-              class="box"
-              v-if="request"
+    <div class="request-poster">
+        <div class="box"
+             v-if="request"
         >
-            <div class="columns is-multiline">
+
+            <form @submit.prevent="send" class="columns is-multiline">
                 <div class="column is-half">
                     <input class="input"
                            type="text"
@@ -14,6 +13,7 @@
                            v-model="request.method"
                     >
                 </div>
+
                 <div class="column is-half">
                     <input class="input"
                            type="text"
@@ -22,6 +22,7 @@
                            v-model="request.path"
                     >
                 </div>
+
                 <div class="column is-half">
                     <input class="input"
                            type="text"
@@ -30,11 +31,17 @@
                            v-model="request.name"
                     >
                 </div>
-                <div class="column is-half">
-                    <pre v-text="request.id | json"></pre>
-                </div>
 
                 <input type="submit" class="is-hidden"/>
+            </form>
+
+            <div class="columns is-multiline">
+
+                <div class="column is-full">
+                    <vm-headers :headers="request.headers"
+                                @updated="request.headers = $arguments[0]"
+                    ></vm-headers>
+                </div>
 
                 <div class="column is-full">
                     <vm-json-editor :json="request.body"
@@ -42,43 +49,42 @@
                                     @changed="request.body = $arguments[0], changed = true"
                     ></vm-json-editor>
                 </div>
-            </div>
 
-            <!-- For some reason the form ignores top down submit -->
-
-            <div class="columns">
-                <div class="column">
-                    <div class="error"
-                         v-if="showError"
-                         transition="fade-out"
-                    >Your JSON is incorrect!
+                <div class="column is-full">
+                    <div class="columns">
+                        <div class="column is-full error"
+                             v-if="showError"
+                             transition="fade-out">
+                            Your JSON is incorrect!
+                        </div>
+                        <div class="column is-narrow">
+                            <button class="button is-success"
+                                    :class="{'is-loading': isSending}"
+                                    type="button"
+                                    @click="send"
+                                    v-text="'Send'"
+                            ></button>
+                        </div>
+                        <div class="column"></div>
+                        <div class="column is-narrow">
+                            <button class="button is-primary"
+                                    type="button"
+                                    @click="save"
+                                    v-text="request.id ? 'Update' : 'Save'"
+                            ></button>
+                            <button class="button is-icon"
+                                    type="button"
+                                    @click="copy"
+                                    title="Copy"
+                            >
+                                <span class="icon" v-text="'⎘'"></span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="column is-narrow">
-                    <button class="button is-primary"
-                            type="submit"
-                            v-text="'Send'"
-                    ></button>
-                    <button class="button is-primary"
-                            type="button"
-                            v-if="request.id"
-                            @click="update"
-                            v-text="'Update'"
-                    ></button>
-                    <button class="button is-primary"
-                            type="button"
-                            @click="save"
-                            v-if="! request.id"
-                            v-text="'Save'"
-                    ></button>
-                    <button class="button"
-                            type="button"
-                            @click="$options.editor.set('')"
-                            v-text="'Clear'"
-                    ></button>
-                </div>
+
             </div>
-        </form>
+        </div>
 
         <div class="box">
             <iframe style="width: 100%; height: 700px;"
@@ -86,7 +92,7 @@
                     :srcdoc="response.data"
             ></iframe>
 
-            <vm-json-viewer response.isJson
+            <vm-json-viewer v-if="response.isJson"
                             :json="response.data"
             ></vm-json-viewer>
         </div>
@@ -96,15 +102,18 @@
 <script>
     import $ from 'jquery'
     import _ from 'lodash'
-    import vmJsonEditor from './json-editor.vue'
-    import vmJsonViewer from './json-viewer.vue'
+    import vmJsonEditor from '../editor/json-editor.vue'
+    import vmJsonViewer from '../editor/json-viewer.vue'
 
-    import * as actions from './vuex/actions.js'
+    import vmHeaders from './headers.vue'
+
+    import * as actions from '../../vuex/actions.js'
 
     export default {
         components: {
             vmJsonEditor,
             vmJsonViewer,
+            vmHeaders,
         },
         vuex: {
             getters: {
@@ -125,15 +134,17 @@
             },
             isRequestScheduled (isScheduled){
                 if (isScheduled) {
+                    this.scheduleRequest(false)
                     this.send()
                 }
-            }
+            },
         },
         data (){
             return {
                 request: null,
                 changed: false,
                 jsonRequest: {},
+                isSending: false,
                 response: {
                     isJson: false,
                     data: '',
@@ -156,24 +167,16 @@
                     this.isRequestError = true
                 }
             },
-            save (){
-                console.log(this.request)
-
-                this.$api.ajax('POST', 'requests', this.request)
-                    .then(function (data) {
-                        this.setCurrentRequest(data.data)
-                        this.loadRequests()
-                    })
+            copy (){
+                this.saveRequest(this.request)
             },
-            update (){
-                this.$api.ajax('POST', 'requests/' + this.request.id, this.request)
-                    .then(function (data) {
-                        this.setCurrentRequest(data.data)
-                        this.loadRequests()
-                    })
+            save (){
+                // Saves or updates depending on whether request has id
+                let request = this.request
+                request.id ? this.updateRequest(request) : this.saveRequest(request)
             },
             send (){
-                this.scheduleRequest(false)
+                this.isSending = true
 
                 let path = this.request.path
                 // Process routes that have leading slash.
@@ -181,6 +184,8 @@
 
                 this.$api.ajax(this.request.method, path, this.request.body)
                     .always(function (data) {
+                        this.isSending = false
+
                         if (data.responseText !== undefined) {
                             data = data.responseText
                         }
@@ -199,10 +204,5 @@
         font-size: 12px;
         margin-top: 3px;
         display: block;
-    }
-
-    .buttons {
-        margin: 10px 0px;
-        float: right;
     }
 </style>

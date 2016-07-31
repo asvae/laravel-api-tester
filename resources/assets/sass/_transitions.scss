@@ -27,3 +27,14 @@
   }
 }
 
+.slip{
+  &-transition {
+    transition: all .5s ease;
+    overflow: hidden;
+    height: 25px;
+  }
+  &-enter, &-leave {
+    opacity: 0;
+    height: 0;
+  }
+}

@@ -4,15 +4,15 @@
 
 <script>
     import $ from 'jquery'
-    import jsonEditorMixin from './jsonEditorMixin'
+    import abstractJsonEditor from './abstract-json-editor.vue'
 
     export default {
-        mixins: [jsonEditorMixin],
+        extends: abstractJsonEditor,
         data () {
             return {
                 // We have to keep state in order to figure out,
                 // whether json change derived from parent or self.
-                editedJson: {}
+                editedJson: {},
             }
         },
         watch: {

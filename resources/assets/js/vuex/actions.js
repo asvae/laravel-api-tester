@@ -33,14 +33,32 @@ export const setCurrentRequestFromRoute = ({dispatch}, route) => {
         path: route.path,
         name: "",
         body: "",
+        headers: {},
+        config: {
+            addCRSF: true,
+        }
     }
     
     dispatch('SET_CURRENT_REQUEST', request)
 }
 
 export const deleteRequest = function ({dispatch}, request) {
+    dispatch('DELETE_REQUEST', request)
     this.$api.ajax('DELETE', 'requests/' + request.id)
-        .then(function (response) {
+}
+
+export const saveRequest = function ({dispatch}, request) {
+    this.$api.ajax('POST', 'requests', this.request)
+        .then(function (data) {
+            this.setCurrentRequest(data.data)
+            this.loadRequests()
+        })
+}
+
+export const updateRequest = function ({dispatch}, request) {
+    this.$api.ajax('PUT', 'requests/' + request.id, request)
+        .then(function (data) {
+            this.setCurrentRequest(data.data)
             this.loadRequests()
         })
 }
