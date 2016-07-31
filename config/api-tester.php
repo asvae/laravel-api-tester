@@ -41,7 +41,10 @@ return [
     |
     */
     'repositories' => [
-        'routes'   => Asvae\ApiTester\Repositories\RouteLaravelRepository::class,
+        'routes'   => [
+            Asvae\ApiTester\Repositories\RouteLaravelRepository::class,
+            //Asvae\ApiTester\Repositories\RouteDingoRepository::class,
+        ],
         'requests' => Asvae\ApiTester\Repositories\RequestRepository::class
     ],
 

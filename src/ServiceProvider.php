@@ -6,7 +6,9 @@ use Asvae\ApiTester\Contracts\RequestRepositoryInterface;
 use Asvae\ApiTester\Contracts\RouteRepositoryInterface;
 use Asvae\ApiTester\Contracts\StorageInterface;
 use Asvae\ApiTester\Providers\RouteServiceProvider;
+use Asvae\ApiTester\Repositories\RouteRepository;
 use Asvae\ApiTester\Storages\JsonStorage;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -29,10 +31,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             return $app->make(JsonStorage::class, ['path' => storage_path(config('api-tester.storage.path')),'filename' => config('api-tester.storage.file')]);
         });
 
-        $this->app->singleton(
-            RouteRepositoryInterface::class,
-            config('api-tester.repositories.routes')
-        );
+        $this->app->singleton(RouteRepositoryInterface::class, function(Container $app){
+            $repositories = [];
+            foreach(config('api-tester.repositories.routes') as $repository){
+                $repositories[] = $app->make($repository);
+            }
+
+            return $app->make(RouteRepository::class, ['repositories' => $repositories]);
+        });
 
         $this->app->singleton(
             RequestRepositoryInterface::class,
