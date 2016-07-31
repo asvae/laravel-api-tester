@@ -4,11 +4,10 @@
 
 <script>
     import $ from 'jquery'
-    import jsonEditor from './jsonEditorMixin'
+    import abstractJsonEditor from './abstract-json-editor.vue'
 
     export default {
-        extends: jsonEditor,
-
+        extends: abstractJsonEditor,
         watch: {
             json (json){
                 this.$options.editor.set(json)

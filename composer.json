@@ -14,7 +14,8 @@
     },
     "require-dev": {
         "laravel/framework": "5.2.*",
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.0",
+        "mockery/mockery": "^0.9.5"
     },
     "autoload-dev": {
         "classmap": [

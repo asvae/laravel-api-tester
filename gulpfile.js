@@ -10,7 +10,7 @@ paths.js.push('./node_modules/jsoneditor/dist/jsoneditor.js')
 paths.css.push('./node_modules/jsoneditor/dist/jsoneditor.min.css')
 
 elixir(function (mix) {
-    mix.sass('api-tester.scss', './resources/assets/tmp')
+    mix.sass('api-tester.sass', './resources/assets/tmp')
     paths.css.push('./resources/assets/tmp/api-tester.css')
 
     mix.browserify('api-tester.js', './resources/assets/tmp/app.js')
