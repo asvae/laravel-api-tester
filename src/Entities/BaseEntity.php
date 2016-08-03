@@ -6,13 +6,14 @@ use ArrayAccess;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
+use JsonSerializable;
 
 /**
  * Class BaseEntity.
  *
  * @package Asvae\ApiTester\Entities
  */
-abstract class BaseEntity implements Arrayable, Jsonable, ArrayAccess
+abstract class BaseEntity implements Arrayable, Jsonable, ArrayAccess, JsonSerializable
 {
     /**
      * Names of attributes that can be filled.
@@ -131,5 +132,18 @@ abstract class BaseEntity implements Arrayable, Jsonable, ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->attributes[$offset]);
+    }
+
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link  http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }

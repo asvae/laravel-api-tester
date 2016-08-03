@@ -40,14 +40,15 @@ class RequestEntity extends BaseEntity
         return $newRequest;
     }
 
-    public function toJson($options = 0)
+
+    public function jsonSerialize()
     {
-        $data = $this->toArray();
+        $data = parent::jsonSerialize();
 
         if(empty($data['headers'])){
             $data['headers'] = (object)[];
         }
-        
-        return json_encode($data);
+
+        return $data;
     }
 }
