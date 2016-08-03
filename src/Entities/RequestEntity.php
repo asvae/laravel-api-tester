@@ -39,4 +39,15 @@ class RequestEntity extends BaseEntity
 
         return $newRequest;
     }
+
+    public function toJson($options = 0)
+    {
+        $data = $this->toArray();
+
+        if(empty($data['headers'])){
+            $data['headers'] = (object)[];
+        }
+        
+        return json_encode($data);
+    }
 }
