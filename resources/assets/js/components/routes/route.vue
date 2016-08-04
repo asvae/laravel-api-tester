@@ -44,10 +44,10 @@
 
 <style scoped>
     .route.selected {
-        border-left: 2px solid rgb(255, 82, 82);
+        border-right: 2px solid rgb(255, 82, 82);
         background-color: #eef9f2;
     }
     .route {
-        border-left: 2px solid transparent;
+        border-right: 2px solid transparent;
     }
 </style>
