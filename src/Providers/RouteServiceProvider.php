@@ -39,6 +39,9 @@ class RouteServiceProvider extends BaseRouteServiceProvider
         parent::boot($router);
 
         $this->kernel = $this->app->make(Kernel::class);
+
+        // The middleware is used to intercept every request with specific header
+        // so that laravel can tell us, which route the request belongs to.
         $this->kernel->prependMiddleware(DetectRouteMiddleware::class);
     }
 

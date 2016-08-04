@@ -26,24 +26,26 @@ class DetectRouteMiddleware
 
     public function handle(Request $request, Closure $next)
     {
-        if($request->hasHeader('X-Test-Request')){
+        // In case the request was sent by Api Tester we will halt the request
+        // and output route information instead.
+        if ($request->hasHeader('X-Api-Tester')) {
 
-            $this->events->listen(RouteMatched::class, function(RouteMatched $event){
+            $this->events->listen(RouteMatched::class,
+                function (RouteMatched $event) {
 
-                $route = $event->route;
+                    $route = $event->route;
 
-                response()->json([
-                    'domain'  => $route->domain(),
-                    'name'    => $route->getName(),
-                    'methods' => $route->getMethods(),
-                    'path'    => $route->getPath(),
-                    'action'  => $route->getAction(),
-                ])->send();
+                    response()->json([
+                        'domain'  => $route->domain(),
+                        'name'    => $route->getName(),
+                        'methods' => $route->getMethods(),
+                        'path'    => $route->getPath(),
+                        'action'  => $route->getAction(),
+                    ])->send();
 
-                exit();
-            });
+                    exit();
+                });
         }
-
 
         return $next($request);
     }
