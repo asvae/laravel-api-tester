@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 const state = {
     routes: [],
     requests: [],
-    currentRequest: {method: 'GET', path: '/', headers: {}},
+    currentRequest: {method: 'GET', path: '/', headers: []},
     isRequestScheduled: false,
     search: '',
 }

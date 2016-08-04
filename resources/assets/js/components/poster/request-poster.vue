@@ -1,10 +1,21 @@
 <template>
     <div class="request-poster">
-        <div class="box"
-             v-if="request"
-        >
 
-            <form @submit.prevent="send" class="columns is-multiline">
+        <div v-if="request">
+
+            <div class="columns">
+                <div class="column is-full">
+                    <vm-poster-navigation
+                            :page="page"
+                            @changed="page = $arguments[0]"
+                    ></vm-poster-navigation>
+                </div>
+            </div>
+
+            <form @submit.prevent="send"
+                  class="columns is-multiline"
+                  v-if="page === 'request'"
+            >
                 <div class="column is-half">
                     <input class="input"
                            type="text"
@@ -37,17 +48,17 @@
 
             <div class="columns is-multiline">
 
-                <div class="column is-full">
-                    <vm-headers :headers="request.headers"
-                                @updated="request.headers = $arguments[0]"
-                    ></vm-headers>
-                </div>
-
-                <div class="column is-full">
+                <div class="column is-full" v-if="page === 'request'">
                     <vm-json-editor :json="request.body"
                                     style="height: 300px"
                                     @changed="request.body = $arguments[0], changed = true"
                     ></vm-json-editor>
+                </div>
+
+                <div class="column is-full" v-if="page === 'headers'">
+                    <vm-headers :headers="request.headers"
+                                @updated="request.headers = $arguments[0]"
+                    ></vm-headers>
                 </div>
 
                 <div class="column is-full">
@@ -83,19 +94,19 @@
                     </div>
                 </div>
 
+                <div class="column is-full">
+                    <iframe style="width: 100%; height: 700px;"
+                            v-if="! response.isJson"
+                            :srcdoc="response.data"
+                    ></iframe>
+
+                    <vm-json-viewer v-if="response.isJson"
+                                    :json="response.data"
+                    ></vm-json-viewer>
+                </div>
             </div>
         </div>
 
-        <div class="box">
-            <iframe style="width: 100%; height: 700px;"
-                    v-if="! response.isJson"
-                    :srcdoc="response.data"
-            ></iframe>
-
-            <vm-json-viewer v-if="response.isJson"
-                            :json="response.data"
-            ></vm-json-viewer>
-        </div>
     </div>
 </template>
 
@@ -104,6 +115,7 @@
     import _ from 'lodash'
     import vmJsonEditor from '../editor/json-editor.vue'
     import vmJsonViewer from '../editor/json-viewer.vue'
+    import vmPosterNavigation from './poster-navigation.vue'
 
     import vmHeaders from './headers.vue'
 
@@ -114,6 +126,7 @@
             vmJsonEditor,
             vmJsonViewer,
             vmHeaders,
+            vmPosterNavigation,
         },
         vuex: {
             getters: {
@@ -145,6 +158,7 @@
                 changed: false,
                 jsonRequest: {},
                 isSending: false,
+                page: 'request',
                 response: {
                     isJson: false,
                     data: '',
