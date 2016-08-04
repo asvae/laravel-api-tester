@@ -4,9 +4,9 @@ namespace Asvae\ApiTester\Providers;
 
 use Asvae\ApiTester\Http\Middleware\DebugState;
 use Asvae\ApiTester\Http\Middleware\DetectRouteMiddleware;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as BaseRouteServiceProvider;
 use Illuminate\Routing\Router;
-use Symfony\Component\HttpKernel\Kernel;
 
 class RouteServiceProvider extends BaseRouteServiceProvider
 {
