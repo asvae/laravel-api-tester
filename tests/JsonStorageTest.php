@@ -79,4 +79,12 @@ class JsonStorageTest extends TestCase
 
         $this->assertEquals($this->referenceData, $data);
     }
+    
+    public function testRemoveAll()
+    {
+        $this->storage->put([]);
+        $data = $this->storage->get();
+
+        $this->assertEquals([], $data);
+    }
 }
