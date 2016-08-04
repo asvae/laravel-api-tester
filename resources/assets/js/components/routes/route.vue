@@ -1,5 +1,7 @@
 <template>
-    <div class="request">
+    <div class="route"
+         :class="{selected: currentRoute === route}"
+    >
         <div class="columns is-mobile">
             <div class="column is-narrow">
                 <button class="button is-small is-active"
@@ -17,11 +19,20 @@
 </template>
 
 <script>
-    import * as actions from '../../vuex/actions.js'
+    import {
+            setCurrentRequestFromRoute,
+            scheduleRequest
+    } from '../../vuex/actions.js'
 
     export default {
         vuex: {
-            actions,
+            getters: {
+                currentRoute: (store) => store.currentRoute,
+            },
+            actions: {
+                setCurrentRequestFromRoute,
+                scheduleRequest
+            }
         },
         props: {
             route: {
@@ -32,5 +43,11 @@
 </script>
 
 <style scoped>
-
+    .route.selected {
+        border-left: 2px solid rgb(255, 82, 82);
+        background-color: #eef9f2;
+    }
+    .route {
+        border-left: 2px solid transparent;
+    }
 </style>

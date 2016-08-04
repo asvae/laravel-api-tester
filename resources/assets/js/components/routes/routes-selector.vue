@@ -107,8 +107,5 @@
 </script>
 
 <style scoped>
-    .route.selected {
-        border-left: 2px solid rgb(255, 82, 82);
-        background-color: #eef9f2;
-    }
+
 </style>
