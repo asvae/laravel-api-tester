@@ -6,7 +6,7 @@ export const loadRoutes = function ({dispatch}) {
             let routes = response.data
             let order = 0
 
-            let parsedRoutes = _.map(routes, function (route){
+            let parsedRoutes = _.map(routes, function (route) {
                 route.type = 'route'
                 route.order = order++
                 return route
@@ -38,7 +38,7 @@ export const setCurrentRequestFromRoute = ({dispatch}, route) => {
             addCRSF: true,
         }
     }
-    
+
     dispatch('SET_CURRENT_REQUEST', request)
 }
 
@@ -52,6 +52,24 @@ export const saveRequest = function ({dispatch}, request) {
         .then(function (data) {
             this.setCurrentRequest(data.data)
             this.loadRequests()
+        })
+}
+
+export const getCurrentRequestRoute = function ({dispatch}) {
+    let headers = _.cloneDeep(this.currentRequest.headers)
+    headers.push({key: 'X-Api-Tester', value: 1})
+
+    let request = this.currentRequest
+
+    let path = this.request.path
+    // Process routes that have leading slash.
+    path = path === '/' ? path : '/' + path
+
+    this.$api.ajax(request.method, path, request.body, headers)
+        .always((response) => {
+            let route = response.data
+
+            dispatch('SET_CURRENT_ROUTE', route)
         })
 }
 

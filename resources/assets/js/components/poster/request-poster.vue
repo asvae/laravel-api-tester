@@ -49,6 +49,10 @@
             <div class="columns is-multiline">
 
                 <div class="column is-full" v-if="page === 'request'">
+                    <vm-route-details></vm-route-details>
+                </div>
+
+                <div class="column is-full" v-if="page === 'request'">
                     <vm-json-editor :json="request.body"
                                     style="height: 300px"
                                     @changed="request.body = $arguments[0], changed = true"
@@ -118,6 +122,7 @@
     import vmPosterNavigation from './poster-navigation.vue'
 
     import vmHeaders from './headers.vue'
+    import vmRouteDetails from './route-details.vue'
 
     import * as actions from '../../vuex/actions.js'
 
@@ -127,6 +132,7 @@
             vmJsonViewer,
             vmHeaders,
             vmPosterNavigation,
+            vmRouteDetails,
         },
         vuex: {
             getters: {
@@ -170,6 +176,8 @@
             refresh (){
                 this.request = _.cloneDeep(this.currentRequest)
                 this.changed = false
+                this.page = 'request'
+                this.getCurrentRequestRoute()
             },
             parseRequest (request){
                 try {

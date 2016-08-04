@@ -36,11 +36,13 @@ class DetectRouteMiddleware
                     $route = $event->route;
 
                     response()->json([
-                        'domain'  => $route->domain(),
-                        'name'    => $route->getName(),
-                        'methods' => $route->getMethods(),
-                        'path'    => $route->getPath(),
-                        'action'  => $route->getAction(),
+                        'data' => [
+                            'domain'  => $route->domain(),
+                            'name'    => $route->getName(),
+                            'methods' => $route->getMethods(),
+                            'path'    => $route->getPath(),
+                            'action'  => $route->getAction(),
+                        ],
                     ])->send();
 
                     exit();

@@ -3,21 +3,23 @@
 
         <button class="button page"
                 type="button"
-                :class="{selected: 'request' === page}"
+                :class="{'is-primary': 'request' === page}"
                 @click="page = 'request'"
                 v-text="'Request'"
         ></button>
 
         <button class="button page"
                 type="button"
-                :class="{selected: 'headers' === page}"
+                :class="{'is-primary': 'headers' === page}"
                 @click="page = 'headers'"
                 v-text="'Headers'"
         ></button>
 
-        <button class="button page"
+        <!-- // TODO Implement -->
+        <button v-if="false"
+                class="button page"
                 type="button"
-                :class="{selected: 'config' === page}"
+                :class="{'is-primary': 'config' === page}"
                 @click="page = 'config'"
                 v-text="'Config'"
         ></button>
@@ -42,11 +44,5 @@
 </script>
 
 <style scoped>
-    .page.selected {
-        background-color: #0fb8ad;
-    }
 
-    .page {
-        background-color: white;
-    }
 </style>

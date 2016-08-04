@@ -1,9 +1,11 @@
 import Vuex from 'vuex'
+import _ from 'lodash'
 
 const state = {
     routes: [],
     requests: [],
     currentRequest: {method: 'GET', path: '/', headers: []},
+    currentRoute: null,
     isRequestScheduled: false,
     search: '',
 }
@@ -26,6 +28,9 @@ const mutations = {
     },
     SET_SEARCH: (state, search) => {
         state.search = search
+    },
+    SET_CURRENT_ROUTE: (state, route) => {
+        state.currentRoute = _.find(state.routes, route)
     },
 }
 
