@@ -1,4 +1,5 @@
 import './plugins/env.js'
+import './plugins/globals.js'
 import './vuex/vuex-installer.js'
 import './plugins/api_demo/api-demo-installer.js'
 
