@@ -3,7 +3,7 @@
         <form class="columns"
               @submit.prevent="create"
         >
-            <div class="column is-4">
+            <div class="column">
                 <input class="input"
                        type="text"
                        placeholder="Key"
@@ -12,7 +12,7 @@
                 >
             </div>
 
-            <div class="column is-6">
+            <div class="column">
                 <input class="input"
                        type="text"
                        placeholder="Value"
@@ -20,9 +20,9 @@
                        v-model="header.value"
                 >
             </div>
-            <div class="column is-2">
+            <div class="column is-narrow">
                 <button type="submit"
-                        class="button is-success is-icon"
+                        class="button is-success is-outlined is-icon"
                 >
                     <span class="icon" v-text="'+'"></span>
                 </button>

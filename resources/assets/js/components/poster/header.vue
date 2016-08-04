@@ -1,8 +1,8 @@
 <template>
     <div class="header">
 
-        <div class="columns">
-            <div class="column is-4">
+        <div class="columns is-mobile">
+            <div class="column">
                 <input class="input"
                        type="text"
                        placeholder="Key"
@@ -11,7 +11,7 @@
                 >
             </div>
 
-            <div class="column is-6">
+            <div class="column">
                 <input class="input"
                        type="text"
                        placeholder="Value"
@@ -20,9 +20,9 @@
                 >
             </div>
 
-            <div class="column is-2">
+            <div class="column is-narrow">
                 <button type="button"
-                        class="button is-danger is-icon"
+                        class="button is-danger  is-outlined is-icon"
                         @click="remove"
                 >
                     <span class="icon" v-text="'×'"></span>
