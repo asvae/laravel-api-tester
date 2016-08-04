@@ -3,11 +3,18 @@
 namespace Asvae\ApiTester\Providers;
 
 use Asvae\ApiTester\Http\Middleware\DebugState;
+use Asvae\ApiTester\Http\Middleware\DetectRouteMiddleware;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as BaseRouteServiceProvider;
 use Illuminate\Routing\Router;
+use Symfony\Component\HttpKernel\Kernel;
 
 class RouteServiceProvider extends BaseRouteServiceProvider
 {
+    /**
+     * @type \Illuminate\Foundation\Http\Kernel
+     */
+    protected $kernel;
+
     /**
      * Define the routes for the application.
      *
@@ -30,6 +37,9 @@ class RouteServiceProvider extends BaseRouteServiceProvider
     public function boot(Router $router)
     {
         parent::boot($router);
+
+        $this->kernel = $this->app->make(Kernel::class);
+        $this->kernel->prependMiddleware(DetectRouteMiddleware::class);
     }
 
     protected function getMiddlewares()
