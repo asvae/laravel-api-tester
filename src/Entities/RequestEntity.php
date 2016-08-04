@@ -9,7 +9,7 @@ namespace Asvae\ApiTester\Entities;
  */
 class RequestEntity extends BaseEntity
 {
-    protected $fillable = ['method', 'path', 'headers', 'body'];
+    protected $fillable = ['method', 'path', 'headers', 'body', 'name'];
 
     /**
      * @param $id
@@ -38,17 +38,5 @@ class RequestEntity extends BaseEntity
         $newRequest->setId($data['id']);
 
         return $newRequest;
-    }
-
-
-    public function jsonSerialize()
-    {
-        $data = parent::jsonSerialize();
-
-        if(empty($data['headers'])){
-            $data['headers'] = (object)[];
-        }
-
-        return $data;
     }
 }

@@ -182,7 +182,7 @@
                 // Process routes that have leading slash.
                 path = path === '/' ? path : '/' + path
 
-                this.$api.ajax(this.request.method, path, this.request.body)
+                this.$api.ajax(this.request.method, path, this.request.body, this.request.headers)
                     .always(function (data) {
                         this.isSending = false
 

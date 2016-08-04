@@ -65,9 +65,15 @@ export default class Api {
      */
     ajax(method, url, data = null, headers = []) {
 
-        headers['X-CSRF-TOKEN'] = ENV.token
+        headers = _.clone(headers)
+        headers.push({key: 'X-CSRF-TOKEN', value: ENV.token})
 
-        if (method.toUpperCase() !== 'GET'){
+        headers = _.reduce(headers, function (headersHash, header) {
+            headersHash[header.key] = header.value
+            return headersHash
+        }, {})
+
+        if (method.toUpperCase() !== 'GET') {
             data = JSON.stringify(data)
         }
 

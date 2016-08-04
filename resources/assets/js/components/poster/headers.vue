@@ -1,44 +1,46 @@
 <template>
     <div class="headers">
-        <div class="tile is-ancestor">
-            <div class="tile is-vertical">
-                <div v-for="(key, name) in headers"
-                     transition="slip"
-                >
-                    {{ key }} {{ name }}
-                </div>
-            </div>
-        </div>
+        <vm-header
+                v-for="header in headers"
+                :header="header"
+                @removed="headers.$remove(header)"
+        ></vm-header>
         <vm-new-header
-                @created="created"
+                @created="headers.push($arguments[0])"
         ></vm-new-header>
     </div>
 </template>
 
 <script>
+    import vmHeader from './header.vue'
     import vmNewHeader from './new-header.vue'
     import _ from 'lodash'
 
     export default {
         components: {
             vmNewHeader,
+            vmHeader,
         },
         data (){
             return {}
         },
         methods: {
-            created (key, value){
-                this.headers[key] = value
-                this.headers = _.clone(this.headers)
-                this.$emit('update', this.headers)
-            }
+//            update (key, value){
+//                this.flush()
+//            },
+//            remove (key){
+//                console.log('delete')
+//                delete this.headers[key]
+//                this.flush()
+//            },
+//            flush(){
+//                this.headers = _.clone(this.headers)
+//                this.$emit('updated', this.headers)
+//            }
         },
         props: {
             headers: {
-                type: Object,
-                default(){
-                    return {}
-                },
+                type: Array,
                 required: true
             }
         }

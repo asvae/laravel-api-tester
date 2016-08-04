@@ -33,7 +33,7 @@ export const setCurrentRequestFromRoute = ({dispatch}, route) => {
         path: route.path,
         name: "",
         body: "",
-        headers: {},
+        headers: [],
         config: {
             addCRSF: true,
         }

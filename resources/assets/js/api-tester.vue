@@ -4,7 +4,7 @@ Application main page.
     <div class="api-tester-main">
         <div class="container is-fluid">
             <div class="columns">
-                <div class="column is-narrow">
+                <div class="column is-4">
                     <div class="columns is-multiline">
                         <div class="column is-full">
                             <vm-search-panel></vm-search-panel>
@@ -12,10 +12,10 @@ Application main page.
                         <div class="column is-full">
                             <vm-routes-selector></vm-routes-selector>
                         </div>
+                        <div class="column is-full">
+                            <vm-requests-selector></vm-requests-selector>
+                        </div>
                     </div>
-                </div>
-                <div class="column is-narrow">
-                    <vm-requests-selector></vm-requests-selector>
                 </div>
                 <div class="column">
                     <vm-request-poster></vm-request-poster>

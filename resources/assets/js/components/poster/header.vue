@@ -1,8 +1,7 @@
 <template>
-    <div class="new-header">
-        <form class="columns"
-              @submit.prevent="create"
-        >
+    <div class="header">
+
+        <div class="columns">
             <div class="column is-4">
                 <input class="input"
                        type="text"
@@ -20,41 +19,37 @@
                        v-model="header.value"
                 >
             </div>
+
             <div class="column is-2">
-                <button type="submit"
-                        class="button is-success is-icon"
+                <button type="button"
+                        class="button is-danger is-icon"
+                        @click="remove"
                 >
-                    <span class="icon" v-text="'+'"></span>
+                    <span class="icon" v-text="'×'"></span>
                 </button>
             </div>
-        </form>
+        </div>
 
     </div>
 </template>
 
 <script>
-    import $ from 'jquery'
     import _ from 'lodash'
 
     export default {
         data (){
-            return {
-                header: {
-                    key: '',
-                    value: '',
-                },
-            }
+            return {}
         },
         methods: {
-            wipe (){
-                $(this.$el).find('input').first().focus()
-                this.header.key = ''
-                this.header.value = ''
+            remove (){
+                this.$emit('removed', this.header)
             },
-            create (){
-                this.$emit('created', _.clone(this.header))
-                this.wipe()
-            }
+        },
+        props: {
+            header: {
+                type: Object,
+                required: true,
+            },
         }
     }
 </script>

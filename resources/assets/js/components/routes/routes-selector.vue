@@ -1,7 +1,7 @@
 <template>
     <div class="routes-selector">
-        <div class="box">
 
+        <div class="box">
             <div class="tile is-ancestor">
                 <!-- Routes -->
                 <div class="tile is-vertical">
@@ -14,8 +14,8 @@
                     Nothing found...
                 </div>
             </div>
-
         </div>
+
     </div>
 </template>
 

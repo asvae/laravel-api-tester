@@ -1,13 +1,11 @@
 <template>
     <div class="search-panel">
-        <div class="box">
-            <input class="input"
-                   type="text"
-                   placeholder="Search"
-                   title="Search"
-                   v-model="search"
-            >
-        </div>
+        <input class="input"
+               type="text"
+               placeholder="Search"
+               title="Search"
+               v-model="search"
+        >
     </div>
 </template>
 
