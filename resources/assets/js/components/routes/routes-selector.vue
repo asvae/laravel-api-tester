@@ -58,7 +58,6 @@
                 this.routes.forEach(function (route) {
 
                     if (
-
                         route.methods.join(',').toUpperCase()
                                  .includes(search)
                             || route.path.toUpperCase().includes(search)
