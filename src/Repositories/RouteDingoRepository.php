@@ -5,6 +5,7 @@ namespace Asvae\ApiTester\Repositories;
 use Asvae\ApiTester\Collections\RouteCollection;
 use Asvae\ApiTester\Contracts\RouteRepositoryInterface;
 use Dingo\Api\Routing\Router;
+use ReflectionClass;
 
 /**
  * Class RouteDingoRepository
@@ -24,11 +25,12 @@ class RouteDingoRepository implements RouteRepositoryInterface
 
         foreach ($router->getAdapterRoutes() as $versionName => $versionGroup) {
             foreach ($versionGroup as $route) {
-                /** @var \Illuminate\Routing\Route $route */
 
+                /** @var \Illuminate\Routing\Route $route */
                 $this->routes->push([
                     'router'  => 'Dingo',
                     'version' => $versionName,
+                    'wheres'  => $this->extractWheres($route),
                     'domain'  => $route->domain(),
                     'name'    => $route->getName(),
                     'methods' => $route->getMethods(),
@@ -50,5 +52,21 @@ class RouteDingoRepository implements RouteRepositoryInterface
         return $this->routes->filterMatch($match)
                             ->filterExcept($except)
                             ->values();
+    }
+
+    protected function extractWheres($route)
+    {
+        $reflection = new ReflectionClass($route);
+        $prop = $reflection->getProperty('wheres');
+        $prop->setAccessible(true);
+
+        $wheres = $prop->getValue($route);
+
+        // Хак, что бы в json всегда был объект
+        if (empty($wheres)) {
+            return (object) [];
+        }
+
+        return $wheres;
     }
 }
