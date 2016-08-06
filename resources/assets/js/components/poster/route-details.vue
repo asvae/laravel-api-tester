@@ -4,15 +4,15 @@
             <tbody>
             <tr>
                 <td>Methods</td>
-                <td v-text="currentRoute.methods.join(', ')"></td>
+                <td v-text="methods"></td>
             </tr>
             <tr>
-                <td>Middlewares</td>
-                <td v-text="currentRoute.action.middleware.join(', ')"></td>
+                <td>Middleware</td>
+                <td v-text="middleware"></td>
             </tr>
             <tr>
-                <td>Contoller</td>
-                <td v-text="currentRoute.action.controller"></td>
+                <td>Action</td>
+                <td v-text="action"></td>
             </tr>
             </tbody>
         </table>
@@ -25,11 +25,32 @@
         data (){
             return {}
         },
+
         vuex: {
             getters: {
-                currentRoute: state => state.currentRoute,
-            },
-        },
+                methods: function (state) {
+                    return state.currentRoute.methods.join(', ');
+                },
+
+                middleware: function (state) {
+                    let middleware = state.currentRoute.action.middleware
+
+                    if(typeof middleware === 'string'){
+                        return middleware
+                    }
+
+                    return middleware.join(', ')
+                },
+
+                action: function(state){
+                    return state.currentRoute.action.uses
+                },
+
+                currentRoute: function(state){
+                    return state.currentRoute
+                }
+            }
+        }
     }
 </script>
 
