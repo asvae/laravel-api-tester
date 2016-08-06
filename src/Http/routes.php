@@ -24,7 +24,7 @@ Route::resource('requests', 'RequestController', [
 Route::group(['prefix' => 'assets'], function () {
 
     // Define a file pattern
-    $filePattern = '^([a-z_\-\.]+?)$';
+    $filePattern = '^([a-z_\-\.]+)$';
 
     Route::get('img/{file}', ['as' => 'image', 'uses' => 'AssetsController@image'])
          ->where('file', $filePattern);
