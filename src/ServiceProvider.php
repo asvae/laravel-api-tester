@@ -15,6 +15,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     public function register()
     {
+
+        if($this->app['config']['api-tester']['enabled']){
+
+        }
+
         if (!defined('API_TESTER_PATH')) {
             define('API_TESTER_PATH', realpath(__DIR__ . '/../'));
         }
@@ -28,12 +33,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             'api-tester');
 
         $this->app->singleton(StorageInterface::class, function(Application $app) {
-            return $app->make(JsonStorage::class, ['path' => storage_path(config('api-tester.storage.path')),'filename' => config('api-tester.storage.file')]);
+            return $app->make(config('api-tester.request_storage'), ['path' => storage_path(config('api-tester.request_db_path'))]);
         });
 
         $this->app->singleton(RouteRepositoryInterface::class, function(Container $app){
             $repositories = [];
-            foreach(config('api-tester.repositories.routes') as $repository){
+            foreach(config('api-tester.route_repositories') as $repository){
                 $repositories[] = $app->make($repository);
             }
 
@@ -42,7 +47,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->app->singleton(
             RequestRepositoryInterface::class,
-            config('api-tester.repositories.requests')
+            config('api-tester.request_repository')
         );
     }
 

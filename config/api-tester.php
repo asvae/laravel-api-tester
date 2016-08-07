@@ -12,41 +12,8 @@ return [
     |
     */
 
-    'enabled'    => env('APP_DEBUG', false),
+    'enabled' => env('APP_DEBUG', false),
 
-    /*
-    |--------------------------------------------------------------------------
-    | Middleware
-    |--------------------------------------------------------------------------
-    |
-    | Define list of middleware(s), that should be used for api-tester.
-    | CRSF token will be handled automatically.
-    |
-    */
-    'middleware' => ['web'],
-
-
-    'storage'      => [
-        'path' => 'api-tester',
-        'file' => 'requests.db',
-    ],
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Repositories
-    |--------------------------------------------------------------------------
-    |
-    | Specify class for RouteRepository and RequestRepository.
-    |
-    */
-    'repositories' => [
-        'routes'   => [
-            Asvae\ApiTester\Repositories\RouteLaravelRepository::class,
-            //Asvae\ApiTester\Repositories\RouteDingoRepository::class,
-        ],
-        'requests' => Asvae\ApiTester\Repositories\RequestRepository::class
-    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -54,11 +21,25 @@ return [
     |--------------------------------------------------------------------------
     |
     | Define the route for api router.
-    | http://your-site.com/[route]
+    | http://your-site.com/{route}
     |
     */
 
     'route' => 'api-tester',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Middleware
+    |--------------------------------------------------------------------------
+    |
+    | Define list of middleware, that should be used for api-tester.
+    | CRSF token will be handled automatically.
+    |
+    */
+
+    'middleware' => ['web'],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -70,7 +51,7 @@ return [
     | ## Examples
     |
     | ### Include all
-    | 'include' => [[]]
+    | 'include' => []
     |
     | ### Include some routes
     | 'include' => [
@@ -79,7 +60,7 @@ return [
     |      // ...
     |  ]
     |
-    | ### Include advanced
+    | ### Include/exclude advanced syntax
     | 'include' => [
     |      [
     |         'path' => 'api/v(1|2|3)/.*',
@@ -89,13 +70,51 @@ return [
     |      // ...
     |  ]
     |
-    | ### Include all except 'users'
-    | 'include' => [[]],
+    | ### Include all except 'api/users'
+    | 'include' => [],
     | 'exclude' => ['api/users'],
     |
     */
 
-    'include' => [[]],
-
+    'include' => ['.*'],
     'exclude' => [],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Repositories
+    |--------------------------------------------------------------------------
+    |
+    | Specify list of Route Repositories that to be used for providing routes.
+    |
+    */
+
+    'route_repositories' => [
+        Asvae\ApiTester\Repositories\RouteLaravelRepository::class,
+        //Asvae\ApiTester\Repositories\RouteDingoRepository::class,
+    ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Request Repository
+    |--------------------------------------------------------------------------
+    | Define class of request repository.
+    |
+    */
+
+    'request_repository' => Asvae\ApiTester\Repositories\RequestRepository::class,
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Asvae\ApiTester\Repositories\RequestRepository configuration
+    |--------------------------------------------------------------------------
+    | The following lines are actual only for default Asvae\ApiTester\Repositories\RequestRepository
+    | or similar implementations.
+    |
+    */
+
+    'request_storage' => Asvae\ApiTester\Storages\JsonStorage::class,
+    'request_db_path' => 'storage/api-tester/requests.db',
 ];
