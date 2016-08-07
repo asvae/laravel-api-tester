@@ -74,8 +74,6 @@ export const getCurrentRequestRoute = function ({dispatch}) {
         let dummy = new RegExp('{'+index+'}', 'g')
 
         path = path.replace(dummy, mocker.gen())
-
-        console.log(path)
     }
 
 
