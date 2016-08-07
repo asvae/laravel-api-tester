@@ -5,10 +5,10 @@ namespace Asvae\ApiTester\Providers;
 use Asvae\ApiTester\Http\Middleware\DebugState;
 use Asvae\ApiTester\Http\Middleware\DetectRouteMiddleware;
 use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as BaseRouteServiceProvider;
 use Illuminate\Routing\Router;
+use Illuminate\Support\ServiceProvider;
 
-class RouteServiceProvider extends BaseRouteServiceProvider
+class RouteServiceProvider extends ServiceProvider
 {
     /**
      * @type \Illuminate\Foundation\Http\Kernel
@@ -25,10 +25,10 @@ class RouteServiceProvider extends BaseRouteServiceProvider
     public function map(Router $router)
     {
         $router->group([
-            'as'         => 'api-tester.',
-            'prefix'     => config('api-tester.route'),
-            'namespace'  => $this->getNamespace(),
-            'middleware' => $this->getMiddlewares(),
+            'as' => 'api-tester.',
+            'prefix' => config('api-tester.route'),
+            'namespace' => $this->getNamespace(),
+            'middleware' => $this->getMiddleware(),
         ], function () {
             $this->requireRoutes();
         });
@@ -36,7 +36,7 @@ class RouteServiceProvider extends BaseRouteServiceProvider
 
     public function boot(Router $router)
     {
-        parent::boot($router);
+        $this->map($router);
 
         $this->kernel = $this->app->make(Kernel::class);
 
@@ -45,12 +45,11 @@ class RouteServiceProvider extends BaseRouteServiceProvider
         $this->kernel->prependMiddleware(DetectRouteMiddleware::class);
     }
 
-    protected function getMiddlewares()
+    protected function getMiddleware()
     {
-        $middlewares = config('api-tester.middleware');
-        $middlewares[] = DebugState::class;
+        $middleware = config('api-tester.middleware');
 
-        return $middlewares;
+        return $middleware;
     }
 
     /**
@@ -69,5 +68,15 @@ class RouteServiceProvider extends BaseRouteServiceProvider
     protected function requireRoutes()
     {
         require __DIR__ . '/../Http/routes.php';
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+
     }
 }

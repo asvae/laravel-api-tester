@@ -15,30 +15,20 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     public function register()
     {
-
-        if($this->app['config']['api-tester']['enabled']){
-
-        }
-
         if (!defined('API_TESTER_PATH')) {
             define('API_TESTER_PATH', realpath(__DIR__ . '/../'));
         }
 
-        $this->app->register(RouteServiceProvider::class);
+        $this->mergeConfigFrom(API_TESTER_PATH . '/config/api-tester.php', 'api-tester');
 
-        $this->mergeConfigFrom(API_TESTER_PATH . '/config/api-tester.php',
-            'api-tester');
+        // Do nothing if api-tester is disabled
+        if (!$this->app['config']['api-tester.enabled']) {
+            return;
+        }
 
-        $this->loadViewsFrom(API_TESTER_PATH . '/resources/views',
-            'api-tester');
-
-        $this->app->singleton(StorageInterface::class, function(Application $app) {
-            return $app->make(config('api-tester.request_storage'), ['path' => storage_path(config('api-tester.request_db_path'))]);
-        });
-
-        $this->app->singleton(RouteRepositoryInterface::class, function(Container $app){
+        $this->app->singleton(RouteRepositoryInterface::class, function (Container $app) {
             $repositories = [];
-            foreach(config('api-tester.route_repositories') as $repository){
+            foreach (config('api-tester.route_repositories') as $repository) {
                 $repositories[] = $app->make($repository);
             }
 
@@ -49,12 +39,24 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             RequestRepositoryInterface::class,
             config('api-tester.request_repository')
         );
+
+        $this->app->singleton(StorageInterface::class, function (Application $app) {
+            return $app->make(
+                config('api-tester.request_storage'),
+                ['path' => storage_path(config('api-tester.request_db_path'))]
+            );
+        });
+
+        $this->loadViewsFrom(API_TESTER_PATH . '/resources/views', 'api-tester');
+
+
+        $this->app->register(RouteServiceProvider::class);
     }
 
     public function boot()
     {
-        $this->publishes([
-            API_TESTER_PATH . '/config/api-tester.php' => config_path('api-tester.php'),
-        ], 'config');
+        $this->publishes([API_TESTER_PATH . '/config/api-tester.php' => config_path('api-tester.php')], 'config');
+
+
     }
 }
