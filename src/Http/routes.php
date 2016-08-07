@@ -39,6 +39,12 @@ Route::group(['prefix' => 'assets'], function () {
 Route::get('test-routes/{_type}', 'HomeController@testRoutes');
 
 
+// Used closure for suppressing attempts to cache api-tester routes.
+// When api-tester is enabled user CAN NOT to cache routes.
+// This restriction has been introduced for user security.
+// Because some information about api (like used middleware,
+// parameter restrictions, etc) may be private.
+Route::any('* routes should not be cached', function () {});
 
 
 
