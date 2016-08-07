@@ -17,12 +17,7 @@ class JsonStorageTest extends TestCase
     /**
      * @type string
      */
-    protected $dir;
-
-    /**
-     * @type string
-     */
-    protected $filename;
+    protected $storageFilePath;
 
     /**
      * @type array
@@ -34,10 +29,15 @@ class JsonStorageTest extends TestCase
      */
     protected $referenceContent;
 
+    /**
+     * @type string
+     */
+    protected $dir;
+
     public function setUp()
     {
         $this->dir = __DIR__ . '/tmp';
-        $this->filename = 'test.db';
+        $this->storageFilePath = $this->dir . '/test.db';
 
         $this->referenceData = [
             ['some_data' => 1],
@@ -55,8 +55,7 @@ class JsonStorageTest extends TestCase
 
         $this->storage = new JsonStorage(
             $fs,
-            $this->dir,
-            $this->filename
+            $this->storageFilePath
         );
     }
 
@@ -64,7 +63,7 @@ class JsonStorageTest extends TestCase
     {
         $this->storage->put($this->referenceData);
 
-        $testRow = file_get_contents($this->dir . DIRECTORY_SEPARATOR . $this->filename);
+        $testRow = file_get_contents($this->storageFilePath);
 
         $this->assertEquals($this->referenceContent, $testRow);
     }
@@ -73,13 +72,13 @@ class JsonStorageTest extends TestCase
     {
         mkdir($this->dir, 0755, true);
 
-        file_put_contents($this->dir . DIRECTORY_SEPARATOR . $this->filename, $this->referenceContent);
+        file_put_contents($this->storageFilePath, $this->referenceContent);
 
         $data = $this->storage->get();
 
         $this->assertEquals($this->referenceData, $data);
     }
-    
+
     public function testRemoveAll()
     {
         $this->storage->put([]);
