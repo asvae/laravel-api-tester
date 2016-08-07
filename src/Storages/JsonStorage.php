@@ -39,15 +39,15 @@ class JsonStorage implements StorageInterface
      * Storage constructor.
      *
      * @param \Illuminate\Filesystem\Filesystem $files
-     *
      * @param                                   $path
-     * @param                                   $filename
      */
-    public function __construct(Filesystem $files, $path, $filename)
+    public function __construct(Filesystem $files, $path)
     {
         $this->files = $files;
-        $this->path = $path;
-        $this->filename = $filename;
+
+        $path = explode('/', $path);
+        $this->filename = array_pop($path);
+        $this->path = implode($path, '/');
     }
 
     /**
