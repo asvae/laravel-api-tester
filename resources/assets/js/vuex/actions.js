@@ -61,7 +61,6 @@ export const getCurrentRequestRoute = function ({dispatch}) {
     let headers = _.cloneDeep(this.currentRequest.headers)
     let wheres = _.cloneDeep(this.currentRequest.wheres)
 
-
     let request = this.currentRequest
     let path = this.request.path
 
@@ -75,8 +74,6 @@ export const getCurrentRequestRoute = function ({dispatch}) {
 
         path = path.replace(dummy, mocker.gen())
     }
-
-
 
     headers.push({key: 'X-Api-Tester', value: 1})
 
