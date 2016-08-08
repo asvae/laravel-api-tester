@@ -76,8 +76,8 @@ return [
     |
     */
 
-    'include' => ['.*'],
-    'exclude' => [],
+    'include' => '.*',
+    'exclude' => null,
 
 
     /*

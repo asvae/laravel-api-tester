@@ -18,8 +18,10 @@ class RouteCollection extends Collection
      *
      * @return static
      */
-    public function filterMatch(array $patterns = [])
+    public function filterMatch($patterns)
     {
+        $patterns = is_string($patterns) ? [$patterns] : $patterns;
+
         // String pattern is assumed to be path.
         foreach ($patterns as $key => $pattern) {
             if (is_string($pattern)) {
