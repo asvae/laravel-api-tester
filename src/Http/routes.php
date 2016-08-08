@@ -1,30 +1,28 @@
 <?php
 
-// Base api-tester route. This is entry point for frontend-SPA.
+// Api-tester base route. This is entry point for frontend-SPA.
 Route::get('/', [
     'as'   => 'home',
     'uses' => 'HomeController@index'
 ]);
 
 
-// Just index route. Because we can only get list of routes.
+// The only route for "routes" is index.
+// Because we won't do anything but ask for the list.
 Route::resource('routes', 'RouteController', [
     'only' => ['index']
 ]);
 
-// There we can get list of requests, store new request, update existing or destroy it.
-// Route parameter renamed with leading underscore for no-collision with user's app.
+// "_" used to prevent collisions with your app.
 Route::resource('requests', 'RequestController', [
     'only'       => ['index', 'store', 'update', 'destroy'],
     'parameters' => ['requests' => '_request']
 ]);
 
-// Assets resources have no publish because this package just a service for developers.
-// So, we can to route requests for files trough AssetsController.
-// Route parameter named with leading underscore for no-collision with user's app.
+// We won't publish library's assets.
+// Instead we'll pass them via app which is slower but fine for development.
 Route::group(['prefix' => 'assets'], function () {
 
-    // Define a file pattern
     $filePattern = '^([a-z_\-\.]+)$';
 
     Route::get('img/{_file}', ['as' => 'image', 'uses' => 'AssetsController@image'])
@@ -35,15 +33,18 @@ Route::group(['prefix' => 'assets'], function () {
 });
 
 
-// I actually dunno what this route doing here... it isn't my.
+// Throw in some routes to test api-tester.
 Route::get('test-routes/{_type}', 'HomeController@testRoutes');
 
-
-// Used closure for suppressing attempts to cache api-tester routes.
-// When api-tester is enabled user CAN NOT to cache routes.
-// This restriction has been introduced for user security.
-// Because some information about api (like used middleware,
-// parameter restrictions, etc) may be private.
+/**
+ * This route is quite special as it prevents user from caching routes
+ * while in development mode. Sorta fool-proof measure.
+ *
+ * How it works? Believe it or not, laravel won't allow you to cache
+ * closure route. Hacky but works.
+ * This route is debug only, hence in production
+ * it isn't registered and route cache is allowed.
+ */
 Route::any('* routes should not be cached', function () {});
 
 
