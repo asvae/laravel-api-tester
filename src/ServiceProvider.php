@@ -43,7 +43,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->singleton(StorageInterface::class, function (Application $app) {
             return $app->make(
                 config('api-tester.request_storage'),
-                ['path' => storage_path(config('api-tester.request_db_path'))]
+                ['path' => base_path(config('api-tester.request_db_path'))]
             );
         });
 
