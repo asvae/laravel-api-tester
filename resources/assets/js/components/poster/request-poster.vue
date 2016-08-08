@@ -4,47 +4,65 @@
         <div v-if="request">
 
             <div class="columns">
-                <div class="column is-full">
+                <div class="column is-narrow">
                     <vm-poster-navigation
                             :page="page"
                             @changed="page = $arguments[0]"
                     ></vm-poster-navigation>
                 </div>
+                <div class="column">
+                    <form @submit.prevent="send"
+                          class="columns"
+                          v-if="page === 'request'"
+                    >
+                        <div class="column is-third">
+                            <vm-request-type-select
+                                    :method="request.method"
+                                    @changed="request.method = $arguments[0]"
+                            ></vm-request-type-select>
+                        </div>
+
+                        <div class="column  is-third">
+                            <input class="input"
+                                   type="text"
+                                   placeholder="Path"
+                                   title="Path"
+                                   v-model="request.path"
+                            >
+                        </div>
+
+                        <div class="column  is-third">
+                            <input class="input"
+                                   type="text"
+                                   placeholder="Name"
+                                   title="Name"
+                                   v-model="request.name"
+                            >
+                        </div>
+                        <input type="submit" class="is-hidden"/>
+                    </form>
+                </div>
+                <div class="column is-narrow">
+                    <button class="button is-success"
+                            :class="{'is-loading': isSending}"
+                            type="button"
+                            @click="send"
+                            v-text="'Send'"
+                    ></button>
+                    <button class="button is-primary"
+                            type="button"
+                            @click="save"
+                            v-text="request.id ? 'Update' : 'Save'"
+                    ></button>
+                    <button class="button is-icon"
+                            type="button"
+                            @click="copy"
+                            title="Copy"
+                    >
+                        <span class="icon" v-text="'⎘'"></span>
+                    </button>
+                </div>
             </div>
-
-            <form @submit.prevent="send"
-                  class="columns is-multiline"
-                  v-if="page === 'request'"
-            >
-                <div class="column is-half">
-                    <input class="input"
-                           type="text"
-                           placeholder="Method"
-                           title="Method"
-                           v-model="request.method"
-                    >
-                </div>
-
-                <div class="column is-half">
-                    <input class="input"
-                           type="text"
-                           placeholder="Path"
-                           title="Path"
-                           v-model="request.path"
-                    >
-                </div>
-
-                <div class="column is-half">
-                    <input class="input"
-                           type="text"
-                           placeholder="Name"
-                           title="Name"
-                           v-model="request.name"
-                    >
-                </div>
-
-                <input type="submit" class="is-hidden"/>
-            </form>
 
             <div class="columns is-multiline">
 
@@ -63,39 +81,6 @@
                     <vm-headers :headers="request.headers"
                                 @updated="request.headers = $arguments[0]"
                     ></vm-headers>
-                </div>
-
-                <div class="column is-full">
-                    <div class="columns">
-                        <div class="column is-full error"
-                             v-if="showError"
-                             transition="fade-out">
-                            Your JSON is incorrect!
-                        </div>
-                        <div class="column is-narrow">
-                            <button class="button is-success"
-                                    :class="{'is-loading': isSending}"
-                                    type="button"
-                                    @click="send"
-                                    v-text="'Send'"
-                            ></button>
-                        </div>
-                        <div class="column"></div>
-                        <div class="column is-narrow">
-                            <button class="button is-primary"
-                                    type="button"
-                                    @click="save"
-                                    v-text="request.id ? 'Update' : 'Save'"
-                            ></button>
-                            <button class="button is-icon"
-                                    type="button"
-                                    @click="copy"
-                                    title="Copy"
-                            >
-                                <span class="icon" v-text="'⎘'"></span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="column is-full">
@@ -120,6 +105,7 @@
     import vmJsonEditor from '../editor/json-editor.vue'
     import vmJsonViewer from '../editor/json-viewer.vue'
     import vmPosterNavigation from './poster-navigation.vue'
+    import vmRequestTypeSelect from './request-type-select.vue'
 
     import vmHeaders from './headers.vue'
     import vmRouteDetails from './route-details.vue'
@@ -133,6 +119,7 @@
             vmHeaders,
             vmPosterNavigation,
             vmRouteDetails,
+            vmRequestTypeSelect,
         },
         vuex: {
             getters: {
