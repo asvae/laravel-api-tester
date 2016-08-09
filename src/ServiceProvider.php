@@ -41,10 +41,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         );
 
         $this->app->singleton(StorageInterface::class, function (Application $app) {
-            return $app->make(
-                config('api-tester.request_storage'),
-                ['path' => base_path(config('api-tester.request_db_path'))]
-            );
+
+            // Defined driver
+            $driver = config('api-tester.storage_drivers')[config('api-tester.storage_driver')];
+
+            return $app->make($driver['class'], $driver['options']);
         });
 
         $this->loadViewsFrom(API_TESTER_PATH . '/resources/views', 'api-tester');

@@ -2,8 +2,7 @@
 
 namespace Asvae\ApiTester\Contracts;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
+use Asvae\ApiTester\Collections\RequestCollection;
 
 /**
  * Class StorageInterface
@@ -16,17 +15,15 @@ interface StorageInterface
     /**
      * Get data from resource.
      *
-     * @return array
+     * @return RequestCollection
      */
-
     public function get();
 
     /**
      * Put data to resource.
      *
-     * @param array|Arrayable[]|Jsonable[]|\Traversable $data
-     *
-     * @return mixed
+     * @param $data RequestCollection
+     * @return void
      */
-    public function put($data);
+    public function put(RequestCollection $data);
 }

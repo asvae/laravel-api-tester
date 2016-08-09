@@ -2,6 +2,7 @@
 
 namespace Asvae\ApiTester\Storages;
 
+use Asvae\ApiTester\Collections\RequestCollection;
 use Asvae\ApiTester\Contracts\StorageInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -36,15 +37,21 @@ class JsonStorage implements StorageInterface
     protected $filename;
 
     /**
+     * @var RequestCollection
+     */
+    protected $collection;
+
+    /**
      * Storage constructor.
      *
      * @param \Illuminate\Filesystem\Filesystem $files
-     * @param                                   $path
+     * @param RequestCollection $collection
+     * @param $path
      */
-    public function __construct(Filesystem $files, $path)
+    public function __construct(Filesystem $files, RequestCollection $collection, $path)
     {
         $this->files = $files;
-
+        $this->collection = $collection;
         $path = explode('/', $path);
         $this->filename = array_pop($path);
         $this->path = implode($path, '/');
@@ -81,7 +88,7 @@ class JsonStorage implements StorageInterface
     /**
      * Return array parsed from file content.
      *
-     * @return array
+     * @return RequestCollection
      */
     public function get()
     {
@@ -91,20 +98,17 @@ class JsonStorage implements StorageInterface
 
             $content = $this->files->get($fullPath);
 
-            return $this->parseResult($content);
+            return $this->makeCollection($this->parseResult($content));
         }
 
-        return [];
+        return $this->makeCollection();
     }
 
     /**
-     * Convert data array to json lines and put to file.
-     *
-     * @param array|\Illuminate\Contracts\Support\Arrayable[]|\Illuminate\Contracts\Support\Jsonable[]|\Traversable $data
-     *
-     * @return mixed|void
+     * @param RequestCollection $data
+     * @return void
      */
-    public function put($data)
+    public function put(RequestCollection $data)
     {
         $this->createDirectoryIfNotExists();
 
@@ -183,5 +187,14 @@ class JsonStorage implements StorageInterface
         }
 
         return null;
+    }
+
+    /**
+     * @param array $data
+     * @return RequestCollection
+     */
+    private function makeCollection($data = [])
+    {
+        return $this->collection->make()->load($data);
     }
 }

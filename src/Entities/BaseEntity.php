@@ -70,7 +70,7 @@ abstract class BaseEntity implements Arrayable, Jsonable, ArrayAccess, JsonSeria
      */
     public function toJson($options = 0)
     {
-        return json_encode($this->toArray(), $options);
+        return json_encode($this->jsonSerialize(), $options);
     }
 
     /**
@@ -133,7 +133,6 @@ abstract class BaseEntity implements Arrayable, Jsonable, ArrayAccess, JsonSeria
     {
         unset($this->attributes[$offset]);
     }
-
 
     /**
      * Specify data which should be serialized to JSON

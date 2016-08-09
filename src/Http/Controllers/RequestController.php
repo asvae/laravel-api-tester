@@ -93,7 +93,7 @@ class RequestController extends Controller
             return response(404);
         }
 
-        $requestEntity->fill($httpRequest->all());
+        $requestEntity->update($httpRequest->all());
 
         $this->repository->flush();
 

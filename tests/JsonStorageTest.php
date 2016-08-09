@@ -1,4 +1,6 @@
 <?php
+use Asvae\ApiTester\Collections\RequestCollection;
+use Asvae\ApiTester\Entities\RequestEntity;
 use Asvae\ApiTester\Storages\JsonStorage;
 use Illuminate\Filesystem\Filesystem;
 
@@ -34,18 +36,30 @@ class JsonStorageTest extends TestCase
      */
     protected $dir;
 
+    /**
+     * @var RequestCollection
+     */
+    protected $referenceCollection;
+
+    /**
+     *
+     */
     public function setUp()
     {
         $this->dir = __DIR__ . '/tmp';
         $this->storageFilePath = $this->dir . '/test.db';
 
         $this->referenceData = [
-            ['some_data' => 1],
-            ['other_data' => 2],
-            ["one_more_data\n"]
+            ['id'=> '111', 'path' => 'aaaa'],
+            ['id'=> '222', 'path' => 'bbbb'],
+            ['id'=> '333', 'path' => 'cccc'],
+            ['id'=> '444', 'path' => 'dddd'],
+            ['id'=> '555', 'path' => 'eeee'],
         ];
 
-        $this->referenceContent = "{\"some_data\":1}\n{\"other_data\":2}\n[\"one_more_data\\n\"]\n";
+        $this->referenceCollection = (new RequestCollection())->load($this->referenceData);
+
+        $this->referenceContent = "{\"path\":\"aaaa\",\"id\":\"111\"}\n{\"path\":\"bbbb\",\"id\":\"222\"}\n{\"path\":\"cccc\",\"id\":\"333\"}\n{\"path\":\"dddd\",\"id\":\"444\"}\n{\"path\":\"eeee\",\"id\":\"555\"}\n";
 
         $fs = new Filesystem;
 
@@ -55,13 +69,18 @@ class JsonStorageTest extends TestCase
 
         $this->storage = new JsonStorage(
             $fs,
+            new RequestCollection(),
             $this->storageFilePath
         );
     }
 
     public function testStoringData()
     {
-        $this->storage->put($this->referenceData);
+        $this->referenceCollection->each(function(RequestEntity $value){
+            $value->setDirty(); $value->exists();
+        });
+
+        $this->storage->put($this->referenceCollection);
 
         $testRow = file_get_contents($this->storageFilePath);
 
@@ -76,14 +95,14 @@ class JsonStorageTest extends TestCase
 
         $data = $this->storage->get();
 
-        $this->assertEquals($this->referenceData, $data);
+        $this->assertEquals($this->referenceCollection, $data);
     }
 
     public function testRemoveAll()
     {
-        $this->storage->put([]);
+        $this->storage->put(new RequestCollection());
         $data = $this->storage->get();
 
-        $this->assertEquals([], $data);
+        $this->assertEquals(new RequestCollection(), $data);
     }
 }

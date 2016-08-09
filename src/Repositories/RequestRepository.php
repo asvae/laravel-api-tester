@@ -29,13 +29,12 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * RequestRepository constructor.
      *
-     * @param \Asvae\ApiTester\Contracts\StorageInterface    $storage
-     * @param \Asvae\ApiTester\Collections\RequestCollection $requests
+     * @param \Asvae\ApiTester\Contracts\StorageInterface $storage
+     * @internal param RequestCollection $requests
      */
-    public function __construct(StorageInterface $storage, RequestCollection $requests)
+    public function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;
-        $this->requests = $requests;
         $this->load();
     }
 
@@ -45,7 +44,7 @@ class RequestRepository implements RequestRepositoryInterface
      */
     protected function load()
     {
-        $this->requests->load($this->getDataFromStorage());
+        $this->requests = $this->storage->get();
     }
 
     /**
@@ -110,7 +109,7 @@ class RequestRepository implements RequestRepositoryInterface
      */
     public function remove(RequestEntity $request)
     {
-        $this->requests->forget($request->getId());
+        $request->markToDelete();
         $this->flush();
     }
 

@@ -50,7 +50,7 @@ class RouteCollection extends Collection
      *
      * @return static
      */
-    public function filterExcept(array $patterns = [])
+    public function filterExcept($patterns = [])
     {
         if (empty($patterns)) {
             return $this;
