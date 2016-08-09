@@ -42,7 +42,10 @@ class FireBaseStorage implements StorageInterface
      */
     public function get()
     {
-        return $this->makeCollection($this->getFromFireBase());
+        $result = $this->getFromFireBase();
+        $data = $this->addHeadersIfEmpty($result);
+
+        return $this->makeCollection($data);
     }
 
     /**
@@ -122,5 +125,16 @@ class FireBaseStorage implements StorageInterface
         $firebase = new FirebaseLib($base, $token);
 
         $this->firebase = $firebase;
+    }
+
+    private function addHeadersIfEmpty($data)
+    {
+        foreach ($data as $key => $request){
+            if(! array_key_exists('headers', $request)){
+                $data[$key]['headers'] = [];
+            }
+        }
+
+        return $data;
     }
 }
