@@ -17,9 +17,8 @@
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "^0.9.5"
     },
-
     "suggest": {
-        "ktamas77/firebase-php": "Firebase for collaboration",
+        "ktamas77/firebase-php": "Keep your requests stored in cloud",
         "firebase/token-generator": "Token generator for firebase"
     },
     "autoload-dev": {
