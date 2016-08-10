@@ -69,7 +69,18 @@ class RequestCollection extends Collection
     public function onlyDiff()
     {
         return $this->filter(function (RequestEntity $request) {
-            return $request->notExists() || $request->isDirty() and $request->notMarkedToDelete();
+            return ($request->notExists() || $request->isDirty()) && $request->notMarkedToDelete();
+        });
+    }
+
+    /**
+     * Только не помеченные на удаление
+     *
+     * @return static
+     */
+    public function onlyNotMarkedToDelete(){
+        return $this->filter(function (RequestEntity $request) {
+            return $request->notMarkedToDelete();
         });
     }
 

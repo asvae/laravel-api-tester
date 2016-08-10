@@ -112,7 +112,7 @@ class JsonStorage implements StorageInterface
     {
         $this->createDirectoryIfNotExists();
 
-        $content = $this->prepareContent($data);
+        $content = $this->prepareContent($data->onlyNotMarkedToDelete());
 
         $this->files->put($this->getFilePath(), $content);
     }
