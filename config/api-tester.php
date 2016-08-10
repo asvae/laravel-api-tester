@@ -114,8 +114,6 @@ return [
     | or similar implementations.
     |
     */
-
-
     'storage_driver' => 'file',
 
     'storage_drivers' => [
@@ -125,13 +123,16 @@ return [
                 'path' => 'storage/api-tester/requests.db'
             ]
         ],
-
         'firebase' => [
             'class' => Asvae\ApiTester\Storages\FireBaseStorage::class,
             'options' => [
                 'base' => env('API_TESTER_FIREBASE_ADDRESS', 'https://example.firebaseio.com/api-tester/'),
-                'secret' => env('API_TESTER_FIREBASE_SECRET', '<your-secret-api-key>'),
             ],
+            'token' => [
+                'secret' => env('API_TESTER_FIREBASE_SECRET', '<your-secret-api-key>'),
+                'options' => ['admin' => true],
+                'data' => [],
+            ]
         ]
     ]
 ];

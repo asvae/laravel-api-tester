@@ -6,8 +6,11 @@ namespace Asvae\ApiTester\Storages;
 use Asvae\ApiTester\Collections\RequestCollection;
 use Asvae\ApiTester\Contracts\StorageInterface;
 use Asvae\ApiTester\Entities\RequestEntity;
+use Asvae\Exceptions\FireBaseException;
 use Firebase\FirebaseLib;
 use Firebase\Token\TokenGenerator;
+use Mockery\CountValidator\Exception;
+use Symfony\Component\Debug\Exception\ClassNotFoundException;
 
 class FireBaseStorage implements StorageInterface
 {
@@ -22,17 +25,20 @@ class FireBaseStorage implements StorageInterface
     protected $collection;
 
     /**
+     * @var TokenGenerator
+     */
+    protected $tokens;
+
+    /**
      * FireBaseStorage constructor.
      * @param RequestCollection $collection
+     * @param TokenGenerator $tokens
      * @param $base
-     * @param $secret
      */
-    public function __construct(RequestCollection $collection, $base, $secret)
+    public function __construct(RequestCollection $collection, TokenGenerator $tokens, $base)
     {
         $this->collection = $collection;
-
-        $this->initFirebase($base, $secret);
-
+        $this->initFirebase($tokens, $base);
     }
 
     /**
@@ -43,6 +49,7 @@ class FireBaseStorage implements StorageInterface
     public function get()
     {
         $result = $this->getFromFireBase();
+
         $data = $this->addHeadersIfEmpty($result);
 
         return $this->makeCollection($data);
@@ -89,7 +96,6 @@ class FireBaseStorage implements StorageInterface
         $this->firebase->set('requests/' . $request->getId(), $request->jsonSerialize());
     }
 
-
     /**
      * @param RequestEntity $request
      */
@@ -105,6 +111,10 @@ class FireBaseStorage implements StorageInterface
     {
         $result = json_decode($this->firebase->get('requests'), true);
 
+        if ($result && is_string($result)) {
+            throw new FireBaseException($result);
+        }
+
         return $result ?: [];
     }
 
@@ -117,20 +127,15 @@ class FireBaseStorage implements StorageInterface
         return $this->collection->make()->load($data);
     }
 
-    private function initFirebase($base, $secret)
+    private function initFirebase(TokenGenerator $tokens, $base)
     {
-        $token = (new TokenGenerator($secret))
-            ->setOption('admin', true)->create();
-
-        $firebase = new FirebaseLib($base, $token);
-
-        $this->firebase = $firebase;
+        $this->firebase = new FirebaseLib($base, $tokens->create());
     }
 
     private function addHeadersIfEmpty($data)
     {
-        foreach ($data as $key => $request){
-            if(! array_key_exists('headers', $request)){
+        foreach ($data as $key => $request) {
+            if (!array_key_exists('headers', $request)) {
                 $data[$key]['headers'] = [];
             }
         }

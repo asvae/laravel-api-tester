@@ -2,14 +2,10 @@
 
 namespace Asvae\ApiTester;
 
-use Asvae\ApiTester\Contracts\RequestRepositoryInterface;
-use Asvae\ApiTester\Contracts\RouteRepositoryInterface;
-use Asvae\ApiTester\Contracts\StorageInterface;
+use Asvae\ApiTester\Providers\RepositoryServiceProvider;
 use Asvae\ApiTester\Providers\RouteServiceProvider;
-use Asvae\ApiTester\Repositories\RouteRepository;
-use Asvae\ApiTester\Storages\JsonStorage;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Foundation\Application;
+use Asvae\ApiTester\Providers\StorageServiceProvide;
+use Asvae\ApiTester\Providers\ViewServiceProvider;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -21,43 +17,18 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->mergeConfigFrom(API_TESTER_PATH . '/config/api-tester.php', 'api-tester');
 
-        // Do nothing if api-tester is disabled
+        // Если апи-тесетр не включен - дальше не загружаемся.
         if (!$this->app['config']['api-tester.enabled']) {
             return;
         }
-
-        $this->app->singleton(RouteRepositoryInterface::class, function (Container $app) {
-            $repositories = [];
-            foreach (config('api-tester.route_repositories') as $repository) {
-                $repositories[] = $app->make($repository);
-            }
-
-            return $app->make(RouteRepository::class, ['repositories' => $repositories]);
-        });
-
-        $this->app->singleton(
-            RequestRepositoryInterface::class,
-            config('api-tester.request_repository')
-        );
-
-        $this->app->singleton(StorageInterface::class, function (Application $app) {
-
-            // Defined driver
-            $driver = config('api-tester.storage_drivers')[config('api-tester.storage_driver')];
-
-            return $app->make($driver['class'], $driver['options']);
-        });
-
-        $this->loadViewsFrom(API_TESTER_PATH . '/resources/views', 'api-tester');
-
-
         $this->app->register(RouteServiceProvider::class);
+        $this->app->register(RepositoryServiceProvider::class);
+        $this->app->register(StorageServiceProvide::class);
+        $this->app->register(ViewServiceProvider::class);
     }
 
     public function boot()
     {
         $this->publishes([API_TESTER_PATH . '/config/api-tester.php' => config_path('api-tester.php')], 'config');
-
-
     }
 }
