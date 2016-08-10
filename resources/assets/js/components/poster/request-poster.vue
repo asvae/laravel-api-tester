@@ -59,7 +59,9 @@
                             @click="copy"
                             title="Copy"
                     >
-                        <span class="icon" v-text="'⎘'"></span>
+                        <span class="icon">
+                            <i class="fa fa-files-o"></i>
+                        </span>
                     </button>
                 </div>
             </div>

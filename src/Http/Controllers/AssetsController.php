@@ -14,24 +14,34 @@ class AssetsController extends Controller
         return $this->file($file, $root);
     }
 
-    public function image($file){
+    public function image($file)
+    {
         $root = __DIR__.'/../../../resources/assets/build/img';
+
         return $this->file($file, $root);
     }
 
-    protected function file($file, $root){
-        $contents =  file_get_contents($root.DIRECTORY_SEPARATOR.$file);
+    protected function file($file, $root)
+    {
+        $contents = file_get_contents($root.DIRECTORY_SEPARATOR.$file);
         $response = response($contents, 200, [
-            'Content-Type' => $this->getFileContentType($file)
+            'Content-Type' => $this->getFileContentType($file),
         ]);
 
         // Browser will cache files for 1 year.
-        $secondsInYear = 60*60*24*365;
+        $secondsInYear = 60 * 60 * 24 * 365;
         $response->setSharedMaxAge($secondsInYear);
         $response->setMaxAge($secondsInYear);
         $response->setExpires(new DateTime('+1 year'));
 
         return $response;
+    }
+
+    public function font($file)
+    {
+        $root = __DIR__ . '/../../../resources/assets/build/fonts';
+
+        return $this->file($file, $root);
     }
 
     /**
@@ -50,6 +60,9 @@ class AssetsController extends Controller
             'css' => 'text/css',
             'js'  => 'text/javascript',
             'svg' => 'image/svg+xml',
+            'map' => 'text/css',
+            'woff' => 'application/x-font-woff',
+            'woff2' => 'application/x-font-woff2',
         ];
 
         return $contentTypes[$ext];
