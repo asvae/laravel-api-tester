@@ -5,81 +5,74 @@
 
             <div class="columns">
                 <div class="column is-narrow">
-                    <vm-poster-navigation
-                            :page="page"
-                            @changed="page = $arguments[0]"
-                    ></vm-poster-navigation>
+                    <vm-poster-navigation></vm-poster-navigation>
                 </div>
                 <div class="column">
-                    <form @submit.prevent="send"
-                          class="columns"
-                          v-if="page === 'request'"
-                    >
-                        <div class="column is-third">
+                    <form @submit.prevent="send">
+                        <div class="control has-addons">
                             <vm-request-type-select
                                     :method="request.method"
                                     @changed="request.method = $arguments[0]"
                             ></vm-request-type-select>
-                        </div>
-
-                        <div class="column  is-third">
-                            <input class="input"
+                            <input class="input is-expanded"
                                    type="text"
                                    placeholder="Path"
                                    title="Path"
                                    v-model="request.path"
                             >
-                        </div>
-
-                        <div class="column  is-third">
-                            <input class="input"
-                                   type="text"
-                                   placeholder="Name"
-                                   title="Name"
-                                   v-model="request.name"
+                            <button class="button is-success is-icon"
+                                    :class="{'is-loading': isSending}"
+                                    type="button"
+                                    @click="send"
+                                    title="Send"
                             >
+                                <i class="fa fa-send-o"></i>
+                            </button>
                         </div>
-                        <input type="submit" class="is-hidden"/>
                     </form>
                 </div>
                 <div class="column is-narrow">
-                    <button class="button is-success"
-                            :class="{'is-loading': isSending}"
-                            type="button"
-                            @click="send"
-                            v-text="'Send'"
-                    ></button>
-                    <button class="button is-primary"
+                    <button class="button"
                             type="button"
                             @click="save"
-                            v-text="request.id ? 'Update' : 'Save'"
-                    ></button>
+                            title="Save"
+                    >
+                        <i class="fa fa-save"></i>
+                    </button>
                     <button class="button is-icon"
                             type="button"
                             @click="copy"
                             title="Copy"
                     >
-                        <span class="icon">
-                            <i class="fa fa-files-o"></i>
-                        </span>
+                        <i class="fa fa-files-o"></i>
                     </button>
                 </div>
             </div>
 
             <div class="columns is-multiline">
 
-                <div class="column is-full" v-if="page === 'request'">
-                    <vm-route-details></vm-route-details>
+                <div class="column is-full" v-if="mode === 'request'">
+                    <input class="input"
+                           type="text"
+                           placeholder="Name"
+                           title="Name"
+                           v-model="request.name"
+                    >
                 </div>
 
-                <div class="column is-full" v-if="page === 'request'">
+                <vm-route-details
+                        class="column is-full"
+                        v-if="mode === 'info'"
+                ></vm-route-details>
+
+                <div class="column is-full" v-if="mode === 'request'">
                     <vm-json-editor :json="request.body"
                                     style="height: 300px"
                                     @changed="request.body = $arguments[0], changed = true"
                     ></vm-json-editor>
                 </div>
 
-                <div class="column is-full" v-if="page === 'headers'">
+                <div class="column is-full" v-if="mode === 'headers'">
                     <vm-headers :headers="request.headers"
                                 @updated="request.headers = $arguments[0]"
                     ></vm-headers>
@@ -104,8 +97,8 @@
 <script>
     import $ from 'jquery'
     import _ from 'lodash'
-    import vmJsonEditor from '../editor/json-editor.vue'
-    import vmJsonViewer from '../editor/json-viewer.vue'
+    import vmJsonEditor from '../json-editor/json-editor.vue'
+    import vmJsonViewer from '../json-editor/json-viewer.vue'
     import vmPosterNavigation from './poster-navigation.vue'
     import vmRequestTypeSelect from './request-type-select.vue'
 
@@ -125,6 +118,7 @@
         },
         vuex: {
             getters: {
+                mode: state => state.requestEditor.mode,
                 currentRequest: state => state.currentRequest,
                 isRequestScheduled: state => state.isRequestScheduled,
             },
@@ -153,7 +147,6 @@
                 changed: false,
                 jsonRequest: {},
                 isSending: false,
-                page: 'request',
                 response: {
                     isJson: false,
                     data: '',
@@ -165,7 +158,6 @@
             refresh (){
                 this.request = _.cloneDeep(this.currentRequest)
                 this.changed = false
-                this.page = 'request'
                 this.getCurrentRequestRoute()
             },
             parseRequest (request){

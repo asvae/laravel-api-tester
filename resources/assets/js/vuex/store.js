@@ -8,9 +8,15 @@ const state = {
     currentRoute: null,
     isRequestScheduled: false,
     search: '',
+    requestEditor:{
+        mode: 'request',
+    }
 }
 
 const mutations = {
+    SET_EDITOR_MODE(state, mode){
+        state.requestEditor.mode = mode
+    },
     DELETE_REQUEST(state, request){
         state.requests.$remove(request)
     },

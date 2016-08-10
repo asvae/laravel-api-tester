@@ -1,44 +1,37 @@
 <template>
-    <div class="poster-navigation">
-
+    <div class="poster-navigation control has-addons">
         <button class="button page"
                 type="button"
-                :class="{'is-primary': 'request' === page}"
-                @click="page = 'request'"
+                :class="{'is-primary': 'request' === mode}"
+                @click="setMode('request')"
                 v-text="'Request'"
         ></button>
 
         <button class="button page"
                 type="button"
-                :class="{'is-primary': 'headers' === page}"
-                @click="page = 'headers'"
+                :class="{'is-primary': 'headers' === mode}"
+                @click="setMode('headers')"
                 v-text="'Headers'"
         ></button>
 
-        <!-- // TODO Implement -->
-        <button v-if="false"
-                class="button page"
+        <button class="button page"
                 type="button"
-                :class="{'is-primary': 'config' === page}"
-                @click="page = 'config'"
-                v-text="'Config'"
+                :class="{'is-primary': 'info' === mode}"
+                @click="setMode('info')"
+                v-text="'Info'"
         ></button>
-
     </div>
 </template>
 
 <script>
     export default {
-        props: {
-            page: {
-                type: String,
-                default: 'request',
-            }
-        },
-        watch: {
-            page (page){
-                this.$emit('changed', page)
-            }
+        vuex: {
+            getters: {
+                mode: state => state.requestEditor.mode,
+            },
+            actions: {
+                setMode: ({dispatch}, mode) => dispatch('SET_EDITOR_MODE', mode)
+            },
         }
     }
 </script>
