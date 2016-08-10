@@ -58,19 +58,16 @@ class RequestController extends Controller
     }
 
     /**
-     * @param $request
-     *
+     * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function destroy($request)
+    public function destroy($id)
     {
-        $toRemove = $this->repository->find($request);
-
-        if (!$toRemove instanceof RequestEntity) {
+        if (! $this->repository->exists($id)) {
             return response(null, 404);
         }
 
-        $this->repository->remove($toRemove);
+        $this->repository->remove($id);
 
         $this->repository->flush();
 

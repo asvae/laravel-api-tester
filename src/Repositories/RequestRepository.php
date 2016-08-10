@@ -68,7 +68,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * @param int $id
      *
-     * @return array
+     * @return RequestEntity
      */
     public function find($id)
     {
@@ -105,12 +105,11 @@ class RequestRepository implements RequestRepositoryInterface
     }
 
     /**
-     * @param \Asvae\ApiTester\Entities\RequestEntity $request
+     * @param string $id
      */
-    public function remove(RequestEntity $request)
+    public function remove($id)
     {
-        $request->markToDelete();
-        $this->flush();
+        $this->find($id)->markToDelete();
     }
 
     /**

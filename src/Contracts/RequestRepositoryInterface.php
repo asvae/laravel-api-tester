@@ -38,8 +38,8 @@ interface RequestRepositoryInterface
     public function flush();
 
     /**
-     * @param \Asvae\ApiTester\Entities\RequestEntity $request
+     * @param string $request
      */
-    public function remove(RequestEntity $request);
+    public function remove($request);
 
 }
