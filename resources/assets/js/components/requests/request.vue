@@ -12,7 +12,7 @@
             <a @click="setCurrentRequest(request)"
                class="column is-bold"
                v-text="displayedName"
-               style="white-space: nowrap"
+               style=""
             ></a>
             <a class="column is-narrow"
                v-text="'X'"

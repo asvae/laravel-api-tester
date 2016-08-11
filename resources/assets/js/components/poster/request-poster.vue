@@ -3,62 +3,23 @@
 
         <div v-if="request">
 
-            <div class="columns">
-                <div class="column is-narrow">
+            <div class="columns is-multiline">
+                <div class="column is-full">
                     <vm-poster-navigation></vm-poster-navigation>
                 </div>
-                <div class="column">
-                    <form @submit.prevent="send">
-                        <div class="control has-addons">
-                            <vm-request-type-select
-                                    :method="request.method"
-                                    @changed="request.method = $arguments[0]"
-                            ></vm-request-type-select>
-                            <input class="input is-expanded"
-                                   type="text"
-                                   placeholder="Path"
-                                   title="Path"
-                                   v-model="request.path"
-                            >
-                            <button class="button is-success is-icon"
-                                    :class="{'is-loading': isSending}"
-                                    type="button"
-                                    @click="send"
-                                    title="Send"
-                            >
-                                <i class="fa fa-send-o"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="column is-narrow">
-                    <button class="button"
-                            type="button"
-                            @click="save"
-                            title="Save"
-                    >
-                        <i class="fa fa-save"></i>
-                    </button>
-                    <button class="button is-icon"
-                            type="button"
-                            @click="copy"
-                            title="Copy"
-                    >
-                        <i class="fa fa-files-o"></i>
-                    </button>
-                </div>
-            </div>
 
-            <div class="columns is-multiline">
-
-                <div class="column is-full" v-if="mode === 'request'">
+                <form class="column is-full"
+                      v-if="mode === 'request'"
+                      @submit.prevent="save"
+                >
                     <input class="input"
                            type="text"
                            placeholder="Name"
                            title="Name"
                            v-model="request.name"
                     >
-                </div>
+                    <input type="submit" class="is-hidden">
+                </form>
 
                 <vm-route-details
                         class="column is-full"
@@ -107,6 +68,8 @@
 
     import * as actions from '../../vuex/actions.js'
 
+    import requestStorage from './request-storage.js'
+
     export default {
         components: {
             vmJsonEditor,
@@ -121,6 +84,7 @@
                 mode: state => state.requestEditor.mode,
                 currentRequest: state => state.currentRequest,
                 isRequestScheduled: state => state.isRequestScheduled,
+                isSavingRequest: state => state.requestEditor.saving
             },
             actions,
         },
@@ -202,10 +166,5 @@
 </script>
 
 <style scoped>
-    .error {
-        color: rgb(213, 0, 0);
-        font-size: 12px;
-        margin-top: 3px;
-        display: block;
-    }
+
 </style>

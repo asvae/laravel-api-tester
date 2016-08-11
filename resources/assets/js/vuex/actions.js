@@ -49,13 +49,6 @@ export const deleteRequest = function ({dispatch}, request) {
     this.$api.ajax('DELETE', 'requests/' + request.id)
 }
 
-export const saveRequest = function ({dispatch}, request) {
-    this.$api.ajax('POST', 'requests', this.request)
-        .then(function (data) {
-            this.setCurrentRequest(data.data)
-            this.loadRequests()
-        })
-}
 
 export const getCurrentRequestRoute = function ({dispatch}) {
     let headers = _.cloneDeep(this.currentRequest.headers)
@@ -85,9 +78,21 @@ export const getCurrentRequestRoute = function ({dispatch}) {
         })
 }
 
+export const saveRequest = function ({dispatch}, request) {
+    dispatch('REQUEST_IS_SAVING', true)
+    this.$api.ajax('POST', 'requests', this.request)
+        .then(function (data) {
+            dispatch('REQUEST_IS_SAVING', false)
+            this.setCurrentRequest(data.data)
+            this.loadRequests()
+        })
+}
+
 export const updateRequest = function ({dispatch}, request) {
+    dispatch('REQUEST_IS_SAVING', true)
     this.$api.ajax('PUT', 'requests/' + request.id, request)
         .then(function (data) {
+            dispatch('REQUEST_IS_SAVING', false)
             this.setCurrentRequest(data.data)
             this.loadRequests()
         })

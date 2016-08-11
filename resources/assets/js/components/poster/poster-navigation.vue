@@ -1,25 +1,14 @@
 <template>
-    <div class="poster-navigation control has-addons">
-        <button class="button page"
-                type="button"
-                :class="{'is-primary': 'request' === mode}"
-                @click="setMode('request')"
-                v-text="'Request'"
-        ></button>
-
-        <button class="button page"
-                type="button"
-                :class="{'is-primary': 'headers' === mode}"
-                @click="setMode('headers')"
-                v-text="'Headers'"
-        ></button>
-
-        <button class="button page"
-                type="button"
-                :class="{'is-primary': 'info' === mode}"
-                @click="setMode('info')"
-                v-text="'Info'"
-        ></button>
+    <div class="poster-navigation tabs is-boxed">
+        <ul>
+            <li v-for="tab in ['request','headers','info']"
+                :class="{'is-active': tab === mode}"
+            >
+                <a @click="setMode(tab)"
+                   v-text="tab | capitalize"
+                ></a>
+            </li>
+        </ul>
     </div>
 </template>
 

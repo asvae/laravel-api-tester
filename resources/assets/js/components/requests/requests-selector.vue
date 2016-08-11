@@ -39,6 +39,8 @@
                     if (
                             request.method.toUpperCase().includes(search)
                             || request.path.toUpperCase().includes(search)
+                            || (request.name && request.name.toUpperCase()
+                                                   .includes(search))
                     ) {
                         toDisplay.push(request)
                     }

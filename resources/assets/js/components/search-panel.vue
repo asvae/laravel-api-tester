@@ -32,5 +32,7 @@
 </script>
 
 <style scoped>
-
+    .search-panel{
+        width: 380px;
+    }
 </style>

@@ -10,6 +10,7 @@ const state = {
     search: '',
     requestEditor:{
         mode: 'request',
+        saving: false,
     }
 }
 
@@ -38,6 +39,9 @@ const mutations = {
     SET_CURRENT_ROUTE: (state, route) => {
         state.currentRoute = _.find(state.routes, route)
     },
+    REQUEST_IS_SAVING: (state, value) => {
+        state.requestEditor.saving = value
+    }
 }
 
 import api from '../plugins/api_demo/src/vuex/api-module.js'

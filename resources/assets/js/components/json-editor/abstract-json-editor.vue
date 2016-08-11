@@ -11,10 +11,7 @@
     }
 </script>
 
-<style>
-    .api-tester-main {
-        padding: 15px;
-    }
+<style scoped>
 
     /* jsoneditor color fixes */
     .api-tester-main .jsoneditor-menu {
