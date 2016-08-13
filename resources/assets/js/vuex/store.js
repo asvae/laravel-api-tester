@@ -9,14 +9,21 @@ const state = {
     isRequestScheduled: false,
     search: '',
     requestEditor:{
-        mode: 'request',
+        mode: 'data',
         saving: false,
-    }
+    },
+    responseViewer:{
+        mode: 'data',
+        processing: false,
+    },
 }
 
 const mutations = {
     SET_EDITOR_MODE(state, mode){
         state.requestEditor.mode = mode
+    },
+    SET_VIEWER_MODE(state, mode){
+        state.responseViewer.mode = mode
     },
     DELETE_REQUEST(state, request){
         state.requests.$remove(request)

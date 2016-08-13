@@ -1,7 +1,7 @@
 <template>
-    <div class="poster-navigation tabs">
+    <div class="response-navigation tabs">
         <ul>
-            <li v-for="tab in ['data','headers','info']"
+            <li v-for="tab in ['data', 'headers','preview']"
                 :class="{'is-active': tab === mode}"
             >
                 <a @click="setMode(tab)"
@@ -14,12 +14,13 @@
 
 <script>
     export default {
+        name: 'response-navigation',
         vuex: {
             getters: {
-                mode: state => state.requestEditor.mode,
+                mode: state => state.responseViewer.mode,
             },
             actions: {
-                setMode: ({dispatch}, mode) => dispatch('SET_EDITOR_MODE', mode)
+                setMode: ({dispatch}, mode) => dispatch('SET_VIEWER_MODE', mode)
             },
         }
     }
