@@ -15,14 +15,14 @@
         },
         ready() {
             let options = {
-                mode: 'view'
+                mode: 'view',
             }
 
-            this.$options.editor = new JSONEditor(this.$el, options, this.json)
+            this.initEditor(this.$el, options, this.json)
         },
     }
 </script>
 
-<style>
+<style scoped>
 
 </style>

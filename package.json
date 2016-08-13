@@ -8,7 +8,6 @@
     "babel-plugin-transform-runtime": "^6.7.5",
     "babel-preset-stage-2": "^6.11.0",
     "browserify": "^13.0.1",
-    "browserify-shim": "^3.8.12",
     "bulma": "^0.1.0",
     "font-awesome": "^4.6.1",
     "gulp": "^3.9.1",
@@ -41,12 +40,8 @@
         }
       ],
       [
-        "vueify",
-        "browserify-shim"
+        "vueify"
       ]
     ]
-  },
-  "browserify-shim": {
-    "jsoneditor": "global:JSONEditor"
   }
 }

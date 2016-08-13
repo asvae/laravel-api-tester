@@ -37,11 +37,11 @@
                 },
             }
 
-            this.$options.editor = new JSONEditor(this.$el, options, this.editedJson)
+            this.initEditor(this.$el, options, this.editedJson)
         },
     }
 </script>
 
-<style>
+<style scoped>
 
 </style>

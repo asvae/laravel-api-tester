@@ -6,8 +6,7 @@ var paths = {
 }
 
 // JSONEditor
-paths.js.push('./node_modules/jsoneditor/dist/jsoneditor.js')
-paths.css.push('./node_modules/jsoneditor/dist/jsoneditor.min.css')
+//paths.js.push('./node_modules/jsoneditor/dist/jsoneditor.js')
 
 elixir(function (mix) {
     mix.sass('api-tester.sass', './resources/assets/tmp')
