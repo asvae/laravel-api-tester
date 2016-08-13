@@ -4,6 +4,8 @@ $fa-font-path: '../assets/fonts'
 @import "../../../node_modules/font-awesome/scss/font-awesome.scss"
 
 @import "transitions"
+@import "https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+@import "../../../node_modules/jsoneditor/dist/jsoneditor"
 
 // Bulma buttons have strange margins when all button content is one icon.
 .button.is-icon
@@ -12,6 +14,44 @@ $fa-font-path: '../assets/fonts'
   .tag
     margin: 0
 
+html
+  background-color: #ffffff
 
+body
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif
+
+.is-fullwidth
+  width: 100%
+
+// Input styles
+.request-poster
+  input.input
+      border-top: 0
+      border-left: 0
+      border-right: 0
+      border-radius: 0
+      box-shadow: none
+
+// Jsoneditor colors
+div.jsoneditor
+  border-color: transparent
+  .ace_editor
+    border: 1px solid lighten($grey, 10%)
+    &.ace_focus
+      border-color: $primary
+    .ace_marker-layer
+      .ace_active-line
+        background-color: lighten($primary, 40%)
+  .jsoneditor-menu
+    background-color: $white
+    border-bottom-color: transparent
+    .jsoneditor-poweredBy
+      color: $grey
+    button
+      border-radius: 0
+      background-color: $primary
+      &:hover,&:active,&:focus
+        background-color: darken($primary, 10%)
+        outline: 0
 
 

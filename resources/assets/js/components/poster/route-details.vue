@@ -57,6 +57,6 @@
 <style scoped>
     td:first-child {
         width: 50px;
-        font-weight: 600;
+        font-weight: 500;
     }
 </style>
