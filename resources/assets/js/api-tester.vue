@@ -70,8 +70,8 @@ Application main page.
     }
 </script>
 
-We decided to forsake all the responsibility stuff. It requires using bulma @media
-which requires scss in .vue file, which is not supported by phpstorm atm.
+We decided to forsake all the responsibility stuff. It requires bulma @media
+which requires scss in .vue file, which is not supported by phpstorm ATM.
 <style scoped>
     .top-fixed {
         box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px rgba(17, 17, 17, 0.1);

@@ -1,36 +1,36 @@
 <template>
     <form class="action-panel control has-addons"
-          @submit.prevent="requestPoster.send"
+          @submit.prevent="setRequestScheduled"
     >
         <vm-request-type-select
-                :method="requestPoster.request.method"
-                @changed="requestPoster.request.method = $arguments[0]"
+                :method="request.method"
+                @changed="request.method = $arguments[0]"
         ></vm-request-type-select>
         <input class="input is-expanded"
                type="text"
                placeholder="Path"
                title="Path"
-               v-model="requestPoster.request.path"
+               v-model="request.path"
         >
         <button class="button is-success is-icon"
-                :class="{'is-loading': requestPoster.isSending}"
+                :class="{'is-loading': sending}"
                 type="button"
-                @click="requestPoster.send"
+                @click="setRequestScheduled"
                 title="Send"
         >
             <i class="fa fa-send-o"></i>
         </button>
         <button class="button"
-                :class="{'is-loading': requestPoster.isSavingRequest}"
+                :class="{'is-loading': saving}"
                 type="button"
-                @click="requestPoster.save"
+                @click="save"
                 title="Save"
         >
             <i class="fa fa-save"></i>
         </button>
         <button class="button is-icon"
                 type="button"
-                @click="requestPoster.copy"
+                @click="saveRequest(request)"
                 title="Copy"
         >
             <i class="fa fa-files-o"></i>
@@ -40,18 +40,32 @@
 
 <script>
     import vmRequestTypeSelect from './poster/request-type-select.vue'
-    import Vue from 'vue'
+    import requestEditorData from './poster/request-editor/request-editor-data.js'
+
+    import {saveRequest, updateRequest} from '../vuex/actions.js'
 
     export default {
+        data: () => requestEditorData,
         components: {
             vmRequestTypeSelect,
         },
-        props: {
-            // This component is supposed to be tightly bound to request poster.
-            // Passing by reference is intended.
-            'request-poster': {
-                required: true,
-            }
+        vuex: {
+            getters: {
+                sending: (store) => store.requestEditor.sendingRequest,
+                saving: (store) => store.requestEditor.savingRequest,
+            },
+            actions: {
+                saveRequest,
+                updateRequest,
+                setRequestScheduled: ({dispatch}) => dispatch('SET_REQUEST_SCHEDULED')
+            },
+        },
+        methods: {
+            save (){
+                // Saves or updates depending on whether request has id
+                let request = this.request
+                request.id ? this.updateRequest(request) : this.saveRequest(request)
+            },
         }
     }
 </script>

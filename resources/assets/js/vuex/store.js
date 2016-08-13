@@ -10,20 +10,25 @@ const state = {
     search: '',
     requestEditor:{
         mode: 'data',
-        saving: false,
+        sendingRequest: false,
+        savingRequest: false,
     },
     responseViewer:{
         mode: 'data',
-        processing: false,
+        response: null,
     },
 }
 
 const mutations = {
-    SET_EDITOR_MODE(state, mode){
-        state.requestEditor.mode = mode
+    // Response viewer
+    SET_RESPONSE(state, response){
+        state.responseViewer.response = response
     },
     SET_VIEWER_MODE(state, mode){
         state.responseViewer.mode = mode
+    },
+    SET_EDITOR_MODE(state, mode){
+        state.requestEditor.mode = mode
     },
     DELETE_REQUEST(state, request){
         state.requests.$remove(request)
