@@ -1,8 +1,7 @@
 <template>
     <div class="requests-selector">
-        <div class="box">
-            <div class="tile is-ancestor">
-                <!-- Requests -->
+        <div class="columns is-multiline">
+            <div class="column">
                 <div class="tile is-vertical">
                     <vm-request v-for="request in filteredRequests"
                                 track-by="id"
@@ -10,7 +9,7 @@
                                 :request="request"
                     ></vm-request>
                 </div>
-                <div class="tile" v-if="requests.length === 0">
+                <div class="column" v-if="requests.length === 0">
                     Nothing found...
                 </div>
             </div>
@@ -40,7 +39,7 @@
                             request.method.toUpperCase().includes(search)
                             || request.path.toUpperCase().includes(search)
                             || (request.name && request.name.toUpperCase()
-                                                   .includes(search))
+                                                       .includes(search))
                     ) {
                         toDisplay.push(request)
                     }

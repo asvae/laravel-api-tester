@@ -50,6 +50,9 @@ export const deleteRequest = function ({dispatch}, request) {
 }
 
 
+/**
+ * Ask laravel what route are we dealing with, if any.
+ */
 export const getCurrentRequestRoute = function ({dispatch}) {
     let headers = _.cloneDeep(this.currentRequest.headers)
     let wheres = _.cloneDeep(this.currentRequest.wheres)

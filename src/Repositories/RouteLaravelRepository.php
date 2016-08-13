@@ -4,6 +4,7 @@ namespace Asvae\ApiTester\Repositories;
 
 use Asvae\ApiTester\Collections\RouteCollection;
 use Asvae\ApiTester\Contracts\RouteRepositoryInterface;
+use Asvae\ApiTester\Entities\RouteInfo;
 use Illuminate\Routing\Router;
 use ReflectionClass;
 
@@ -20,16 +21,10 @@ class RouteLaravelRepository implements RouteRepositoryInterface
 
         foreach ($router->getRoutes() as $route) {
 
+            $routeInfo = (new RouteInfo($route))->toArray();
+
             /** @var \Illuminate\Routing\Route $route */
-            $this->routes->push([
-                'router'  => 'Laravel',
-                'wheres'  => $this->extractWheres($route),
-                'name'    => $route->getName(),
-                'methods' => $route->getMethods(),
-                'domain'  => $route->domain(),
-                'path'    => $route->getPath(),
-                'action'  => $route->getAction(),
-            ]);
+            $this->routes->push($routeInfo);
         }
     }
 
@@ -44,21 +39,5 @@ class RouteLaravelRepository implements RouteRepositoryInterface
         return $this->routes->filterMatch($match)
                             ->filterExcept($except)
                             ->values();
-    }
-
-    protected function extractWheres($route)
-    {
-        $reflection = new ReflectionClass($route);
-        $prop = $reflection->getProperty('wheres');
-        $prop->setAccessible(true);
-
-        $wheres = $prop->getValue($route);
-
-        // Хак, что бы в json всегда был объект
-        if (empty($wheres)) {
-            return (object) [];
-        }
-
-        return $wheres;
     }
 }

@@ -1,21 +1,16 @@
 <template>
     <div class="routes-selector">
-
-        <div class="box">
-            <div class="tile is-ancestor">
-                <!-- Routes -->
-                <div class="tile is-vertical">
-                    <vm-route v-for="route in filteredRoutes"
-                              transition="slip"
-                              :route="route"
-                    ></vm-route>
-                </div>
-                <div class="tile" v-if="routes.length === 0">
+        <div class="columns is-multiline">
+            <div class="column">
+                <vm-route v-for="route in filteredRoutes"
+                          transition="slip"
+                          :route="route"
+                ></vm-route>
+                <div class="column" v-if="routes.length === 0">
                     Nothing found...
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -58,10 +53,11 @@
                 this.routes.forEach(function (route) {
 
                     if (
-                        route.methods.join(',').toUpperCase()
+                            route.methods.join(',').toUpperCase()
                                  .includes(search)
                             || route.path.toUpperCase().includes(search)
-                            || (route.action.controller && route.action.controller.toUpperCase().includes(search))
+                            || (route.action.controller && route.action.controller.toUpperCase()
+                                                                .includes(search))
                             || (route.name && route.name.toUpperCase()
                                                    .includes(search))
                     ) {

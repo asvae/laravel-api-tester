@@ -4,10 +4,10 @@
     >
         <div class="columns is-mobile">
             <div class="column is-narrow">
-                <button class="button is-small is-active"
+                <vm-method-button
                         @click="setCurrentRequestFromRoute(route), scheduleRequest(true)"
                         v-text="route.methods[0]"
-                ></button>
+                ></vm-method-button>
             </div>
             <a @click="setCurrentRequestFromRoute(route)"
                class="column is-bold"
@@ -23,8 +23,12 @@
             setCurrentRequestFromRoute,
             scheduleRequest
     } from '../../vuex/actions.js'
+    import vmMethodButton from '../ligth-components/method-button.vue'
 
     export default {
+        components: {
+            vmMethodButton,
+        },
         vuex: {
             getters: {
                 currentRoute: (store) => store.currentRoute,
@@ -47,6 +51,7 @@
         border-right: 2px solid rgb(255, 82, 82);
         background-color: #eef9f2;
     }
+
     .route {
         border-right: 2px solid transparent;
     }

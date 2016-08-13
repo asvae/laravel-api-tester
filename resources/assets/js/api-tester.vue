@@ -18,11 +18,25 @@ Application main page.
             <div class="left-side-background"></div>
             <div class="left-side">
                 <div class="columns is-multiline">
-                    <div class="column is-full">
-                        <vm-routes-selector></vm-routes-selector>
+                    <div class="column is-boxed">
+                        <div class="tabs">
+                            <ul>
+                                <li v-for="page in ['routes', 'requests']"
+                                    :class="{'is-active': mode === page}">
+                                    <a @click="mode = page"
+                                       v-text="page | capitalize"
+                                    ></a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="column is-full">
-                        <vm-requests-selector></vm-requests-selector>
+                        <vm-routes-selector v-show="mode === 'routes'"
+                        ></vm-routes-selector>
+                        <vm-requests-selector v-show="mode === 'requests'"
+                        ></vm-requests-selector>
+                    </div>
+                    <div class="column is-full">
                     </div>
                 </div>
             </div>
@@ -41,6 +55,11 @@ Application main page.
     import vmRequestPoster from './components/poster/request-poster.vue'
 
     export default {
+        data (){
+            return {
+                mode: "routes",
+            }
+        },
         components: {
             vmActionPanel,
             vmSearchPanel,
@@ -51,6 +70,8 @@ Application main page.
     }
 </script>
 
+We decided to forsake all the responsibility stuff. It requires using bulma @media
+which requires scss in .vue file, which is not supported by phpstorm atm.
 <style scoped>
     .top-fixed {
         box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px rgba(17, 17, 17, 0.1);
@@ -63,11 +84,12 @@ Application main page.
         z-index: 5;
     }
 
+    /* Purely decorational element */
     .left-side-background {
         position: fixed;
         width: 400px;
         height: 100%;
-        background-color: #00bcd4;
+        background-color: white;
         z-index: -1;
     }
 

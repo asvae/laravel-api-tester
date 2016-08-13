@@ -2,6 +2,8 @@
 
 namespace Asvae\ApiTester\Http\Middleware;
 
+use Asvae\ApiTester\Entities\Route;
+use Asvae\ApiTester\Entities\RouteInfo;
 use Closure;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
@@ -32,17 +34,8 @@ class DetectRouteMiddleware
 
             $this->events->listen(RouteMatched::class,
                 function (RouteMatched $event) {
-
-                    $route = $event->route;
-
                     response()->json([
-                        'data' => [
-                            'domain'  => $route->domain(),
-                            'name'    => $route->getName(),
-                            'methods' => $route->getMethods(),
-                            'path'    => $route->getPath(),
-                            'action'  => $route->getAction(),
-                        ],
+                        'data' => new RouteInfo($event->route),
                     ])->send();
 
                     exit();

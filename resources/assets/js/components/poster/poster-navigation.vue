@@ -13,6 +13,8 @@
 </template>
 
 <script>
+
+
     export default {
         vuex: {
             getters: {

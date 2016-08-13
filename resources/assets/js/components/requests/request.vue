@@ -4,10 +4,10 @@
     >
         <div class="columns is-mobile">
             <div class="column is-narrow">
-                <button class="button is-small is-active"
+                <vm-method-button
                         @click="setCurrentRequest(request), scheduleRequest(true)"
                         v-text="request.method"
-                ></button>
+                ></vm-method-button>
             </div>
             <a @click="setCurrentRequest(request)"
                class="column is-bold"
@@ -24,8 +24,17 @@
 
 <script>
     import * as actions from '../../vuex/actions.js'
+    import vmMethodButton from '../ligth-components/method-button.vue'
 
     export default {
+        components: {
+            vmMethodButton,
+        },
+        computed: {
+            displayedName (){
+                return this.request.name ? this.request.name : this.request.path
+            }
+        },
         data (){
             return {}
         },
@@ -35,11 +44,6 @@
         props: {
             request: {
                 type: Object,
-            }
-        },
-        computed: {
-            displayedName (){
-                return this.request.name ? this.request.name : this.request.path
             }
         }
     }
