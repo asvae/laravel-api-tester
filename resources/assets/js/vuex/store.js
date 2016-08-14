@@ -3,7 +3,7 @@ import _ from 'lodash'
 
 const state = {
     routes: [],
-    requests: [],
+    requests: {},
     currentRequest: {method: 'GET', path: '/', headers: []},
     currentRoute: null,
     isRequestScheduled: false,
@@ -26,7 +26,9 @@ const mutations = {
         state.responseViewer.mode = mode
     },
     DELETE_REQUEST(state, request){
-        state.requests.$remove(request)
+        let requests = _.cloneDeep(state.requests)
+        delete requests[request.id]
+        state.requests = requests
     },
     SET_REQUESTS(state, requests){
         state.requests = requests
