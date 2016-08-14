@@ -9,34 +9,47 @@
                        v-model="request.name"
                 >
             </div>
+
             <div class="column is-full">
-                <vm-poster-navigation></vm-poster-navigation>
+                <vm-navigation-tabs class="is-boxed"
+                                    :pages="['data', 'headers', 'info']"
+                                    :mode="mode"
+                                    @changed="setMode($arguments[0])"
+                ></vm-navigation-tabs>
             </div>
-            <div class="column is-full" v-if="request_mode === 'data'">
+
+            <!-- Editor -->
+            <div class="column is-full" v-if="mode === 'data'">
                 <vm-json-editor :json="request.body"
                                 style="height: 300px"
                                 @changed="request.body = $arguments[0], changed = true"
                 ></vm-json-editor>
             </div>
+
+            <!-- Headers -->
+            <div class="column is-full" v-if="mode === 'headers'">
+                <vm-headers :headers="request.headers"
+                            @updated="request.headers = $arguments[0]"
+                ></vm-headers>
+            </div>
+
+            <!-- Info -->
             <vm-route-details
                     class="column is-full"
                     v-if="mode === 'info'"
             ></vm-route-details>
 
-            <div class="column is-full" v-if="request_mode === 'headers'">
-                <vm-headers :headers="request.headers"
-                            @updated="request.headers = $arguments[0]"
-                ></vm-headers>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
     import vmJsonEditor from '../../json-editor/json-editor.vue'
-    import vmJsonViewer from '../../json-editor/json-viewer.vue'
-    import vmRouteDetails from '../route-details.vue'
+    import vmRouteDetails from './route-details.vue'
     import vmPosterNavigation from './request-editor-navigation.vue'
+    import vmHeaders from '../headers/headers.vue'
+
+    import vmNavigationTabs from '../../ligth-components/navigation-tabs.vue'
 
     import requestEditorData from './request-editor-data.js'
 
@@ -45,18 +58,25 @@
         data: () => requestEditorData,
         components: {
             vmJsonEditor,
-            vmJsonViewer,
+            vmHeaders,
             vmRouteDetails,
             vmPosterNavigation,
+
+            vmNavigationTabs,
         },
         vuex: {
             getters: {
                 mode: state => state.requestEditor.mode,
             },
+            actions: {
+                setMode: ({dispatch}, mode) => dispatch('SET_EDITOR_MODE', mode)
+            }
         },
     }
 </script>
 
 <style scoped>
-
+    .request-editor {
+        padding-bottom: 10px;
+    }
 </style>

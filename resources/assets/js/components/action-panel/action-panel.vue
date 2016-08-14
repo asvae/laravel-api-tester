@@ -1,6 +1,6 @@
 <template>
     <form class="action-panel control has-addons"
-          @submit.prevent="setRequestScheduled"
+          @submit.prevent="scheduleRequest"
     >
         <vm-request-type-select
                 :method="request.method"
@@ -14,8 +14,7 @@
         >
         <button class="button is-success is-icon"
                 :class="{'is-loading': sending}"
-                type="button"
-                @click="setRequestScheduled"
+                type="submit"
                 title="Send"
         >
             <i class="fa fa-send-o"></i>
@@ -39,10 +38,10 @@
 </template>
 
 <script>
-    import vmRequestTypeSelect from './poster/request-type-select.vue'
-    import requestEditorData from './poster/request-editor/request-editor-data.js'
+    import vmRequestTypeSelect from './request-type-select.vue'
+    import requestEditorData from '../poster/request-editor/request-editor-data.js'
 
-    import {saveRequest, updateRequest} from '../vuex/actions.js'
+    import {saveRequest, updateRequest} from '../../vuex/actions.js'
 
     export default {
         data: () => requestEditorData,
@@ -57,7 +56,7 @@
             actions: {
                 saveRequest,
                 updateRequest,
-                setRequestScheduled: ({dispatch}) => dispatch('SET_REQUEST_SCHEDULED')
+                scheduleRequest: ({dispatch}) => dispatch('SET_SENDING_SCHEDULED')
             },
         },
         methods: {

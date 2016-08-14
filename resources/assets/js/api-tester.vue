@@ -19,16 +19,9 @@ Application main page.
             <div class="left-side">
                 <div class="columns is-multiline">
                     <div class="column is-boxed">
-                        <div class="tabs">
-                            <ul>
-                                <li v-for="page in ['routes', 'requests']"
-                                    :class="{'is-active': mode === page}">
-                                    <a @click="mode = page"
-                                       v-text="page | capitalize"
-                                    ></a>
-                                </li>
-                            </ul>
-                        </div>
+                        <vm-navigation-tabs :pages="['routes', 'requests']"
+                                            :mode.sync="mode"
+                        ></vm-navigation-tabs>
                     </div>
                     <div class="column is-full">
                         <vm-routes-selector v-show="mode === 'routes'"
@@ -49,10 +42,12 @@ Application main page.
 
 <script>
     import vmSearchPanel from './components/search-panel.vue'
-    import vmActionPanel from './components/action-panel.vue'
+    import vmActionPanel from './components/action-panel/action-panel.vue'
     import vmRoutesSelector from './components/routes/routes-selector.vue'
     import vmRequestsSelector from './components/requests/requests-selector.vue'
     import vmRequestPoster from './components/poster/request-poster.vue'
+
+    import vmNavigationTabs from './components/ligth-components/navigation-tabs.vue'
 
     export default {
         data (){
@@ -66,6 +61,8 @@ Application main page.
             vmRoutesSelector,
             vmRequestsSelector,
             vmRequestPoster,
+
+            vmNavigationTabs,
         },
     }
 </script>

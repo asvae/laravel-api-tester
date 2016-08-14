@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import * as actions from '../../vuex/actions.js'
+    import {setCurrentRequest, scheduleRequest, deleteRequest} from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
 
     export default {
@@ -39,7 +39,11 @@
             return {}
         },
         vuex: {
-            actions,
+            actions: {
+                setCurrentRequest,
+                scheduleRequest,
+                deleteRequest,
+            },
         },
         props: {
             request: {
