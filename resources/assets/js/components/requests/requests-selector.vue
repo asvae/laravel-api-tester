@@ -75,16 +75,33 @@
 
         methods:{
             addRequest(requests, path){
-                // при первой загрузке, мы получаем весь список имеющихся реквестов разом
-                let stateRequests = this.requests
+                path.replace('/', '')
+
+                let stateRequests
+
                 if(path === '/'){
                     stateRequests = requests
+                    for(let index in requests){
+                        this.prepareRequest(requests[index])
+                    }
                 } else {
-                // При последующих ивентах вставляем их по одному
-                    stateRequests[path] = requests
+                    stateRequests = _.cloneDeep(this.requests)
+                    if(requests === null){
+                        delete stateRequests[path];
+                    }else {
+
+                        this.prepareRequest(requests)
+                        stateRequests[path] = requests
+                    }
                 }
 
                 this.setRequests(stateRequests)
+            },
+            // Firebase не хранит пустые массивы. Поэтому заголовки придется добавить в ручную
+            prepareRequest(request){
+                if(request.headers === undefined){
+                    request.headers = []
+                }
             }
         }
     }

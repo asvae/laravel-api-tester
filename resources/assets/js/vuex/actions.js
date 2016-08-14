@@ -44,7 +44,8 @@ export const setCurrentRequestFromRoute = ({dispatch}, route) => {
         name: "",
         body: "",
         wheres: route.wheres,
-        headers: [],
+        // TODO: подумать
+        headers: route.headers !== undefined ? route.headers : [],
         config: {
             addCRSF: true,
         }
