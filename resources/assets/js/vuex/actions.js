@@ -18,10 +18,19 @@ export const loadRoutes = function ({dispatch}) {
 }
 
 export const loadRequests = function ({dispatch}) {
+    // Хацк загрузки 
+    if(ENV.firebaseToken !== '' && ENV.firebaseToken !== ''){
+        return
+    }
+
     this.$api.ajax('GET', 'requests')
         .then(function (response) {
             dispatch('SET_REQUESTS', response.data)
         })
+}
+
+export const setRequests = function ({dispatch}, requests) {
+        dispatch('SET_REQUESTS', requests)
 }
 
 export const setCurrentRequest = ({dispatch}, request) => {

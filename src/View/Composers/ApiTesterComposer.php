@@ -24,11 +24,13 @@ class ApiTesterComposer
     public function compose(View $view)
     {
         $firebaseToken = null;
-        if($this->driver  === 'firebase'){
+        $firebaseSource = null;
 
+        if($this->driver  === 'firebase'){
             $firebaseToken = $this->app['api-tester.token_generator']->create();
+            $firebaseSource = $this->app['config']['api-tester.storage_drivers.firebase.options.base'];
         }
 
-        $view->with(compact('firebaseToken'));
+        $view->with(compact('firebaseToken', 'firebaseSource'));
     }
 }

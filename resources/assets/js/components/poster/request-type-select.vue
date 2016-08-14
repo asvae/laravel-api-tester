@@ -16,6 +16,7 @@
                 options: [
                     'POST',
                     'GET',
+                    'HEAD',
                     'DELETE',
                     'PUT',
                     'PATCH',

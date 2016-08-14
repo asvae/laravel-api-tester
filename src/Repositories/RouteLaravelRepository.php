@@ -6,7 +6,6 @@ use Asvae\ApiTester\Collections\RouteCollection;
 use Asvae\ApiTester\Contracts\RouteRepositoryInterface;
 use Asvae\ApiTester\Entities\RouteInfo;
 use Illuminate\Routing\Router;
-use ReflectionClass;
 
 class RouteLaravelRepository implements RouteRepositoryInterface
 {
@@ -20,10 +19,7 @@ class RouteLaravelRepository implements RouteRepositoryInterface
         $this->routes = $collection;
 
         foreach ($router->getRoutes() as $route) {
-
-            $routeInfo = (new RouteInfo($route))->toArray();
-
-            /** @var \Illuminate\Routing\Route $route */
+            $routeInfo = (new RouteInfo($route, ['router' => 'Laravel']))->toArray();
             $this->routes->push($routeInfo);
         }
     }
@@ -37,7 +33,7 @@ class RouteLaravelRepository implements RouteRepositoryInterface
     public function get($match = [], $except = [])
     {
         return $this->routes->filterMatch($match)
-                            ->filterExcept($except)
-                            ->values();
+            ->filterExcept($except)
+            ->values();
     }
 }
