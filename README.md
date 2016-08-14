@@ -51,6 +51,10 @@ And edit `config/api-tester.php` as you please.
 * [Material design lite](https://getmdl.io/) as theme.
 * Lightweight and no dependencies (except on laravel).
 
+## Powered By
+* [Vue.js](https://vuejs.org/)
+* [Bulma](http://bulma.io/)
+
 ## Feedback
 Don't hesitate to raise an issue if something doesn't work or you have a feature request. You're welcome to.
 
