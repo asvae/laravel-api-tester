@@ -88,13 +88,13 @@ class RouteInfo implements Arrayable, JsonSerializable
     protected function extractFormRequest()
     {
         foreach ($this->getActionReflection()->getParameters() as $parameter){
-            $type = $parameter->getType();
-            if($type && is_subclass_of($type->__toString(), FormRequest::class) ){
-                $formRequest = app()->build($type->__toString());
+            $class = $parameter->getClass();
+            if($class && is_subclass_of($class->__toString(), FormRequest::class) ){
+                $formRequest = app()->build($class->__toString());
                 $rules = (new \ReflectionClass($formRequest))->getMethod('rules')->invoke($formRequest);
 
                 return [
-                    'class' => $type->__toString(),
+                    'class' => $class->__toString(),
                     'rules' => $rules,
                 ];
             }
