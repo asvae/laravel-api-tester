@@ -48,7 +48,7 @@ And edit `config/api-tester.php` as you please.
 * CSRF token is handled for you.
 * Define request body in [JSON editor](https://github.com/josdejong/jsoneditor).
 * Preview response depending on type (html or json).
-* [Material design lite](https://getmdl.io/) as theme.
+* Clean and intuitive interface.
 * Lightweight and no dependencies (except on laravel).
 
 ## Powered By
