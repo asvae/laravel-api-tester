@@ -12,6 +12,12 @@ use Illuminate\Routing\Controller;
  */
 class RouteController extends Controller
 {
+    /**
+     * Display list of all available routes.
+     *
+     * @param RouteRepositoryInterface $repository
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(RouteRepositoryInterface $repository)
     {
         $data = $repository->get(
