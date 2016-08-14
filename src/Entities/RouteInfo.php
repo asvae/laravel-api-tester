@@ -21,6 +21,7 @@ class RouteInfo implements Arrayable, JsonSerializable
      * @var
      */
     protected $actionReflection;
+    protected $options;
 
     /**
      * @var \Illuminate\Routing\Route
@@ -30,6 +31,7 @@ class RouteInfo implements Arrayable, JsonSerializable
     public function __construct(\Illuminate\Routing\Route $route, $options = [])
     {
         $this->route = $route;
+        $this->options = $options;
     }
 
     /**
@@ -37,17 +39,16 @@ class RouteInfo implements Arrayable, JsonSerializable
      */
     public function toArray()
     {
-        return [
-            'router' => 'Laravel',
+        return array_merge([
             'name' => $this->route->getName(),
             'methods' => $this->route->getMethods(),
             'domain' => $this->route->domain(),
-            'path' => $this->route->getPath(),
+            'path' => trim($this->route->getPath(), '/'),
             'action' => $this->route->getAction(),
             'annotation' => $this->extractAnnotation(),
             'formRequest' => $this->extractFormRequest(),
             'wheres' => $this->extractWheres(),
-        ];
+        ], $this->options);
     }
 
     protected function extractWheres()
