@@ -8,12 +8,12 @@
 ## Live demo
 Try it out: [laravel-api-tester.asva.by](http://laravel-api-tester.asva.by/)
 
-## Disclaimer
+<!--- ## Disclaimer
 
 Image and demo are from `development` branch. It's definitely more usable and quite stable, compared to master release. Give it a try:
 ```
 composer require asvae/laravel-api-tester:dev-development
-```
+``` --->
 
 ## Installation
 
