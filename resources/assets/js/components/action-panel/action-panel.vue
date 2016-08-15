@@ -41,7 +41,7 @@
     import vmRequestTypeSelect from './request-type-select.vue'
     import requestEditorData from '../poster/request-editor/request-editor-data.js'
 
-    import {saveRequest, updateRequest} from '../../vuex/actions.js'
+    import {saveRequest, updateRequest, loadRequests, setCurrentRequest} from '../../vuex/actions.js'
 
     export default {
         data: () => requestEditorData,
