@@ -50,12 +50,14 @@
         },
         vuex: {
             getters: {
-                sending: (store) => store.requestEditor.sendingRequest,
-                saving: (store) => store.requestEditor.savingRequest,
+                sending: (store) => store.requestEditor.isSending,
+                saving: (store) => store.requestEditor.isSaving,
             },
             actions: {
                 saveRequest,
                 updateRequest,
+                loadRequests,
+                setCurrentRequest,
                 scheduleRequest: ({dispatch}) => dispatch('SET_SENDING_SCHEDULED')
             },
         },

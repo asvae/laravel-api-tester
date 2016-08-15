@@ -89,20 +89,20 @@ export const getCurrentRequestRoute = function ({dispatch}) {
 }
 
 export const saveRequest = function ({dispatch}, request) {
-    dispatch('REQUEST_IS_SAVING', true)
+    dispatch('SET_REQUEST_IS_SAVING', true)
     this.$api.ajax('POST', 'requests', this.request)
         .then(function (data) {
-            dispatch('REQUEST_IS_SAVING', false)
+            dispatch('SET_REQUEST_IS_SAVING', false)
             setCurrentRequest({dispatch}, data.data)
-            loadRequests({dispatch})
+            this.loadRequests({dispatch})
         })
 }
 
 export const updateRequest = function ({dispatch}, request) {
-    dispatch('REQUEST_IS_SAVING', true)
+    dispatch('SET_REQUEST_IS_SAVING', true)
     this.$api.ajax('PUT', 'requests/' + request.id, request)
         .then(function (data) {
-            dispatch('REQUEST_IS_SAVING', false)
+            dispatch('SET_REQUEST_IS_SAVING', false)
             this.setCurrentRequest(data.data)
             this.loadRequests()
         })
