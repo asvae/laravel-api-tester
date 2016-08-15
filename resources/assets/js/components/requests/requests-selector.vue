@@ -4,7 +4,7 @@
             <div class="column">
                 <div class="tile is-vertical">
                     <vm-request v-for="request of filteredRequests"
-                                track-by="id"
+                                track-by="$index"
                                 transition="slip"
                                 :request="request"
                     ></vm-request>
