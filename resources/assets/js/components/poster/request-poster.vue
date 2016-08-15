@@ -54,9 +54,25 @@
                 headers.push({key: 'X-Api-Tester', value: 1})
 
                 this.$api.ajax(request.method, path, request.body, headers)
-                    .always((response) => {
+                    .done((response) => {
                         let route = response.data
                         this.setCurrentRoute(route)
+                    })
+                    .fail((xhr, status, error)=>{
+
+                        data = xhr.responseText
+
+                        try {
+                            data = JSON.parse(data)
+                        } catch (e) {}
+
+                        let response = {
+                            data,
+                            isJson: typeof data !== 'string',
+                            headers: xhr.getAllResponseHeaders(),
+                        }
+
+                        this.setResponse(response)
                     })
             },
             send (){

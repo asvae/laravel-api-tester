@@ -4,7 +4,9 @@ namespace Asvae\ApiTester\Entities;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use JsonSerializable;
+use ReflectionException;
 
 /**
  * Frontend ready route
@@ -22,6 +24,10 @@ class RouteInfo implements Arrayable, JsonSerializable
      */
     protected $actionReflection;
     protected $options;
+    /**
+     * @var array
+     */
+    protected $errors = [];
 
     /**
      * @var \Illuminate\Routing\Route
@@ -48,6 +54,7 @@ class RouteInfo implements Arrayable, JsonSerializable
             'annotation' => $this->extractAnnotation(),
             'formRequest' => $this->extractFormRequest(),
             'wheres' => $this->extractWheres(),
+            'errors' => $this->errors,
         ], $this->options);
     }
 
@@ -74,12 +81,15 @@ class RouteInfo implements Arrayable, JsonSerializable
         return $this->toArray();
     }
 
+    /**
+     * @return string
+     */
     protected function extractAnnotation()
     {
-        $uses = $this->route->getAction()['uses'];
-        if (is_string($uses)) {
-            list($controller, $action) = explode('@', $uses);
-            return (new \ReflectionClass($controller))->getMethod($action)->getDocComment();
+        $reflection = $this->getActionReflection();
+
+        if (!is_null($reflection)) {
+            return $reflection->getDocComment();
         }
 
         return '';
@@ -95,12 +105,28 @@ class RouteInfo implements Arrayable, JsonSerializable
 
         foreach ($reflection->getParameters() as $parameter) {
             $class = $parameter->getClass();
-            if ($class && is_subclass_of($class->__toString(), FormRequest::class)) {
-                $formRequest = app()->build($class->__toString());
-                $rules = (new \ReflectionClass($formRequest))->getMethod('rules')->invoke($formRequest);
+
+            // Если аргумент нетипизирован, значит он уже не будет затянут через DI,
+            // И дальнейший обход не имеет смысла, так как все последующие аргументы
+            // тоже не будут затянуты через DI, не зависимо от того типизированы они или нет.
+            if (is_null($class)) {
+                break;
+            }
+
+            $class = $class->__toString();
+
+            // Если это форм-реквест.
+            if (is_subclass_of($class, FormRequest::class)) {
+
+                // Для вызова нестатического метода на объекте, нам необходим инстанс объекта.
+                // Мы используем build вместо make, чтобы избежать автоматического запуска валидации.
+                $formRequest = app()->build($class);
+
+                // Здесь используется метод call, чтобы разрешить зависимости.
+                $rules = app()->call([$formRequest, 'rules']);
 
                 return [
-                    'class' => $class->__toString(),
+                    'class' => $class,
                     'rules' => $rules,
                 ];
             }
@@ -115,12 +141,11 @@ class RouteInfo implements Arrayable, JsonSerializable
             return $this->routeReflection;
         }
 
-
         return $this->routeReflection = new \ReflectionClass($this->route);
     }
 
     /**
-     * @return \ReflectionFunctionAbstract
+     * @return \ReflectionFunctionAbstract|null
      */
     protected function getActionReflection()
     {
@@ -129,14 +154,31 @@ class RouteInfo implements Arrayable, JsonSerializable
         }
 
         $uses = $this->route->getAction()['uses'];
-        if (is_string($uses)) {
+
+        // Если это строка и она содержит @, значит мы имем дело с методом контроллера.
+        if (is_string($uses) && str_contains($uses, '@')) {
             list($controller, $action) = explode('@', $uses);
+
+            // Если нет контроллера.
+            if (!class_exists($controller)) {
+                $this->setError('uses', 'controller does not exists');
+                return null;
+            }
+
+            // Если нет метода в контроллере.
+            if (!method_exists($controller, $action)) {
+                $this->setError('uses', 'controller@method does not exists');
+                return null;
+            }
+
             return $this->actionReflection = new \ReflectionMethod($controller, $action);
         }
 
         if (is_callable($uses)) {
             return $this->actionReflection = new \ReflectionFunction($uses);
         }
+
+        $this->setError('uses', 'route uses is not valid');
 
         return null;
     }
@@ -149,5 +191,10 @@ class RouteInfo implements Arrayable, JsonSerializable
         }
 
         return trim($path, '/');
+    }
+
+    private function setError($type, $text, $params = [])
+    {
+        $this->errors[$type] = trans($text, $params);
     }
 }

@@ -11,6 +11,7 @@
             </div>
             <a @click="setCurrentRequestFromRoute(route)"
                class="column is-bold"
+               :class="{'has-error': hasErrors(route)}"
                v-text="route.path"
                style="white-space: nowrap"
             ></a>
@@ -19,11 +20,9 @@
 </template>
 
 <script>
-    import {
-            setCurrentRequestFromRoute,
-            scheduleRequest
-    } from '../../vuex/actions.js'
+    import {setCurrentRequestFromRoute, scheduleRequest} from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
+    import _ from 'lodash'
 
     export default {
         components: {
@@ -43,6 +42,11 @@
                 type: Object,
             }
         },
+        methods: {
+            hasErrors(route){
+                return ! _.isEmpty(route.errors);
+            }
+        }
     }
 </script>
 
@@ -54,5 +58,9 @@
 
     .route {
         border-right: 2px solid transparent;
+    }
+
+    .route .has-error{
+        color: #FF5252;
     }
 </style>
