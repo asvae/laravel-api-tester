@@ -30,11 +30,7 @@ const mutations = {
     SET_VIEWER_MODE(state, mode){
         state.responseViewer.mode = mode
     },
-    DELETE_REQUEST(state, request){
-        let requests = _.cloneDeep(state.requests)
-        delete requests[request.id]
-        state.requests = requests
-    },
+
 
     // Request editor
 
@@ -62,13 +58,16 @@ const mutations = {
     SET_REQUESTS(state, requests){
         state.requests = requests
     },
-    DELETE_REQUEST(state, request){
-        state.requests.$remove(request)
-    },
+
     SET_CURRENT_REQUEST(state, currentRequest){
         state.currentRequest = currentRequest
     },
 
+    DELETE_REQUEST(state, request){
+        let requests = _.cloneDeep(state.requests)
+        delete requests[request.id]
+        state.requests = requests
+    },
     // Routes
 
     SET_ROUTES(state, routes){
@@ -76,6 +75,10 @@ const mutations = {
     },
     SET_CURRENT_ROUTE: (state, route) => {
         state.currentRoute = _.find(state.routes, route)
+    },
+
+    SET_REQUEST_SCHEDULED(state, isScheduled){
+        state.isRequestScheduled = isScheduled
     },
 }
 
