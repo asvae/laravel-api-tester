@@ -43,7 +43,7 @@ class RouteInfo implements Arrayable, JsonSerializable
             'name' => $this->route->getName(),
             'methods' => $this->route->getMethods(),
             'domain' => $this->route->domain(),
-            'path' => trim($this->route->getPath(), '/'),
+            'path' => $this->preparePath(),
             'action' => $this->route->getAction(),
             'annotation' => $this->extractAnnotation(),
             'formRequest' => $this->extractFormRequest(),
@@ -87,9 +87,15 @@ class RouteInfo implements Arrayable, JsonSerializable
 
     protected function extractFormRequest()
     {
-        foreach ($this->getActionReflection()->getParameters() as $parameter){
+        $reflection = $this->getActionReflection();
+
+        if (is_null($reflection)) {
+            return null;
+        }
+
+        foreach ($reflection->getParameters() as $parameter) {
             $class = $parameter->getClass();
-            if($class && is_subclass_of($class->__toString(), FormRequest::class) ){
+            if ($class && is_subclass_of($class->__toString(), FormRequest::class)) {
                 $formRequest = app()->build($class->__toString());
                 $rules = (new \ReflectionClass($formRequest))->getMethod('rules')->invoke($formRequest);
 
@@ -128,8 +134,20 @@ class RouteInfo implements Arrayable, JsonSerializable
             return $this->actionReflection = new \ReflectionMethod($controller, $action);
         }
 
-        if(is_callable($uses)){
+        if (is_callable($uses)) {
             return $this->actionReflection = new \ReflectionFunction($uses);
         }
+
+        return null;
+    }
+
+    protected function preparePath()
+    {
+        $path = $this->route->getPath();
+        if ($path === '/') {
+            return $path;
+        }
+
+        return trim($path, '/');
     }
 }
