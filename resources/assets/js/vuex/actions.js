@@ -18,6 +18,9 @@ export const loadRoutes = function ({dispatch}) {
 }
 
 export const loadRequests = function ({dispatch}) {
+    if(ENV.firebaseToken !== '' && ENV.firebaseToken !== ''){
+        return
+    }
     this.$api.ajax('GET', 'requests')
         .then(function (response) {
             dispatch('SET_REQUESTS', response.data)
