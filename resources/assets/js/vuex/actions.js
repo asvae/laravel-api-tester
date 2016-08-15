@@ -109,3 +109,5 @@ export const updateRequest = function ({dispatch}, request) {
 }
 
 export const scheduleRequest = ({dispatch}, status) => dispatch('SET_REQUEST_SCHEDULED', status)
+
+export const scheduleSending = ({dispatch}, status) => dispatch('SET_SENDING_SCHEDULED', status)

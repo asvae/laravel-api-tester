@@ -1,6 +1,6 @@
 <template>
     <form class="action-panel control has-addons"
-          @submit.prevent="scheduleRequest"
+          @submit.prevent="scheduleSending(true)"
     >
         <vm-request-type-select
                 :method="request.method"
@@ -41,7 +41,7 @@
     import vmRequestTypeSelect from './request-type-select.vue'
     import requestEditorData from '../poster/request-editor/request-editor-data.js'
 
-    import {saveRequest, updateRequest, loadRequests, setCurrentRequest} from '../../vuex/actions.js'
+    import {saveRequest, updateRequest, loadRequests, setCurrentRequest, scheduleSending} from '../../vuex/actions.js'
 
     export default {
         data: () => requestEditorData,
@@ -58,7 +58,7 @@
                 updateRequest,
                 loadRequests,
                 setCurrentRequest,
-                scheduleRequest: ({dispatch}) => dispatch('SET_SENDING_SCHEDULED')
+                scheduleSending,
             },
         },
         methods: {

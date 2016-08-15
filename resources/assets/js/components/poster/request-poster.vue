@@ -14,7 +14,7 @@
 
     import RandExp from 'randexp'
 
-    import {scheduleRequest} from '../../vuex/actions.js'
+    import {scheduleRequest, scheduleSending} from '../../vuex/actions.js'
 
     import requestEditorData from './request-editor/request-editor-data.js'
 
@@ -103,6 +103,7 @@
             },
             actions: {
                 scheduleRequest,
+                scheduleSending,
                 setResponse: ({dispatch}, response) => dispatch('SET_RESPONSE', response),
                 setCurrentRoute: ({dispatch}, route) => dispatch('SET_CURRENT_ROUTE', route),
             },
@@ -114,9 +115,14 @@
             // Kinda vuex event
             sendingIsScheduled (isScheduled){
                 if (isScheduled) {
-                    this.scheduleRequest(false)
+                    console.log('is Scheduled')
                     this.send()
+                    this.scheduleSending(false)
+
+                    return
                 }
+
+                console.log('is mot Scheduled')
             },
         },
     }
