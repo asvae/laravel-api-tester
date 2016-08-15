@@ -34,6 +34,7 @@ const mutations = {
         let requests = _.cloneDeep(state.requests)
         delete requests[request.id]
         state.requests = requests
+    },
 
     // Request editor
 
