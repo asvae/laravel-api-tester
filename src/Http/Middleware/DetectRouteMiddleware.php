@@ -30,7 +30,7 @@ class DetectRouteMiddleware
     {
         // In case the request was sent by Api Tester we will halt the request
         // and output route information instead.
-        if ($request->hasHeader('X-Api-Tester')) {
+        if ($request->header('X-Api-Tester', false)) {
 
             $this->events->listen(RouteMatched::class,
                 function (RouteMatched $event) {
