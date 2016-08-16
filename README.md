@@ -41,10 +41,12 @@ And edit `config/api-tester.php` as you please.
 
 ## Features
 * Display routes for your application.
-* Live search and sortable columns.
+* Prepare and save requests.
+* Collaborate with your team using firebase.
+* Live search for everything.
 * Filter out routes in [config](config/api-tester.php).
 * CSRF token is handled for you.
-* Define request body in [JSON editor](https://github.com/josdejong/jsoneditor).
+* Fill request in JSON editor.
 * Preview response depending on type (html or json).
 * Clean and intuitive interface.
 * Lightweight and no dependencies (except on laravel).
@@ -57,8 +59,8 @@ And edit `config/api-tester.php` as you please.
 Don't hesitate to raise an issue if something doesn't work or you have a feature request. You're welcome to.
 
 ## Authors
-* [greabock](https://github.com/greabock) — backend. All of it.
-* [asvae](https://github.com/asvae) — frontend. You guessed it.
+* [greabock](https://github.com/greabock) — backends. All of em.
+* [asvae](https://github.com/asvae) — frontends. You guessed it.
 
 ## Tests
 We do unit tests as well as integration tests, which is rare for laravel libraries. Check badges on the top for details.
