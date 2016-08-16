@@ -18,7 +18,6 @@
             </div>
         </div>
     </div>
-    </div>
 </template>
 
 <script>
@@ -111,5 +110,7 @@
 </script>
 
 <style scoped>
-
+    .column + .column {
+        padding: 0 10px;
+    }
 </style>

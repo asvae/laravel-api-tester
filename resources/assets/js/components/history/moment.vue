@@ -41,11 +41,12 @@
         },
         methods: {
             hasErrors(route){
-                return ! _.isEmpty(route.errors);
+                return !_.isEmpty(route.errors);
             }
         }
     }
 </script>
 
 <style scoped>
+
 </style>
