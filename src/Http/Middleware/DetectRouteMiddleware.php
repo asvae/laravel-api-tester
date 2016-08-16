@@ -32,16 +32,22 @@ class DetectRouteMiddleware
         // and output route information instead.
         if ($request->header('X-Api-Tester', false)) {
 
+            $this->events->listen('router.matched', [$this, 'handleMatchedRoute']);
+
             $this->events->listen(RouteMatched::class,
                 function (RouteMatched $event) {
-                    response()->json([
-                        'data' => new RouteInfo($event->route),
-                    ])->send();
-
-                    exit();
+                    $this->handleMatchedRoute($event->route);
                 });
         }
 
         return $next($request);
+    }
+
+    public function handleMatchedRoute($route){
+        response()->json([
+            'data' => new RouteInfo($route),
+        ])->send();
+
+        exit();
     }
 }
