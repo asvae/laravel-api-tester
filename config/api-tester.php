@@ -34,7 +34,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | Define list of middleware, that should be used for api-tester.
-    | CRSF token will be handled automatically.
+    | This allows automatic CRSF token handling.
+    | Also, you can use middleware groups, such as 'web', for Laravel 5.2+ here.
     |
     */
 
@@ -116,10 +117,11 @@ return [
     |--------------------------------------------------------------------------
     | Asvae\ApiTester\Repositories\RequestRepository configuration
     |--------------------------------------------------------------------------
-    | The following lines are actual only for default Asvae\ApiTester\Repositories\RequestRepository
+    | This config matters only when using Asvae\ApiTester\Repositories\RequestRepository
     | or similar implementations.
     |
     */
+
     'storage_driver' => 'file',
 
     'storage_drivers' => [
