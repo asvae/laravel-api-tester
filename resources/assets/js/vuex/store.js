@@ -2,6 +2,7 @@ import Vuex from 'vuex'
 import _ from 'lodash'
 
 const state = {
+    history:[],
     routes: [],
     requests: {},
     currentRequest: {method: 'GET', path: '/', headers: []},
@@ -22,6 +23,12 @@ const state = {
 
 const mutations = {
 
+    // History
+    SET_HISTORY(state, history){
+        window.localStorage.setItem('api-tester.history', JSON.stringify(history))
+        state.history = history
+    },
+
     // Response viewer
 
     SET_RESPONSE(state, response){
@@ -30,7 +37,6 @@ const mutations = {
     SET_VIEWER_MODE(state, mode){
         state.responseViewer.mode = mode
     },
-
 
     // Request editor
 

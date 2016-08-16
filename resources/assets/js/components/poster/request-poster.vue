@@ -76,6 +76,7 @@
                     })
             },
             send (){
+
                 let path = this.request.path
                 // Process routes that have leading slash.
                 path = path === '/' ? path : '/' + path
@@ -114,6 +115,7 @@
         },
         vuex: {
             getters: {
+                history: state => state.history,
                 currentRequest: state => state.currentRequest,
                 sendingIsScheduled: state => state.requestEditor.sendingIsScheduled,
             },

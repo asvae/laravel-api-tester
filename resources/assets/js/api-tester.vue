@@ -19,7 +19,7 @@ Application main page.
             <div class="left-side">
                 <div class="columns is-multiline">
                     <div class="column is-boxed">
-                        <vm-navigation-tabs :pages="['routes', 'requests']"
+                        <vm-navigation-tabs :pages="['routes', 'requests', 'history']"
                                             :mode.sync="mode"
                         ></vm-navigation-tabs>
                     </div>
@@ -28,6 +28,8 @@ Application main page.
                         ></vm-routes-selector>
                         <vm-requests-selector v-show="mode === 'requests'"
                         ></vm-requests-selector>
+                        <vm-history-selector v-show="mode === 'history'"
+                        ></vm-history-selector>
                     </div>
                     <div class="column is-full">
                     </div>
@@ -43,11 +45,13 @@ Application main page.
 <script>
     import vmSearchPanel from './components/search-panel.vue'
     import vmActionPanel from './components/action-panel/action-panel.vue'
-    import vmRoutesSelector from './components/routes/routes-selector.vue'
-    import vmRequestsSelector from './components/requests/requests-selector.vue'
-    import vmRequestPoster from './components/poster/request-poster.vue'
 
     import vmNavigationTabs from './components/ligth-components/navigation-tabs.vue'
+    import vmRoutesSelector from './components/routes/routes-selector.vue'
+    import vmRequestsSelector from './components/requests/requests-selector.vue'
+    import vmHistorySelector from './components/history/history-selector.vue'
+
+    import vmRequestPoster from './components/poster/request-poster.vue'
 
     export default {
         data (){
@@ -58,9 +62,11 @@ Application main page.
         components: {
             vmActionPanel,
             vmSearchPanel,
+
             vmRoutesSelector,
             vmRequestsSelector,
             vmRequestPoster,
+            vmHistorySelector,
 
             vmNavigationTabs,
         },
