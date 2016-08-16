@@ -8,12 +8,10 @@
 ## Live demo
 Try it out: [laravel-api-tester.asva.by](http://laravel-api-tester.asva.by/)
 
-## Disclaimer
-
-Image and demo are from `development` branch. Got the courage? Give it a try:
-```
-composer require asvae/laravel-api-tester:dev-development
-```
+## Docs
+Those are short and easy to read. Take a look.
+* [Interface](https://github.com/asvae/laravel-api-tester/wiki/Interface)
+* [FAQ](https://github.com/asvae/laravel-api-tester/wiki/Frequently-asked-questions)
 
 ## Installation
 
@@ -58,11 +56,12 @@ And edit `config/api-tester.php` as you please.
 ## Feedback
 Don't hesitate to raise an issue if something doesn't work or you have a feature request. You're welcome to.
 
-## Timeline
-* 1.0.10 (19.07.2016) - add filters (thanks [greabock](https://github.com/greabock)).
+## Authors
+* [greabock](https://github.com/greabock) — backend. All of it.
+* [asvae](https://github.com/asvae) — frontend. You guessed it.
 
 ## Tests
-We do unit tests as well as integration tests, which is rare for laravel libraries. Check badges on the top for details
+We do unit tests as well as integration tests, which is rare for laravel libraries. Check badges on the top for details.
 
 ## Licence
 MIT
