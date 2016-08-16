@@ -5,7 +5,7 @@ const state = {
     history:[],
     routes: [],
     requests: {},
-    currentRequest: {method: 'GET', path: '/', headers: []},
+    currentRequest: {method: 'GET', path: '/', headers: [], body: ''},
     currentRoute: null,
     isRequestScheduled: false,
     search: '',

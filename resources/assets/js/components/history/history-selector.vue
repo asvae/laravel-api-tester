@@ -1,25 +1,23 @@
 <template>
     <div class="history-selector">
-        <div class="columns is-multiline">
-            <div class="column">
-                <a class="button is-icon is-bordered"
+        <div class="columns is-multiline is-centered">
+            <div class="column is-narrow">
+                <a class="button is-bordered"
                    @click="clearHistory"
-                >D</a>
+                >Clear history</a>
             </div>
-        </div>
-        <div class="columns is-multiline">
-            <div class="column">
-                <vm-moment v-for="moment in filteredMoments"
-                           transition="slip"
-                           :moment="moment"
-                ></vm-moment>
-                <div class="column" v-if="history.length === 0">
-                    <div class="content">
-                        <blockquote>No history stored</blockquote>
-                    </div>
+            <vm-moment v-for="moment in filteredMoments"
+                       class="column is-full"
+                       transition="slip"
+                       :moment="moment"
+            ></vm-moment>
+            <div class="column is-full" v-if="history.length === 0">
+                <div class="content">
+                    <blockquote>No history stored</blockquote>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </template>
 
@@ -69,8 +67,8 @@
                 // Let's find out what to display first.
                 this.history.forEach(function (moment) {
                     if (
-                        moment.method.includes(search)
-                        || moment.path.toUpperCase().includes(search)
+                            moment.method.includes(search)
+                            || moment.path.toUpperCase().includes(search)
                     ) {
                         toDisplay.push(moment)
                     }
@@ -96,12 +94,12 @@
         },
         watch: {
             sendingIsScheduled(sendingIsScheduled){
-                if(sendingIsScheduled){
+                if (sendingIsScheduled) {
                     let history = _.cloneDeep(this.history)
                     history.push({
                         method: this.currentRequest.method,
-                        path : this.currentRequest.path,
-                        body : this.currentRequest.body,
+                        path: this.currentRequest.path,
+                        body: this.currentRequest.body,
                         headers: this.currentRequest.headers,
                     })
 

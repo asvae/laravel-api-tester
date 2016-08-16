@@ -60,16 +60,17 @@ export const deleteRequest = function ({dispatch}, request) {
     this.$api.ajax('DELETE', 'requests/' + request.id)
 }
 
-export const saveRequest = function ({dispatch}, request) {
+export const saveRequest = function ({dispatch}, request, next = () => {}) {
     dispatch('SET_REQUEST_IS_SAVING', true)
     this.$api.ajax('POST', 'requests', this.request)
         .then(function (data) {
             dispatch('SET_REQUEST_IS_SAVING', false)
             dispatch('SET_CURRENT_REQUEST', data.data)
+            next()
         })
 }
 
-export const updateRequest = function ({dispatch}, request) {
+export const updateRequest = function ({dispatch}, request, next = () => {}) {
     dispatch('SET_REQUEST_IS_SAVING', true)
     this.$api.ajax('PUT', 'requests/' + request.id, request)
         .then(function (data) {

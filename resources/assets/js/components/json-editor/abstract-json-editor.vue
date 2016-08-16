@@ -7,7 +7,9 @@
 
     export default {
         editor: null, // Json editor instance is bound to component.
-        props: ['json'],
+        props: {
+            json: {}
+        },
         methods: {
             initEditor(el, options, json){
                 this.$options.editor = new JSONEditor(el, options, json)

@@ -45,7 +45,13 @@
     import vmRequestTypeSelect from './request-type-select.vue'
     import requestEditorData from '../poster/request-editor/request-editor-data.js'
 
-    import {saveRequest, updateRequest, loadRequests, setCurrentRequest, scheduleSending} from '../../vuex/actions.js'
+    import {
+            saveRequest,
+            updateRequest,
+            loadRequests,
+            setCurrentRequest,
+            scheduleSending
+    } from '../../vuex/actions.js'
 
     export default {
         data: () => requestEditorData,
@@ -69,8 +75,12 @@
             save (){
                 // Saves or updates depending on whether request has id
                 let request = this.request
-                request.id ? this.updateRequest(request) : this.saveRequest(request)
-                this.loadRequests()
+                let afterUpdate = () => {
+                    this.loadRequests()
+                }
+
+                request.id ? this.updateRequest(request, afterUpdate) : this.saveRequest(request, afterUpdate)
+
             },
         }
     }
