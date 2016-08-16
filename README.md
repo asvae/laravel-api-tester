@@ -27,7 +27,7 @@ After updating composer, add the ServiceProvider to the providers array in confi
 Asvae\ApiTester\ServiceProvider::class,
 ```
 
-That's it. Go to `[your site]/api-tester` and start testing routes. 
+That's it. Go to `[your site]/api-tester` and start testing routes.  It works for Laravel 5.1+.
 
 ## Config
 
