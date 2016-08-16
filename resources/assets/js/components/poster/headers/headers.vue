@@ -4,20 +4,31 @@
                 v-for="header in headers"
                 :header="header"
                 @removed="headers.$remove(header)"
+                @enter="addNewHeader"
         ></vm-header>
-        <vm-new-header
-                @created="headers.push($arguments[0])"
-        ></vm-new-header>
+        <div class="columns is-centered" v-if="! headers.length">
+            <div class="column content">
+                <blockquote>No headers present</blockquote>
+            </div>
+        </div>
+        <div class="columns is-centered">
+            <div class="column is-narrow">
+                <button type="button"
+                        class="button is-success is-icon"
+                        @click="addNewHeader"
+                >
+                    <span class="icon">+</span>
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import vmHeader from './header.vue'
-    import vmNewHeader from './new-header.vue'
 
     export default {
         components: {
-            vmNewHeader,
             vmHeader,
         },
         props: {
@@ -25,10 +36,23 @@
                 type: Array,
                 required: true
             }
+        },
+        methods: {
+            addNewHeader (){
+                this.headers.push({key: '', value: ''})
+            }
         }
     }
 </script>
 
-<style>
-
+<style scoped>
+    .button {
+        width: 60px;
+    }
+    blockquote {
+        padding: 6px 12px;
+    }
+    .columns {
+        margin: 0;
+    }
 </style>

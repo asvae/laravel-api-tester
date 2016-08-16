@@ -51,7 +51,7 @@
         },
         ready (){
             // подписываемся на файрбейз
-            if(ENV.firebaseToken !== '' && ENV.firebaseToken !== ''){
+            if(ENV.firebaseToken && ENV.firebaseToken){
                 let source = new EventSource(ENV.firebaseSource+'requests.json?auth='+ENV.firebaseToken)
                 source.addEventListener('put', ((e) => {
                     let body = JSON.parse(e.data)

@@ -5,7 +5,7 @@
         <div class="columns is-mobile">
             <div class="column is-narrow">
                 <vm-method-button
-                        @click="setCurrentRequest(moment), scheduleRequest(true)"
+                        @click="setCurrentRequest(moment), scheduleSending(true)"
                         v-text="moment.method"
                 ></vm-method-button>
             </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    import {setCurrentRequest, scheduleRequest} from '../../vuex/actions.js'
+    import {setCurrentRequest, scheduleSending} from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
     import _ from 'lodash'
 
@@ -33,7 +33,7 @@
             },
             actions: {
                 setCurrentRequest,
-                scheduleRequest
+                scheduleSending,
             }
         },
         props: {

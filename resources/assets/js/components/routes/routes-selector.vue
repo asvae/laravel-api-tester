@@ -7,7 +7,9 @@
                           :route="route"
                 ></vm-route>
                 <div class="column" v-if="routes.length === 0">
-                    Nothing found...
+                    <div class="content">
+                        <blockquote>No saved routes yet</blockquote>
+                    </div>
                 </div>
             </div>
         </div>

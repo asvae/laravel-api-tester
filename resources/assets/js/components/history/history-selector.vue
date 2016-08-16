@@ -2,12 +2,21 @@
     <div class="history-selector">
         <div class="columns is-multiline">
             <div class="column">
+                <a class="button is-icon is-bordered"
+                   @click="clearHistory"
+                >D</a>
+            </div>
+        </div>
+        <div class="columns is-multiline">
+            <div class="column">
                 <vm-moment v-for="moment in filteredMoments"
                            transition="slip"
                            :moment="moment"
                 ></vm-moment>
                 <div class="column" v-if="history.length === 0">
-                    Nothing found...
+                    <div class="content">
+                        <blockquote>No history stored</blockquote>
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,6 +49,9 @@
             actions: {
                 setHistory: ({dispatch}, history) => {
                     dispatch('SET_HISTORY', history)
+                },
+                clearHistory: ({dispatch}) => {
+                    dispatch('CLEAR_HISTORY')
                 }
             },
         },

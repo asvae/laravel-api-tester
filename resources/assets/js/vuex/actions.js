@@ -18,9 +18,11 @@ export const loadRoutes = function ({dispatch}) {
 }
 
 export const loadRequests = function ({dispatch}) {
-    if(ENV.firebaseToken !== '' && ENV.firebaseToken !== ''){
+    // TODO split Firebase and JSON storage.
+    if(ENV.firebaseToken && ENV.firebaseToken){
         return
     }
+
     this.$api.ajax('GET', 'requests')
         .then(function (response) {
             dispatch('SET_REQUESTS', response.data)
@@ -63,8 +65,7 @@ export const saveRequest = function ({dispatch}, request) {
     this.$api.ajax('POST', 'requests', this.request)
         .then(function (data) {
             dispatch('SET_REQUEST_IS_SAVING', false)
-            setCurrentRequest({dispatch}, data.data)
-            this.loadRequests({dispatch})
+            dispatch('SET_CURRENT_REQUEST', data.data)
         })
 }
 
@@ -73,11 +74,8 @@ export const updateRequest = function ({dispatch}, request) {
     this.$api.ajax('PUT', 'requests/' + request.id, request)
         .then(function (data) {
             dispatch('SET_REQUEST_IS_SAVING', false)
-            this.setCurrentRequest(data.data)
-            this.loadRequests()
+            dispatch('SET_CURRENT_REQUEST', data.data)
         })
 }
-
-export const scheduleRequest = ({dispatch}, status) => dispatch('SET_REQUEST_SCHEDULED', status)
 
 export const scheduleSending = ({dispatch}, status) => dispatch('SET_SENDING_SCHEDULED', status)

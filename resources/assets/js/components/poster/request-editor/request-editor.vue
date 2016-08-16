@@ -34,10 +34,10 @@
             </div>
 
             <!-- Info -->
-            <vm-route-details
+            <vm-route-info
                     class="column is-full"
                     v-if="mode === 'info'"
-            ></vm-route-details>
+            ></vm-route-info>
 
         </div>
     </div>
@@ -45,7 +45,7 @@
 
 <script>
     import vmJsonEditor from '../../json-editor/json-editor.vue'
-    import vmRouteDetails from './route-details.vue'
+    import vmRouteInfo from './route-info.vue'
     import vmPosterNavigation from './request-editor-navigation.vue'
     import vmHeaders from '../headers/headers.vue'
 
@@ -59,7 +59,7 @@
         components: {
             vmJsonEditor,
             vmHeaders,
-            vmRouteDetails,
+            vmRouteInfo,
             vmPosterNavigation,
 
             vmNavigationTabs,

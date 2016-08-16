@@ -6,6 +6,7 @@
                 :method="request.method"
                 @changed="request.method = $arguments[0]"
         ></vm-request-type-select>
+
         <input class="input is-expanded"
                type="text"
                placeholder="Path"
@@ -19,6 +20,7 @@
         >
             <i class="fa fa-send-o"></i>
         </button>
+
         <button class="button"
                 :class="{'is-loading': saving}"
                 type="button"
@@ -27,6 +29,7 @@
         >
             <i class="fa fa-save"></i>
         </button>
+
         <button class="button is-icon"
                 type="button"
                 @click="saveRequest(request)"
@@ -34,6 +37,7 @@
         >
             <i class="fa fa-files-o"></i>
         </button>
+
     </form>
 </template>
 
@@ -66,6 +70,7 @@
                 // Saves or updates depending on whether request has id
                 let request = this.request
                 request.id ? this.updateRequest(request) : this.saveRequest(request)
+                this.loadRequests()
             },
         }
     }

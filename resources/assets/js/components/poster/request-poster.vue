@@ -14,7 +14,7 @@
 
     import RandExp from 'randexp'
 
-    import {scheduleRequest, scheduleSending} from '../../vuex/actions.js'
+    import {scheduleSending} from '../../vuex/actions.js'
 
     import requestEditorData from './request-editor/request-editor-data.js'
 
@@ -77,6 +77,8 @@
             },
             send (){
 
+                this.setIsSending(true)
+
                 let path = this.request.path
                 // Process routes that have leading slash.
                 path = path === '/' ? path : '/' + path
@@ -107,6 +109,7 @@
                         }
 
                         this.setResponse(response)
+                        this.setIsSending(false)
                     })
             }
         },
@@ -120,10 +123,10 @@
                 sendingIsScheduled: state => state.requestEditor.sendingIsScheduled,
             },
             actions: {
-                scheduleRequest,
                 scheduleSending,
                 setResponse: ({dispatch}, response) => dispatch('SET_RESPONSE', response),
                 setCurrentRoute: ({dispatch}, route) => dispatch('SET_CURRENT_ROUTE', route),
+                setIsSending: ({dispatch}, sending) => dispatch('SET_REQUEST_IS_SENDING', sending),
             },
         },
         watch: {
@@ -133,14 +136,9 @@
             // Kinda vuex event
             sendingIsScheduled (isScheduled){
                 if (isScheduled) {
-                    console.log('is Scheduled')
                     this.send()
                     this.scheduleSending(false)
-
-                    return
                 }
-
-                console.log('is mot Scheduled')
             },
         },
     }

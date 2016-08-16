@@ -28,6 +28,10 @@ const mutations = {
         window.localStorage.setItem('api-tester.history', JSON.stringify(history))
         state.history = history
     },
+    CLEAR_HISTORY(state){
+        window.localStorage.setItem('api-tester.history', '')
+        state.history = []
+    },
 
     // Response viewer
 

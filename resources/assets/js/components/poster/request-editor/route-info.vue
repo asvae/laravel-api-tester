@@ -40,17 +40,29 @@
         },
         vuex: {
             getters: {
-                methods: (state) => state.currentRoute.methods.join(', '),
-                action: (state) => state.currentRoute.action.uses,
                 currentRoute: (state) => state.currentRoute,
-                middleware (state) {
-                    let middleware = state.currentRoute.action.middleware
-                    let isString = typeof middleware === 'string'
-
-                    return isString ? middleware : middleware.join(', ')
-                },
             }
-        }
+        },
+        computed: {
+            methods () {
+                return this.currentRoute.methods.join(', ')
+            },
+            methods () {
+                return this.currentRoute.action.middleware.join(', ')
+            },
+            action () {
+                let action = this.currentRoute.action.uses
+                let isString = typeof action === 'string'
+
+                return isString ? action : 'Current route is defined by closure'
+            },
+            state () {
+                let middleware = this.currentRoute.action.middleware
+                let isString = typeof middleware === 'string'
+
+                return isString ? middleware : middleware.join(', ')
+            },
+        },
     }
 </script>
 
