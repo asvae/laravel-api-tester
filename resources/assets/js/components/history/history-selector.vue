@@ -39,7 +39,7 @@
             getters: {
                 history: (store) => store.history,
                 search: (store) => store.search,
-                sendingIsScheduled: state => state.requestEditor.sendingIsScheduled,
+                isSending: state => state.requestEditor.isSending,
                 currentRequest: state => state.currentRequest,
 
             },
@@ -92,8 +92,8 @@
             }
         },
         watch: {
-            sendingIsScheduled(sendingIsScheduled){
-                if (sendingIsScheduled) {
+            isSending(isSending){
+                if (isSending) {
                     let history = _.cloneDeep(this.history)
                     history.push({
                         method: this.currentRequest.method,
@@ -101,6 +101,9 @@
                         body: this.currentRequest.body,
                         headers: this.currentRequest.headers,
                     })
+
+                    console.log('currentRequest')
+                    console.log(this.currentRequest)
 
                     this.setHistory(history)
                 }

@@ -78,8 +78,10 @@
             send (){
 
                 this.setIsSending(true)
+                this.setCurrentRequest(this.request)
 
                 let path = this.request.path
+
                 // Process routes that have leading slash.
                 path = path === '/' ? path : '/' + path
 
@@ -126,6 +128,7 @@
                 scheduleSending,
                 setResponse: ({dispatch}, response) => dispatch('SET_RESPONSE', response),
                 setCurrentRoute: ({dispatch}, route) => dispatch('SET_CURRENT_ROUTE', route),
+                setCurrentRequest: ({dispatch}, route) => dispatch('SET_CURRENT_REQUEST', route),
                 setIsSending: ({dispatch}, sending) => dispatch('SET_REQUEST_IS_SENDING', sending),
             },
         },

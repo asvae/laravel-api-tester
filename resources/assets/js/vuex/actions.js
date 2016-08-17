@@ -44,8 +44,8 @@ export const setCurrentRequestFromRoute = ({dispatch}, route) => {
         method: route.methods[0],
         path: route.path,
         name: "",
-        body: "",
-        wheres: route.wheres,
+        body: route.hasOwnProperty('body') ? route.body : "",
+        wheres: route.hasOwnProperty('wheres') ? route.wheres : {},
         headers: route.hasOwnProperty('headers') ? route.headers : [],
         config: {
             addCRSF: true,
