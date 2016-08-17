@@ -10,7 +10,9 @@
             <div class="column is-full"
                  v-if="requests.length === 0"
             >
-                <blockquote>No requests yet</blockquote>
+                <div class="content">
+                    <blockquote>No requests yet</blockquote>
+                </div>
             </div>
         </div>
     </div>
