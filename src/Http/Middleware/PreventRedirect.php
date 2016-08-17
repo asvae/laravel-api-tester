@@ -16,18 +16,21 @@ class PreventRedirect
          */
         $response = $next($request);
 
-        // Отлавливаем редиректы.
-        if ($response->isRedirection()) {
-            /**
-             * @var \Symfony\Component\HttpFoundation\RedirectResponse $response
-             */
-            $response = response()->json(['data' => [
-                'location' => $response->getTargetUrl(),
-                'status' => $response->getStatusCode(),
-            ]])->header('X-Api-Tester', 'redirect');
+        // In case the request was sent by Api Tester and wanted catch-redirect
+        // we will halt the response and output redirect information instead.
+        if ($request->header('X-Api-Tester') === static::CATCH_REDIRECT) {
+            if ($response->isRedirection()) {
+                /**
+                 * @var \Symfony\Component\HttpFoundation\RedirectResponse $response
+                 */
+                return response()->json(['data' => [
+                    'location' => $response->getTargetUrl(),
+                    'status' => $response->getStatusCode(),
+                ]])->header('X-Api-Tester', 'redirect');
+            }
         }
 
-        return $response;
+        return $next($request);
     }
 
 }

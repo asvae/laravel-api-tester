@@ -76,19 +76,22 @@
             send (){
                 this.setCurrentRequest(this.request)
                 this.setIsSending(true)
-
                 let path = this.request.path
-                let request = this.request
 
+                let request = this.request
                 // Process routes that have leading slash.
                 path = path === '/' ? path : '/' + path
 
-                this.getResult(request.method, path, request.body, request.headers)
+                let headers = _.cloneDeep(this.request.headers)
+                headers.push({key: 'X-Api-Tester', value: 'catch-redirect'})
+
+
+                this.getResult(request.method, path, request.body, headers)
             },
 
-            followRedirect(data, redirects){
+            followRedirect(data, redirects, headers){
                 redirects.push(data)
-                this.getResult('GET', data.location, null, [{key: 'X-Api-Tester', value: 'catch-redirect'}], redirects)
+                this.getResult('GET', data.location, null, headers, redirects)
             },
 
             getResult(method, path, body, headers, redirects = []){
@@ -111,7 +114,7 @@
                                     } catch (e) {}
 
                                     if(xhr.getResponseHeader('X-Api-Tester') === 'redirect'){
-                                        this.followRedirect(data.data, redirects);
+                                        this.followRedirect(data.data, redirects, headers);
 
                                         return
                                     }
