@@ -51,17 +51,15 @@
                     path = path.replace(dummy, mocker.gen())
                 }
 
-                headers.push({key: 'X-Api-Tester', value: 1})
+                headers.push({key: 'X-Api-Tester', value: 'route-info'})
 
                 this.$api.ajax(request.method, path, request.body, headers)
                     .done((response) => {
                         let route = response.data
                         this.setCurrentRoute(route)
                     })
-                    .fail((xhr, status, error)=>{
-
+                    .fail((xhr, status, error) => {
                         data = xhr.responseText
-
                         try {
                             data = JSON.parse(data)
                         } catch (e) {}
@@ -76,44 +74,62 @@
                     })
             },
             send (){
-
-                this.setIsSending(true)
                 this.setCurrentRequest(this.request)
+                this.setIsSending(true)
 
                 let path = this.request.path
+                let request = this.request
 
                 // Process routes that have leading slash.
                 path = path === '/' ? path : '/' + path
 
-                this.$api.ajax(this.request.method, path, this.request.body, this.request.headers)
-                    .always(function (dataOrXHR, status, XHROrError) {
-                        // NOTE Jquery ajax is sometimes not quite sane.
+                this.getResult(request.method, path, request.body, request.headers)
+            },
 
-                        let xhr
+            followRedirect(data, redirects){
+                redirects.push(data)
+                this.getResult('GET', data.location, null, [{key: 'X-Api-Tester', value: 'catch-redirect'}], redirects)
+            },
 
-                        if (dataOrXHR && dataOrXHR.hasOwnProperty('responseText')) {
-                            xhr = dataOrXHR
-                        } else {
-                            xhr = XHROrError
-                        }
+            getResult(method, path, body, headers, redirects = []){
+                this.$api.ajax(method, path, body, headers)
+                        .always(function (dataOrXHR, status, XHROrError) {
+                                    // NOTE Jquery ajax is sometimes not quite sane.
 
-                        let data = xhr.responseText
+                                    let xhr
 
-                        try {
-                            data = JSON.parse(data)
-                        } catch (e) {}
+                                    if (dataOrXHR && dataOrXHR.hasOwnProperty('responseText')) {
+                                        xhr = dataOrXHR
+                                    } else {
+                                        xhr = XHROrError
+                                    }
 
+                                    let data = xhr.responseText
 
-                        let response = {
-                            data,
-                            isJson: typeof data !== 'string',
-                            headers: xhr.getAllResponseHeaders(),
-                        }
+                                    try {
+                                        data = JSON.parse(data)
+                                    } catch (e) {}
 
-                        this.setResponse(response)
-                        this.setIsSending(false)
-                    })
+                                    if(xhr.getResponseHeader('X-Api-Tester') === 'redirect'){
+                                        this.followRedirect(data.data, redirects);
+
+                                        return
+                                    }
+
+                                    let response = {
+                                        data,
+                                        isJson: typeof data !== 'string',
+                                        headers: xhr.getAllResponseHeaders(),
+                                        redirects: redirects
+                                    }
+
+                                    this.setResponse(response)
+                                    this.setIsSending(false)
+                                }
+                        )
             }
+
+
         },
         ready (){
             this.refresh()

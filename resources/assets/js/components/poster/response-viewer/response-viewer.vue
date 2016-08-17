@@ -2,7 +2,7 @@
     <div class="response-viewer">
         <div v-if="response">
             <vm-navigation-tabs class="is-boxed"
-                                :pages="['data', 'headers', 'preview']"
+                                :pages="['data', 'headers', 'preview', 'redirects']"
                                 :mode="mode"
                                 @changed="setMode($arguments[0])"
             ></vm-navigation-tabs>
@@ -22,6 +22,27 @@
                     <pre>
                         {{response.headers}}
                     </pre>
+                </blockquote>
+            </div>
+            <div  v-show="mode === 'redirects'" class="content">
+                <blockquote>
+                    <table class="table" v-if="response.redirects.length !== 0">
+                        <tbody>
+                            <tr>
+                                <th>#</th>
+                                <th>Status</th>
+                                <th>Location</th>
+                            </tr>
+                            <tr v-for="redirect in response.redirects">
+                                <td>{{$index+1}}.</td>
+                                <td v-text="redirect.status"></td>
+                                <td v-text="redirect.location"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div v-show="response.redirects.length === 0">
+                        None.
+                    </div>
                 </blockquote>
             </div>
         </div>
@@ -59,6 +80,14 @@
         width: 100%;
         height: 0;
 
+    }
+
+    table.table{
+        background-color: transparent;
+    }
+
+    table.table tbody tr th, table.table tbody tr td  {
+        color: #69707a !important;
     }
 
     iframe.is-visible {

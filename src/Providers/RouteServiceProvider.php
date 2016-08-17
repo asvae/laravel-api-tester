@@ -3,7 +3,8 @@
 namespace Asvae\ApiTester\Providers;
 
 use Asvae\ApiTester\Http\Middleware\DebugState;
-use Asvae\ApiTester\Http\Middleware\DetectRouteMiddleware;
+use Asvae\ApiTester\Http\Middleware\DetectRoute;
+use Asvae\ApiTester\Http\Middleware\PreventRedirect;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
@@ -34,15 +35,20 @@ class RouteServiceProvider extends ServiceProvider
         });
     }
 
-    public function boot(Router $router)
+    /**
+     * @param Router $router
+     * @param Kernel|\Illuminate\Foundation\Http\Kernel $kernel
+     */
+    public function boot(Router $router, Kernel $kernel)
     {
         $this->map($router);
 
-        $this->kernel = $this->app->make(Kernel::class);
+        $this->kernel = $kernel;
 
         // The middleware is used to intercept every request with specific header
         // so that laravel can tell us, which route the request belongs to.
-        $this->kernel->prependMiddleware(DetectRouteMiddleware::class);
+        $kernel->prependMiddleware(DetectRoute::class);
+        $kernel->prependMiddleware(PreventRedirect::class);
     }
 
     protected function getMiddleware()
