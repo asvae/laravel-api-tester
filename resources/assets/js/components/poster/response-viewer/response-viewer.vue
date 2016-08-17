@@ -17,7 +17,13 @@
                 <pre v-if="! response.isJson">{{ response.data }}</pre>
                 <pre v-if="response.isJson">{{ response.data | json}}</pre>
             </div>
-            <pre v-show="mode === 'headers'">{{response.headers}}</pre>
+            <div  v-show="mode === 'headers'" class="content">
+                <blockquote>
+                    <pre>
+                        {{response.headers}}
+                    </pre>
+                </blockquote>
+            </div>
         </div>
     </div>
 </template>
