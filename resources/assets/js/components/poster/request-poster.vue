@@ -91,7 +91,7 @@
 
                         let xhr
 
-                        if (dataOrXHR.hasOwnProperty('responseText')) {
+                        if (dataOrXHR && dataOrXHR.hasOwnProperty('responseText')) {
                             xhr = dataOrXHR
                         } else {
                             xhr = XHROrError
