@@ -1,6 +1,6 @@
 # Laravel Api Tester
 
-[![Integration tests](https://travis-ci.org/asvae/laravel-spa-boilerplate.svg)](https://travis-ci.org/asvae/laravel-spa-boilerplate)
+<!--[![Integration tests](https://travis-ci.org/asvae/laravel-spa-boilerplate.svg)](https://travis-ci.org/asvae/laravel-spa-boilerplate)-->
 [![Unit tests](https://travis-ci.org/asvae/laravel-api-tester.svg)](https://travis-ci.org/asvae/laravel-api-tester)
 [![PHP version](https://badge.fury.io/ph/asvae%2Flaravel-api-tester.svg)](https://badge.fury.io/ph/asvae%2Flaravel-api-tester)
 
