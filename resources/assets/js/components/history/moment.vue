@@ -1,12 +1,7 @@
 <template>
     <div class="moment">
         <div class="columns is-mobile">
-            <div class="column is-narrow">
-                <vm-method-button
-                        @click="setCurrentRequest(moment), scheduleSending(true)"
-                        v-text="moment.method"
-                ></vm-method-button>
-            </div>
+            <div class="column is-narrow time" v-text="time"></div>
             <a @click="setCurrentRequest(moment)"
                class="column is-bold"
                v-text="moment.path"
@@ -20,6 +15,7 @@
     import {setCurrentRequest, scheduleSending} from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
     import _ from 'lodash'
+    import moment from 'moment'
 
     export default {
         components: {
@@ -34,19 +30,36 @@
                 scheduleSending,
             }
         },
+
+        data(){
+          return {
+              time : ''
+          }
+        },
         props: {
             moment: {
                 type: Object,
             }
         },
+
+        ready(){
+            this.start()
+        },
+
         methods: {
-            hasErrors(route){
-                return !_.isEmpty(route.errors);
+            tick(){
+                this.time = moment.unix(this.moment.createdAt/1000).fromNow();
+            },
+
+            start(){
+                setInterval(this.tick.bind(this), 10000)
             }
         }
     }
 </script>
 
 <style scoped>
-
+    .time{
+        color: #ccc;
+    }
 </style>

@@ -7,10 +7,12 @@ import Vue from 'vue'
 import vmApiTesterMain from './api-tester.vue'
 import store from './vuex/store.js'
 
-new Vue({
+
+let v = new Vue({
     store,
     el: '#api-tester',
     components: {
         vmApiTesterMain
     },
 })
+

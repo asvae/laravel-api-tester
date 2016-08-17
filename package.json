@@ -19,6 +19,7 @@
     "laravel-elixir-browsersync-official": "^1.0.0",
     "lockr": "^0.8.4",
     "lodash": "^4.11.1",
+    "moment": "^2.14.1",
     "randexp": "^0.4.3",
     "vue": "^1.0.21",
     "vue-hot-reload-api": "^2.0.5",

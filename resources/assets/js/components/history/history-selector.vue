@@ -100,11 +100,8 @@
                         path: this.currentRequest.path,
                         body: this.currentRequest.body,
                         headers: this.currentRequest.headers,
+                        createdAt: new Date().getTime()
                     })
-
-                    console.log('currentRequest')
-                    console.log(this.currentRequest)
-
                     this.setHistory(history)
                 }
             }
