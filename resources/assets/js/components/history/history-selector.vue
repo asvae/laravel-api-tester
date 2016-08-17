@@ -1,7 +1,7 @@
 <template>
     <div class="history-selector">
         <div class="columns is-multiline is-centered">
-            <div class="column is-narrow">
+            <div v-if="history.length !== 0" class="column is-narrow">
                 <a class="button is-bordered"
                    @click="clearHistory"
                 >Clear history</a>
