@@ -54,12 +54,5 @@
 </script>
 
 <style scoped>
-    .request.selected {
-        border-left: 2px solid rgb(255, 82, 82);
-        background-color: #eef9f2;
-    }
 
-    .request {
-        border-left: 2px solid transparent;
-    }
 </style>

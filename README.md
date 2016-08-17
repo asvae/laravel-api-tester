@@ -3,10 +3,15 @@
 [![Integration tests](https://travis-ci.org/asvae/laravel-spa-boilerplate.svg)](https://travis-ci.org/asvae/laravel-spa-boilerplate)
 [![Unit tests](https://travis-ci.org/asvae/laravel-api-tester.svg)](https://travis-ci.org/asvae/laravel-api-tester)
 
-![Interface](http://i.imgur.com/GwPAvXI.png) 
+![Interface](http://i.imgur.com/H7fkU3r.png) 
 
 ## Live demo
 Try it out: [laravel-api-tester.asva.by](http://laravel-api-tester.asva.by/)
+
+## Docs
+Those are short and easy to read. Take a look.
+* [Interface](https://github.com/asvae/laravel-api-tester/wiki/Interface)
+* [FAQ](https://github.com/asvae/laravel-api-tester/wiki/Frequently-asked-questions)
 
 ## Installation
 
@@ -41,17 +46,22 @@ And edit `config/api-tester.php` as you please.
 * CSRF token is handled for you.
 * Define request body in [JSON editor](https://github.com/josdejong/jsoneditor).
 * Preview response depending on type (html or json).
-* [Material design lite](https://getmdl.io/) as theme.
+* Clean and intuitive interface.
 * Lightweight and no dependencies (except on laravel).
+
+## Powered By
+* [Vue.js](https://vuejs.org/)
+* [Bulma](http://bulma.io/)
 
 ## Feedback
 Don't hesitate to raise an issue if something doesn't work or you have a feature request. You're welcome to.
 
-## Timeline
-* 1.0.10 (19.07.2016) - add filters (thanks [greabock](https://github.com/greabock)).
+## Authors
+* [greabock](https://github.com/greabock) — backend. All of it.
+* [asvae](https://github.com/asvae) — frontend. You guessed it.
 
 ## Tests
-We do unit tests as well as integration tests, which is rare for laravel libraries. Check badges on the top for details
+We do unit tests as well as integration tests, which is rare for laravel libraries. Check badges on the top for details.
 
 ## Licence
 MIT

@@ -31,8 +31,6 @@ Application main page.
                         <vm-history-selector v-show="mode === 'history'"
                         ></vm-history-selector>
                     </div>
-                    <div class="column is-full">
-                    </div>
                 </div>
             </div>
             <div class="right-side">

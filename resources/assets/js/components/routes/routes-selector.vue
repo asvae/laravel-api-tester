@@ -1,15 +1,14 @@
 <template>
     <div class="routes-selector">
         <div class="columns is-multiline">
-            <div class="column">
-                <vm-route v-for="route in filteredRoutes"
-                          transition="slip"
-                          :route="route"
-                ></vm-route>
-                <div class="column" v-if="routes.length === 0">
-                    <div class="content">
-                        <blockquote>No saved routes yet</blockquote>
-                    </div>
+            <vm-route v-for="route in filteredRoutes"
+                      class="column is-full"
+                      transition="slip"
+                      :route="route"
+            ></vm-route>
+            <div class="column is-full" v-if="routes.length === 0">
+                <div class="content">
+                    <blockquote>No saved routes yet</blockquote>
                 </div>
             </div>
         </div>
@@ -74,5 +73,7 @@
 </script>
 
 <style scoped>
-
+    .column {
+        padding: 0 10px;
+    }
 </style>
