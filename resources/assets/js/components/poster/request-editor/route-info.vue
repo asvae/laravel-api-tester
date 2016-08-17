@@ -2,30 +2,42 @@
     <div class="current-route">
         <table class="table" v-if="currentRoute">
             <tbody>
-            <tr>
-                <td>Methods</td>
-                <td v-text="methods"></td>
-            </tr>
-            <tr>
-                <td>Middleware</td>
-                <td v-text="middleware"></td>
-            </tr>
-            <tr>
-                <td>Action</td>
-                <td v-text="action"></td>
-            </tr>
-            <tr>
-                <td colspan="2" @click="additionalInfo = true">
-                    <a v-if="! additionalInfo"
+                <tr v-if="annotation">
+                    <td colspan="2">
+                        <div class="content">
+                            <blockquote>
+                                <pre  v-text="annotation"></pre>
+                            </blockquote>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Methods</td>
+                    <td v-text="methods"></td>
+                </tr>
+                <tr>
+                    <td>Middleware</td>
+                    <td>
+                        <pre v-text="middleware"></pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Action</td>
+                    <td v-text="action"></td>
+                </tr>
 
-                       v-text="'Show additional info'"
-                    ></a>
-                    <pre v-if="additionalInfo"
-                         v-text="currentRoute | json"
-                    ></pre>
-                </td>
+                <tr>
+                    <td colspan="2" @click="additionalInfo = true">
+                        <a v-if="! additionalInfo"
 
-            </tr>
+                           v-text="'Show additional info'"
+                        ></a>
+                        <pre v-if="additionalInfo"
+                             v-text="currentRoute | json"
+                        ></pre>
+                    </td>
+
+                </tr>
             </tbody>
         </table>
     </div>
@@ -47,20 +59,30 @@
             methods () {
                 return this.currentRoute.methods.join(', ')
             },
-            methods () {
-                return this.currentRoute.action.middleware.join(', ')
+
+            middleware () {
+                let middleware = this.currentRoute.action.middleware
+                if(middleware){
+                    let isString = typeof middleware === 'string'
+                    return isString ? middleware : middleware.join('\n')
+                }
+
+                return 'None'
             },
+
+            annotation(){
+                let annotation = this.currentRoute.annotation
+                if(annotation){
+                    return annotation.replace(/\n\s+/g, '\n')
+                }
+
+                return null;
+            },
+
             action () {
                 let action = this.currentRoute.action.uses
                 let isString = typeof action === 'string'
-
-                return isString ? action : 'Current route is defined by closure'
-            },
-            state () {
-                let middleware = this.currentRoute.action.middleware
-                let isString = typeof middleware === 'string'
-
-                return isString ? middleware : middleware.join(', ')
+                return isString ? action : 'This route is defined by closure'
             },
         },
     }

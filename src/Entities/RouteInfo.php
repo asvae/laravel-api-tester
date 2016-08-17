@@ -4,9 +4,7 @@ namespace Asvae\ApiTester\Entities;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 use JsonSerializable;
-use ReflectionException;
 
 /**
  * Frontend ready route
@@ -14,30 +12,40 @@ use ReflectionException;
 class RouteInfo implements Arrayable, JsonSerializable
 {
     /**
-     * @var \ReflectionFunctionAbstract
+     * @var \ReflectionFunctionAbstract|null
      */
-    protected $routeReflection;
-
+    protected $routeReflection = null;
 
     /**
-     * @var
+     * @var \ReflectionClass|null
      */
-    protected $actionReflection;
-    protected $options;
+    protected $actionReflection = null;
+
+    /**
+     * @var array
+     */
+    protected $options = [];
+
     /**
      * @var array
      */
     protected $errors = [];
 
     /**
+     * @var bool
+     */
+    protected $addMeta;
+
+    /**
      * @var \Illuminate\Routing\Route
      */
     private $route;
 
-    public function __construct(\Illuminate\Routing\Route $route, $options = [])
+    public function __construct($route, $options = [])
     {
         $this->route = $route;
         $this->options = $options;
+        $this->addMeta = config('api-tester.route_meta');
     }
 
     /**
@@ -51,11 +59,9 @@ class RouteInfo implements Arrayable, JsonSerializable
             'domain' => $this->route->domain(),
             'path' => $this->preparePath(),
             'action' => $this->route->getAction(),
-            'annotation' => $this->extractAnnotation(),
-            'formRequest' => $this->extractFormRequest(),
             'wheres' => $this->extractWheres(),
             'errors' => $this->errors,
-        ], $this->options);
+        ], $this->getMeta(), $this->options);
     }
 
     protected function extractWheres()
@@ -113,20 +119,18 @@ class RouteInfo implements Arrayable, JsonSerializable
                 break;
             }
 
-            $class = $class->__toString();
-
             // Если это форм-реквест.
-            if (is_subclass_of($class, FormRequest::class)) {
+            if (is_subclass_of($class->name, FormRequest::class)) {
 
                 // Для вызова нестатического метода на объекте, нам необходим инстанс объекта.
                 // Мы используем build вместо make, чтобы избежать автоматического запуска валидации.
-                $formRequest = app()->build($class);
+                $formRequest = app()->build($class->name);
 
                 // Здесь используется метод call, чтобы разрешить зависимости.
                 $rules = app()->call([$formRequest, 'rules']);
 
                 return [
-                    'class' => $class,
+                    'class' => $class->name,
                     'rules' => $rules,
                 ];
             }
@@ -193,8 +197,24 @@ class RouteInfo implements Arrayable, JsonSerializable
         return trim($path, '/');
     }
 
-    private function setError($type, $text, $params = [])
+    protected function setError($type, $text, $params = [])
     {
         $this->errors[$type] = trans($text, $params);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getMeta()
+    {
+        if ($this->addMeta) {
+            return [
+                'annotation' => $this->extractAnnotation(),
+                'formRequest' => $this->extractFormRequest(),
+                'errors' => $this->errors,
+            ];
+        }
+
+        return [];
     }
 }
