@@ -1,45 +1,48 @@
 <template>
     <div class="current-route">
-        <table class="table" v-if="currentRoute">
-            <tbody>
-                <tr v-if="annotation">
-                    <td colspan="2">
-                        <div class="content">
-                            <blockquote>
+        <div class="content">
+            <blockquote  v-if="currentRoute">
+                <table class="table">
+                    <tbody>
+                        <tr v-if="annotation">
+                            <td colspan="2">
                                 <pre  v-text="annotation"></pre>
-                            </blockquote>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Methods</td>
-                    <td v-text="methods"></td>
-                </tr>
-                <tr>
-                    <td>Middleware</td>
-                    <td>
-                        <pre v-text="middleware"></pre>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Action</td>
-                    <td v-text="action"></td>
-                </tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Methods</td>
+                            <td v-text="methods"></td>
+                        </tr>
+                        <tr>
+                            <td>Middleware</td>
+                            <td>
+                                <pre v-text="middleware"></pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td v-text="name"></td>
+                        </tr>
+                        <tr>
+                            <td>Action</td>
+                            <td v-text="action"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" @click="additionalInfo = true">
+                                <a v-if="! additionalInfo"
 
-                <tr>
-                    <td colspan="2" @click="additionalInfo = true">
-                        <a v-if="! additionalInfo"
+                                   v-text="'Show additional info'"
+                                ></a>
+                                <pre v-if="additionalInfo"
+                                     v-text="currentRoute | json"
+                                ></pre>
+                            </td>
 
-                           v-text="'Show additional info'"
-                        ></a>
-                        <pre v-if="additionalInfo"
-                             v-text="currentRoute | json"
-                        ></pre>
-                    </td>
-
-                </tr>
-            </tbody>
-        </table>
+                        </tr>
+                    </tbody>
+                </table>
+            </blockquote>
+        </div>
     </div>
 </template>
 
@@ -78,11 +81,14 @@
 
                 return null;
             },
-
+            name(){
+                let name = this.currentRoute.action.as
+                return name ? name : 'None.'
+            },
             action () {
                 let action = this.currentRoute.action.uses
                 let isString = typeof action === 'string'
-                return isString ? action : 'This route is defined by closure'
+                return isString ? action : 'This route is defined by closure.'
             },
         },
     }
@@ -92,5 +98,9 @@
     td:first-child {
         width: 50px;
         font-weight: 500;
+    }
+    table.table{
+        background-color: transparent;
+        color: #69707a;
     }
 </style>
