@@ -10,7 +10,7 @@
                     :srcdoc="response.data"
             ></iframe>
             <vm-json-viewer
-                    v-show="response_mode === 'preview' && response.isJson"
+                    v-show="mode === 'preview' && response.isJson"
                     :json="response.data"
             ></vm-json-viewer>
             <div v-show="mode === 'data'">
@@ -33,11 +33,7 @@
         },
         computed: {
             iframeVisible (){
-                if (this.mode === 'preview' && !this.response.isJson) {
-                    return true
-                }
-
-                return false
+                return this.mode === 'preview' && !this.response.isJson;
             }
         },
         vuex: {
