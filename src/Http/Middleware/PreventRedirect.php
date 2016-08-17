@@ -30,7 +30,7 @@ class PreventRedirect
             }
         }
 
-        return $next($request);
+        return $response;
     }
 
 }
