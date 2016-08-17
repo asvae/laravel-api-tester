@@ -52,7 +52,8 @@
             },
 
             start(){
-                setInterval(this.tick.bind(this), 10000)
+                this.tick()
+                setInterval(this.tick.bind(this), 1000*45)
             }
         }
     }
