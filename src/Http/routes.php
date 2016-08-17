@@ -21,22 +21,29 @@ Route::resource('requests', 'RequestController', [
 // We won't publish library's assets.
 // Instead we'll pass them via app which is slower but fine for development.
 Route::group(['prefix' => 'assets'], function () {
+
     $filePattern = '^([a-z0-9_\-\.]+?)$';
 
-    Route::get('fonts/{_file}',
-        ['as' => 'image', 'uses' => 'AssetsController@font'])
-        ->where('file', $filePattern);
+    Route::get('fonts/{_file}', [
+        'as' => 'image',
+        'uses' => 'AssetsController@font'
+    ])->where('_file', $filePattern);
 
-    Route::get('img/{_file}',
-        ['as' => 'image', 'uses' => 'AssetsController@image'])
-        ->where('file', $filePattern);
+    Route::get('img/{_file}', [
+        'as' => 'image', 'uses' => 'AssetsController@image'
+    ])->where('_file', $filePattern);
 
-    Route::get('{_file}', ['as' => 'file', 'uses' => 'AssetsController@index'])
-        ->where('file', $filePattern);
+    Route::get('{_file}', [
+        'as' => 'file',
+        'uses' => 'AssetsController@index'
+    ])->where('_file', $filePattern);
 });
 
 // Throw in some routes to test api-tester.
-Route::get('test-routes/{_type}', 'HomeController@testRoutes');
+Route::get('test-routes/{_type}', [
+    'as' => 'test-routes',
+    'uses' => 'HomeController@testRoutes',
+]);
 
 /**
  * This route is quite special as it prevents user from caching routes
@@ -47,7 +54,10 @@ Route::get('test-routes/{_type}', 'HomeController@testRoutes');
  * This route is debug only, hence in production
  * it isn't registered and route cache is allowed.
  */
-Route::any('* routes should not be cached', function () { });
+Route::any('* routes should not be cached',[
+    'as' => 'routes-should not be cached',
+    'uses' =>  function () { return 'Api-tester routes-should not be cached';},
+]);
 
 
 
