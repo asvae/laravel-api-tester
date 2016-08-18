@@ -22,7 +22,7 @@ Route::resource('requests', 'RequestController', [
 // Instead we'll pass them via app which is slower but fine for development.
 Route::group(['prefix' => 'assets'], function () {
 
-    $filePattern = '^([a-z0-9_\-\.]+?)$';
+    $filePattern = '^([a-z0-9_\-\.]+)$';
 
     Route::get('fonts/{_file}', [
         'as' => 'image',
