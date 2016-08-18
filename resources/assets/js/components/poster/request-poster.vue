@@ -61,15 +61,17 @@
                         this.setResponse(null)
                     })
                     .fail((xhr, status, error) => {
+
                         data = xhr.responseText
+
                         try {
                             data = JSON.parse(data)
                         } catch (e) {}
-                        let response = {
-                            data,
-                            isJson: typeof data !== 'string',
-                            headers: xhr.getAllResponseHeaders(),
-                        }
+
+                        let response = {}
+
+                        response.status = xhr.status + ' : ' +error
+                        response.data = data
 
                         this.setViewerMode('preview')
 

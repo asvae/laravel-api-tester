@@ -2,7 +2,9 @@
     <div class="current-route">
         <div class="content">
             <div v-if="infoError" class="notification is-danger">
-                Whoops... something went wrong
+                Whoops... error while getting route info.
+                <hr>
+                {{infoError.status}}
             </div>
             <blockquote  v-if="currentRoute">
                 <table class="table">
