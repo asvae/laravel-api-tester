@@ -19,7 +19,6 @@
 </template>
 
 <script>
-    import $ from 'jquery'
     import _ from 'lodash'
 
     import {loadRequests, setRequests} from '../../vuex/actions.js'

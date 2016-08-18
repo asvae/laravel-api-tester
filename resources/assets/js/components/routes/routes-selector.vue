@@ -16,7 +16,6 @@
 </template>
 
 <script>
-    import $ from 'jquery'
     import _ from 'lodash'
 
     import vmRoute from './route.vue'

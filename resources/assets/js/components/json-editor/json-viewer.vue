@@ -3,7 +3,6 @@
 </template>
 
 <script>
-    import $ from 'jquery'
     import abstractJsonEditor from './abstract-json-editor.vue'
 
     export default {

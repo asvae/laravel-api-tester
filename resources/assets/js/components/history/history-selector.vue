@@ -21,7 +21,6 @@
 </template>
 
 <script>
-    import $ from 'jquery'
     import _ from 'lodash'
 
     import vmMoment from './moment.vue'
