@@ -66,7 +66,10 @@ export default class Api {
     ajax(method, url, data = null, headers = []) {
 
         headers = _.clone(headers)
-        headers.push({key: 'X-CSRF-TOKEN', value: ENV.token})
+
+        if(!_.some(['GET', 'HEAD', 'OPTIONS'], method.toUpperCase())){
+            headers.push({key: 'X-XSRF-TOKEN', value: ENV.getCookie('XSRF-TOKEN') })
+        }
 
         headers = _.reduce(headers, function (headersHash, header) {
             headersHash[header.key] = header.value
