@@ -26,7 +26,7 @@
             </div>
             <div  v-show="mode === 'redirects'" class="content">
                 <blockquote>
-                    <table class="table" v-if="response.redirects.length !== 0">
+                    <table class="table" v-if="response.redirects !== undefined">
                         <tbody>
                             <tr>
                                 <th>#</th>
@@ -40,9 +40,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div v-show="response.redirects.length === 0">
-                        None.
-                    </div>
                 </blockquote>
             </div>
         </div>
