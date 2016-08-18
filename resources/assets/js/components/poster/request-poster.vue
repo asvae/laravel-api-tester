@@ -6,7 +6,6 @@
 </template>
 
 <script>
-    import $ from 'jquery'
     import _ from 'lodash'
 
     import vmRequestEditor from './request-editor/request-editor.vue'
