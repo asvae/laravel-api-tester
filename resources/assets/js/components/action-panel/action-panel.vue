@@ -32,7 +32,7 @@
 
         <button class="button is-icon"
                 type="button"
-                @click="saveRequest(request)"
+                @click="copy"
                 title="Copy"
         >
             <i class="fa fa-files-o"></i>
@@ -78,10 +78,17 @@
                 let afterUpdate = () => {
                     this.loadRequests()
                 }
-
                 request.id ? this.updateRequest(request, afterUpdate) : this.saveRequest(request, afterUpdate)
-
             },
+
+            copy(){
+                let request = this.request
+                let afterSave = () => {
+                    this.loadRequests()
+                }
+
+                this.saveRequest(request, afterSave)
+            }
         }
     }
 </script>
