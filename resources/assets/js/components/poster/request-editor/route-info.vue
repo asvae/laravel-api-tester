@@ -1,6 +1,9 @@
 <template>
     <div class="current-route">
         <div class="content">
+            <div v-if="infoError" class="notification is-danger">
+                Whoops... something went wrong
+            </div>
             <blockquote  v-if="currentRoute">
                 <table class="table">
                     <tbody>
@@ -41,8 +44,9 @@
                     </tbody>
                 </table>
             </blockquote>
-            <blockquote  v-if="! currentRoute && infoMode !=='route'">
-                Whoops... something went wrong
+            <iframe v-if="infoError" :srcdoc="infoError.data"></iframe>
+            <blockquote  v-if="! currentRoute && infoMode !=='route' && !infoError">
+                No info
             </blockquote>
         </div>
     </div>
@@ -58,7 +62,8 @@
         vuex: {
             getters: {
                 currentRoute: (state) => state.currentRoute,
-                infoMode: (state) => state.infoMode
+                infoMode: (state) => state.infoMode,
+                infoError:  (state) => state.infoError,
             }
         },
         computed: {
@@ -101,6 +106,11 @@
     td:first-child {
         width: 50px;
         font-weight: 500;
+    }
+
+    iframe {
+        width: 100%;
+        min-height: 500px;
     }
     table.table{
         background-color: transparent;

@@ -9,8 +9,9 @@ const state = {
     currentRoute: null,
     isRequestScheduled: false,
     search: '',
+    infoMode: 'route',
+    infoError: false,
     requestEditor:{
-        infoMode: 'route',
         mode: 'data',
         isSending: false,
         isSaving: false,
@@ -39,6 +40,7 @@ const mutations = {
     SET_RESPONSE(state, response){
         state.responseViewer.response = response
     },
+
     SET_VIEWER_MODE(state, mode){
         state.responseViewer.mode = mode
     },
@@ -46,6 +48,10 @@ const mutations = {
     // Request editor
     SET_INFO_MODE(mode){
         state.infoMode = mode
+    },
+
+    SET_INFO_ERROR(state, response){
+        state.infoError = response
     },
 
     SET_EDITOR_MODE(state, mode){

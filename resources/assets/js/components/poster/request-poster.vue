@@ -34,6 +34,7 @@
              * Ask laravel what route are we dealing with, if any.
              */
             getCurrentRequestRoute () {
+                this.setInfoError(null)
                 let headers = _.cloneDeep(this.currentRequest.headers)
                 let wheres = _.cloneDeep(this.currentRequest.wheres)
 
@@ -76,8 +77,8 @@
                             this.setCurrentRoute(null)
                         }
 
+                        this.setInfoError(response)
                         this.setEditorMode('info')
-                        this.setResponse(response)
                     })
             },
             send (){
@@ -152,6 +153,7 @@
             },
             actions: {
                 scheduleSending,
+                setInfoError: ({dispatch}, bool) => dispatch('SET_INFO_ERROR', bool),
                 setResponse: ({dispatch}, response) => dispatch('SET_RESPONSE', response),
                 setCurrentRoute: ({dispatch}, route) => dispatch('SET_CURRENT_ROUTE', route),
                 setCurrentRequest: ({dispatch}, route) => dispatch('SET_CURRENT_REQUEST', route),
