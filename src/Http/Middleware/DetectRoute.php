@@ -2,7 +2,6 @@
 
 namespace Asvae\ApiTester\Http\Middleware;
 
-use Asvae\ApiTester\Entities\Route;
 use Asvae\ApiTester\Entities\RouteInfo;
 use Closure;
 use Illuminate\Contracts\Events\Dispatcher;

@@ -57,19 +57,26 @@
                     .done((response) => {
                         let route = response.data
                         this.setCurrentRoute(route)
+                        this.setResponse(null)
                     })
                     .fail((xhr, status, error) => {
                         data = xhr.responseText
                         try {
                             data = JSON.parse(data)
                         } catch (e) {}
-
                         let response = {
                             data,
                             isJson: typeof data !== 'string',
                             headers: xhr.getAllResponseHeaders(),
                         }
 
+                        this.setViewerMode('preview')
+
+                        if(this.infoMode === 'request'){
+                            this.setCurrentRoute(null)
+                        }
+
+                        this.setEditorMode('info')
                         this.setResponse(response)
                     })
             },
@@ -84,7 +91,6 @@
 
                 let headers = _.cloneDeep(this.request.headers)
                 headers.push({key: 'X-Api-Tester', value: 'catch-redirect'})
-
 
                 this.getResult(request.method, path, request.body, headers)
             },
@@ -142,6 +148,7 @@
                 history: state => state.history,
                 currentRequest: state => state.currentRequest,
                 sendingIsScheduled: state => state.requestEditor.sendingIsScheduled,
+                infoMode:(state) => state.infoMode,
             },
             actions: {
                 scheduleSending,
@@ -149,6 +156,8 @@
                 setCurrentRoute: ({dispatch}, route) => dispatch('SET_CURRENT_ROUTE', route),
                 setCurrentRequest: ({dispatch}, route) => dispatch('SET_CURRENT_REQUEST', route),
                 setIsSending: ({dispatch}, sending) => dispatch('SET_REQUEST_IS_SENDING', sending),
+                setViewerMode: ({dispatch}, mode) => dispatch('SET_VIEWER_MODE', mode),
+                setEditorMode: ({dispatch}, mode) => dispatch('SET_EDITOR_MODE', mode),
             },
         },
         watch: {

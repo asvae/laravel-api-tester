@@ -10,6 +10,7 @@ const state = {
     isRequestScheduled: false,
     search: '',
     requestEditor:{
+        infoMode: 'route',
         mode: 'data',
         isSending: false,
         isSaving: false,
@@ -43,6 +44,9 @@ const mutations = {
     },
 
     // Request editor
+    SET_INFO_MODE(mode){
+        state.infoMode = mode
+    },
 
     SET_EDITOR_MODE(state, mode){
         state.requestEditor.mode = mode
@@ -65,25 +69,48 @@ const mutations = {
 
     // Requests
 
-    SET_REQUESTS(state, requests){
-        state.requests = requests
-    },
 
     SET_CURRENT_REQUEST(state, currentRequest){
         state.currentRequest = currentRequest
     },
 
+    SET_REQUESTS(state, requests){
+        state.requests = requests
+    },
+
+    INSERT_REQUEST(state, request){
+        let requests = _.cloneDeep(state.requests)
+        requests.push(request)
+        state.requests = requests
+    },
+
     DELETE_REQUEST(state, request){
         let requests = _.cloneDeep(state.requests)
-        delete requests[request.id]
-        state.requests = requests
+        let index = _.findIndex(requests, request);
+        if(index !== -1) {
+            requests.splice(index, 1)
+            state.requests = requests
+        }
+    },
+
+    UPDATE_REQUEST(state, request){
+        let requests = _.cloneDeep(state.requests)
+        let index = _.findIndex(requests, {id: request.id});
+        if(index !== -1){
+            requests.splice(index, 1, request)
+            state.requests = requests
+        }
     },
     // Routes
 
     SET_ROUTES(state, routes){
         state.routes = routes
     },
+
     SET_CURRENT_ROUTE: (state, route) => {
+        if(route === null){
+            return state.currentRoute = route
+        }
         state.currentRoute = _.find(state.routes, route)
     },
 

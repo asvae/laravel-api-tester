@@ -69,7 +69,17 @@
             },
             actions: {
                 loadRequests,
-                setRequests
+                setRequests,
+                updateRequest: ({dispatch}, request) => {
+                    dispatch('UPDATE_REQUEST', request)
+                },
+                deleteRequest: ({dispatch}, request) => {
+                    dispatch('DELETE_REQUEST', request)
+                },
+
+                insertRequest: ({dispatch}, request) => {
+                    dispatch('INSERT_REQUEST', request)
+                },
             }
         },
 
@@ -78,37 +88,39 @@
                 // Убираем слеш из пути, чтобы не мешался
                 path = path.replace('/', '')
 
-                let stateRequests = []
-
                 // Если путь пуст, это значит что мы работаем с самой первой загрузкой,
                 // И должны вставить все записи.
                 if (path === '') {
-                    let requests = data
-                    for (let index in requests) {
-                        this.prepareRequest(requests[index])
-                        stateRequests.push(requests[index])
+                    let requests = []
+
+                    for (let index in data) {
+                        this.prepareRequest(data[index])
+                        requests.push(data[index])
                     }
+
+                    this.setRequests(requests)
                 }
                 // Иначе, это пришло изменение, и нам нужо модифицировать сущестувующие записи.
                 else {
-                    stateRequests = _.cloneDeep(this.requests)
                     let request = data
+
                     // Если данные пусты, это значит что мы должны удалить запись из массива.
                     if (request === null) {
-                        let index = _.findIndex(stateRequests, {id: path});
-                        if(index !== -1) stateRequests.splice(1, index)
-
+                        this.deleteRequest({id: path})
                     }
                     // Иначе нам нужно обновить её
                     else {
                         this.prepareRequest(request)
-                        let index = _.findIndex(stateRequests, {id: path});
-                        if(index !== -1) stateRequests.splice(1, index, request)
+                        let index = _.findIndex(this.requests,{id: path})
+
+                        if(index !== -1){
+                            this.updateRequest(request)
+                        } else {
+                            this.insertRequest(request)
+                        }
+
                     }
                 }
-
-                // Теперь нам нужно перезаписать состояние.
-                this.setRequests(stateRequests)
             },
 
             // Firebase не хранит пустые массивы. Поэтому заголовки придется добавить в ручную

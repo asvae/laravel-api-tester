@@ -37,10 +37,12 @@
                                      v-text="currentRoute | json"
                                 ></pre>
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
+            </blockquote>
+            <blockquote  v-if="! currentRoute && infoMode !=='route'">
+                Whoops... something went wrong
             </blockquote>
         </div>
     </div>
@@ -56,6 +58,7 @@
         vuex: {
             getters: {
                 currentRoute: (state) => state.currentRoute,
+                infoMode: (state) => state.infoMode
             }
         },
         computed: {

@@ -34,12 +34,15 @@ export const setRequests = function ({dispatch}, requests) {
 }
 
 export const setCurrentRequest = ({dispatch}, request) => {
+    dispatch('SET_INFO_MODE', 'request')
+    dispatch('SET_CURRENT_ROUTE', null)
     dispatch('SET_CURRENT_REQUEST', request)
 }
 
 export const setCurrentRequestFromRoute = ({dispatch}, route) => {
+    dispatch('SET_INFO_MODE', 'route')
     dispatch('SET_RESPONSE', null)
-
+    dispatch('SET_CURRENT_ROUTE', route)
     let request = {
         method: route.methods[0],
         path: route.path,
@@ -66,6 +69,7 @@ export const saveRequest = function ({dispatch}, request, next = () => {}) {
         .then(function (data) {
             dispatch('SET_REQUEST_IS_SAVING', false)
             dispatch('SET_CURRENT_REQUEST', data.data)
+            dispatch('SET_CURRENT_REQUEST', data.data)
             next()
         })
 }
@@ -73,9 +77,10 @@ export const saveRequest = function ({dispatch}, request, next = () => {}) {
 export const updateRequest = function ({dispatch}, request, next = () => {}) {
     dispatch('SET_REQUEST_IS_SAVING', true)
     this.$api.ajax('PUT', 'requests/' + request.id, request)
-        .then(function (data) {
+        .done(function (response) {
             dispatch('SET_REQUEST_IS_SAVING', false)
-            dispatch('SET_CURRENT_REQUEST', data.data)
+            dispatch('SET_CURRENT_REQUEST', response.data)
+            dispatch('UPDATE_REQUEST', response.data)
         })
 }
 

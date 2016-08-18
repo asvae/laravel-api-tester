@@ -69,7 +69,15 @@ export default class Api {
 
         if(!_.some(['GET', 'HEAD', 'OPTIONS'], method.toUpperCase())){
             headers.push({key: 'X-XSRF-TOKEN', value: ENV.getCookie('XSRF-TOKEN') })
+        } else {
+
+            if(data === null){
+                data = {}
+            }
+
+            data.__noCache = Date.now()
         }
+
 
         headers = _.reduce(headers, function (headersHash, header) {
             headersHash[header.key] = header.value
