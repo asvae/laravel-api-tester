@@ -1,7 +1,7 @@
 <template>
     <div class="requests-selector">
         <div class="columns is-multiline">
-            <vm-request v-for="request of filteredRequests"
+            <vm-request v-for="request in filteredRequests"
                         class="column is-full"
                         track-by="$index"
                         transition="slip"
@@ -35,8 +35,7 @@
                 let toDisplay = []
                 let search = this.search.toUpperCase()
 
-                for (let index in this.requests) {
-                    let request = this.requests[index]
+                for (let request of this.requests) {
                     if (
                             request.method.toUpperCase().includes(search)
                             || request.path.toUpperCase().includes(search)
@@ -55,8 +54,8 @@
             if (ENV.firebaseToken && ENV.firebaseToken) {
                 let source = new EventSource(ENV.firebaseSource + 'requests.json?auth=' + ENV.firebaseToken)
                 source.addEventListener('put', ((e) => {
-                    let body = JSON.parse(e.data)
-                    this.addRequest(body.data, body.path)
+                    let payload = JSON.parse(e.data)
+                    this.handlePayload(payload.data, payload.path)
                 }))
             }
 
@@ -75,29 +74,43 @@
         },
 
         methods: {
-            addRequest(requests, path){
-                path.replace('/', '')
+            handlePayload(data, path){
+                // Убираем слеш из пути, чтобы не мешался
+                path = path.replace('/', '')
 
-                let stateRequests
+                let stateRequests = []
 
-                if (path === '/') {
-                    stateRequests = requests
+                // Если путь пуст, это значит что мы работаем с самой первой загрузкой,
+                // И должны вставить все записи.
+                if (path === '') {
+                    let requests = data
                     for (let index in requests) {
                         this.prepareRequest(requests[index])
+                        stateRequests.push(requests[index])
                     }
-                } else {
+                }
+                // Иначе, это пришло изменение, и нам нужо модифицировать сущестувующие записи.
+                else {
                     stateRequests = _.cloneDeep(this.requests)
-                    if (requests === null) {
-                        delete stateRequests[path];
-                    } else {
+                    let request = data
+                    // Если данные пусты, это значит что мы должны удалить запись из массива.
+                    if (request === null) {
+                        let index = _.findIndex(stateRequests, {id: path});
+                        if(index !== -1) stateRequests.splice(1, index)
 
-                        this.prepareRequest(requests)
-                        stateRequests[path] = requests
+                    }
+                    // Иначе нам нужно обновить её
+                    else {
+                        this.prepareRequest(request)
+                        let index = _.findIndex(stateRequests, {id: path});
+                        if(index !== -1) stateRequests.splice(1, index, request)
                     }
                 }
 
+                // Теперь нам нужно перезаписать состояние.
                 this.setRequests(stateRequests)
             },
+
             // Firebase не хранит пустые массивы. Поэтому заголовки придется добавить в ручную
             prepareRequest(request){
                 if (request.headers === undefined) {

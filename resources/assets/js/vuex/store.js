@@ -4,7 +4,7 @@ import _ from 'lodash'
 const state = {
     history:[],
     routes: [],
-    requests: {},
+    requests: [],
     currentRequest: {method: 'GET', path: '/', headers: [], body: ''},
     currentRoute: null,
     isRequestScheduled: false,

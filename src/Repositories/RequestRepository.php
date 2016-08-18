@@ -101,7 +101,7 @@ class RequestRepository implements RequestRepositoryInterface
      */
     public function all()
     {
-        return $this->requests;
+        return $this->requests->values();
     }
 
     /**
