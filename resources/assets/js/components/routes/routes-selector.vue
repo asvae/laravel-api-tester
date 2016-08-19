@@ -8,8 +8,13 @@
             ></vm-route>
             <div class="column is-full" v-if="routes.length === 0">
                 <div class="content">
-                    <blockquote>No saved routes yet</blockquote>
+                    <blockquote>No saved routes found</blockquote>
                 </div>
+            </div>
+        </div>
+        <div v-if="routesError">
+            <div class="notification is-danger">
+                Error while getting route list
             </div>
         </div>
     </div>
@@ -35,6 +40,7 @@
             getters: {
                 routes: (store) => store.routes,
                 search: (store) => store.search,
+                routesError: (store) => store.routesError
             },
             actions: {loadRoutes},
         },

@@ -11,6 +11,7 @@ const state = {
     search: '',
     infoMode: 'route',
     infoError: false,
+    routesError: false,
     requestEditor:{
         mode: 'data',
         isSending: false,
@@ -111,6 +112,10 @@ const mutations = {
 
     SET_ROUTES(state, routes){
         state.routes = routes
+    },
+
+    SET_ROUTES_ERROR(response){
+        state.routesError = response
     },
 
     SET_CURRENT_ROUTE: (state, route) => {

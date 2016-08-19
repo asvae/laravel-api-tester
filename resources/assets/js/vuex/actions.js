@@ -3,7 +3,7 @@ import RandExp from 'randexp'
 
 export const loadRoutes = function ({dispatch}) {
     this.$api.ajax('GET', 'routes')
-        .then(function (response) {
+        .done((response) => {
             let routes = response.data
             let order = 0
 
@@ -13,8 +13,16 @@ export const loadRoutes = function ({dispatch}) {
                 return route
             })
 
+            dispatch('SET_ROUTES_ERROR', false)
             dispatch('SET_ROUTES', parsedRoutes)
-        })
+        }).fail((xhr, status, error) => {
+            let response = {}
+
+            response.status = xhr.status + ' : ' +error
+            response.data = xhr.responseText
+
+            dispatch('SET_ROUTES_ERROR', response)
+    })
 }
 
 export const loadRequests = function ({dispatch}) {
