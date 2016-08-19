@@ -51,10 +51,15 @@ return [
     |--------------------------------------------------------------------------
     | Additional route meta information
     |--------------------------------------------------------------------------
+    | Displays additional route information. Such as request rules and comments.
     |
+    | !WARNING!
+    | This sometimes causes fatal errors, rendering api tester unusable.
+    | Set to false if that's your case.
     |
     */
-    'route_meta' => false,
+
+    'route_meta' => true,
 
     /*
     |--------------------------------------------------------------------------
