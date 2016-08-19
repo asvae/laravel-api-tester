@@ -19,8 +19,9 @@ Application main page.
             <div class="left-side">
                 <div class="columns is-multiline">
                     <div class="column is-boxed">
-                        <vm-navigation-tabs :pages="['routes', 'requests', 'history']"
-                                            :mode.sync="mode"
+                        <vm-navigation-tabs
+                                :pages="['routes', 'requests', 'history']"
+                                :mode.sync="mode"
                         ></vm-navigation-tabs>
                     </div>
                     <div class="column is-full">
@@ -71,7 +72,7 @@ Application main page.
     }
 </script>
 
-We decided to forsake all the responsibility stuff. It requires bulma @media
+We decided to forsake all the mobile support stuff. It requires bulma @media
 which requires scss in .vue file, which is not supported by phpstorm ATM.
 <style scoped>
     .top-fixed {

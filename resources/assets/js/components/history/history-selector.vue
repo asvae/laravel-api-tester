@@ -1,7 +1,7 @@
 <template>
     <div class="history-selector">
         <div class="columns is-multiline is-centered">
-            <div v-if="history.length !== 0" class="column is-narrow">
+            <div v-if="history.length !== 0" class="clear-history column is-narrow">
                 <a class="button is-bordered"
                    @click="clearHistory"
                 >Clear history</a>
@@ -19,6 +19,8 @@
         </div>
     </div>
 </template>
+
+
 
 <script>
     import _ from 'lodash'
@@ -109,7 +111,10 @@
 </script>
 
 <style scoped>
-    .column + .column {
+    .column {
         padding: 0 10px;
+    }
+    .clear-history {
+        padding-bottom: 10px;
     }
 </style>
