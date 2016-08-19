@@ -110,7 +110,13 @@ class RouteInfo implements Arrayable, JsonSerializable
         }
 
         foreach ($reflection->getParameters() as $parameter) {
-            $class = $parameter->getClass();
+
+            // TODO Write the reasoning behind following lines.
+            try {
+                $class = $parameter->getClass();
+            } catch (\ReflectionException $e){
+                break;
+            }
 
             // Если аргумент нетипизирован, значит он уже не будет затянут через DI,
             // И дальнейший обход не имеет смысла, так как все последующие аргументы
