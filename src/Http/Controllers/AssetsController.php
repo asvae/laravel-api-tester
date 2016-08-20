@@ -39,7 +39,7 @@ class AssetsController extends Controller
 
     public function font($file)
     {
-        $root = __DIR__ . '/../../../resources/assets/build/fonts';
+        $root = __DIR__.'/../../../resources/assets/fonts';
 
         return $this->file($file, $root);
     }
@@ -57,11 +57,11 @@ class AssetsController extends Controller
         $ext = end($array);
 
         $contentTypes = [
-            'css' => 'text/css',
-            'js'  => 'text/javascript',
-            'svg' => 'image/svg+xml',
-            'map' => 'text/css',
-            'woff' => 'application/x-font-woff',
+            'css'   => 'text/css',
+            'js'    => 'text/javascript',
+            'svg'   => 'image/svg+xml',
+            'map'   => 'text/css',
+            'woff'  => 'application/x-font-woff',
             'woff2' => 'application/x-font-woff2',
         ];
 
