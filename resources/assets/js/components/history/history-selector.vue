@@ -38,9 +38,9 @@
         },
         vuex: {
             getters: {
-                history: (store) => store.history,
-                search: (store) => store.search,
-                isSending: state => state.requestEditor.isSending,
+                history: (store) => store.history.history,
+                search: (store) => store.search.search,
+                isSending: state => state.request.isSending,
                 currentRequest: state => state.currentRequest,
 
             },

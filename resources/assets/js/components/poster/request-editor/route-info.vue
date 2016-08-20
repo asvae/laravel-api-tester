@@ -63,7 +63,7 @@
         },
         vuex: {
             getters: {
-                currentRoute: (state) => state.currentRoute,
+                currentRoute: (state) => state.routes.currentRoute,
                 infoMode: (state) => state.infoMode,
                 infoError:  (state) => state.infoError,
             }

@@ -60,8 +60,8 @@
         },
         vuex: {
             getters: {
-                sending: (store) => store.requestEditor.isSending,
-                saving: (store) => store.requestEditor.isSaving,
+                sending: (store) => store.request.isSending,
+                saving: (store) => store.request.isSaving,
             },
             actions: {
                 saveRequest,

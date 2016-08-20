@@ -62,8 +62,8 @@
         },
         vuex: {
             getters: {
-                mode: (state) => state.responseViewer.mode,
-                response: (state) => state.responseViewer.response,
+                mode: (state) => state.response.mode,
+                response: (state) => state.response.response,
             },
             actions: {
                 setMode: ({dispatch}, mode) => dispatch('SET_VIEWER_MODE', mode)

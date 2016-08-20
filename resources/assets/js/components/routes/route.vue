@@ -30,7 +30,7 @@
         },
         vuex: {
             getters: {
-                currentRoute: (store) => store.currentRoute,
+                currentRoute: (store) => store.routes.currentRoute,
             },
             actions: {
                 setCurrentRequestFromRoute,

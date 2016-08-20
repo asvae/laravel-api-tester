@@ -57,7 +57,6 @@
                     .done((response) => {
                         let route = response.data
                         this.setCurrentRoute(route)
-                        this.setResponse(null)
                     })
                     .fail((xhr, status, error) => {
 
@@ -65,16 +64,17 @@
 
                         try {
                             data = JSON.parse(data)
-                        } catch (e) {}
+                        } catch (e) {
+                        }
 
                         let response = {}
 
-                        response.status = xhr.status + ' : ' +error
+                        response.status = xhr.status + ' : ' + error
                         response.data = data
 
                         this.setViewerMode('preview')
 
-                        if(this.infoMode === 'request'){
+                        if (this.infoMode === 'request') {
                             this.setCurrentRoute(null)
                         }
 
@@ -83,6 +83,7 @@
                     })
             },
             send (){
+                this.setResponse(null)
                 this.setCurrentRequest(this.request)
                 this.setIsSending(true)
                 let path = this.request.path
@@ -104,40 +105,40 @@
 
             getResult(method, path, body, headers, redirects = []){
                 this.$api.ajax(method, path, body, headers)
-                        .always(function (dataOrXHR, status, XHROrError) {
-                                    // NOTE Jquery ajax is sometimes not quite sane.
+                    .always(function (dataOrXHR, status, XHROrError) {
+                        // NOTE Jquery ajax is sometimes not quite sane.
 
-                                    let xhr
+                        let xhr
 
-                                    if (dataOrXHR && dataOrXHR.hasOwnProperty('responseText')) {
-                                        xhr = dataOrXHR
-                                    } else {
-                                        xhr = XHROrError
-                                    }
+                        if (dataOrXHR && dataOrXHR.hasOwnProperty('responseText')) {
+                            xhr = dataOrXHR
+                        } else {
+                            xhr = XHROrError
+                        }
 
-                                    let data = xhr.responseText
+                        let data = xhr.responseText
 
-                                    try {
-                                        data = JSON.parse(data)
-                                    } catch (e) {}
+                        try {
+                            data = JSON.parse(data)
+                        } catch (e) {
+                        }
 
-                                    if(xhr.getResponseHeader('X-Api-Tester') === 'redirect'){
-                                        this.followRedirect(data.data, redirects, headers);
+                        if (xhr.getResponseHeader('X-Api-Tester') === 'redirect') {
+                            this.followRedirect(data.data, redirects, headers);
 
-                                        return
-                                    }
+                            return
+                        }
 
-                                    let response = {
-                                        data,
-                                        isJson: typeof data !== 'string',
-                                        headers: xhr.getAllResponseHeaders(),
-                                        redirects: redirects
-                                    }
+                        let response = {
+                            data,
+                            isJson: typeof data !== 'string',
+                            headers: xhr.getAllResponseHeaders(),
+                            redirects: redirects
+                        }
 
-                                    this.setResponse(response)
-                                    this.setIsSending(false)
-                                }
-                        )
+                        this.setResponse(response)
+                        this.setIsSending(false)
+                    })
             }
 
 
@@ -148,9 +149,9 @@
         vuex: {
             getters: {
                 history: state => state.history,
-                currentRequest: state => state.currentRequest,
-                sendingIsScheduled: state => state.requestEditor.sendingIsScheduled,
-                infoMode:(state) => state.infoMode,
+                currentRequest: state => state.requests.currentRequest,
+                sendingIsScheduled: state => state.request.sendingIsScheduled,
+                infoMode: (state) => state.infoMode,
             },
             actions: {
                 scheduleSending,

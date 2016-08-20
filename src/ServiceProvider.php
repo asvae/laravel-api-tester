@@ -17,7 +17,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->mergeConfigFrom(API_TESTER_PATH . '/config/api-tester.php', 'api-tester');
 
-        // Если апи-тесетр не включен - дальше не загружаемся.
+        // If Api Tester is disabled, we won't run any service providers.
         if (!$this->app['config']['api-tester.enabled']) {
             return;
         }

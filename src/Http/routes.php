@@ -8,9 +8,7 @@ Route::get('/', [
 
 // The only route for "routes" is index.
 // Because we won't do anything but ask for the list.
-Route::resource('routes', 'RouteController', [
-    'only' => ['index'],
-]);
+Route::post('routes/index', 'RouteController@index');
 
 // "_" used to prevent collisions with your app.
 Route::resource('requests', 'RequestController', [
@@ -38,12 +36,6 @@ Route::group(['prefix' => 'assets'], function () {
         'uses' => 'AssetsController@index'
     ])->where('_file', $filePattern);
 });
-
-// Throw in some routes to test api-tester.
-Route::get('test-routes/{_type}', [
-    'as' => 'test-routes',
-    'uses' => 'HomeController@testRoutes',
-]);
 
 /**
  * This route is quite special as it prevents user from caching routes

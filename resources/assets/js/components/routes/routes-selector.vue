@@ -1,18 +1,28 @@
 <template>
     <div class="routes-selector">
         <div class="columns is-multiline">
+            <!-- Refresh route list -->
+            <div class="column is-full">
+                <a class="button"
+                   @click="loadRoutes"
+                >
+                    <i class="fa fa-refresh"></i>
+                </a>
+            </div>
+            <!-- Route list -->
             <vm-route v-for="route in filteredRoutes"
                       class="column is-full"
                       transition="slip"
                       :route="route"
             ></vm-route>
+            <!-- Placeholder -->
             <div class="column is-full" v-if="routes.length === 0">
                 <div class="content">
                     <blockquote>No saved routes found</blockquote>
                 </div>
             </div>
         </div>
-        <div v-if="routesError">
+        <div v-if="loadedWithError">
             <div class="notification is-danger">
                 Error while getting route list
             </div>
@@ -29,18 +39,13 @@
 
     export default {
         data () {
-            return {
-                columns: [
-                    'method',
-                    'path',
-                ],
-            }
+            return {}
         },
         vuex: {
             getters: {
-                routes: (store) => store.routes,
-                search: (store) => store.search,
-                routesError: (store) => store.routesError
+                routes: store => store.routes.routes,
+                loadedWithError: store => store.routes.errorLoading,
+                search: store => store.search.search
             },
             actions: {loadRoutes},
         },
@@ -51,6 +56,7 @@
             vmRoute,
         },
         computed: {
+            // TODO With vuex 2 this should be refactored as computed property.
             filteredRoutes () {
                 let toDisplay = []
 

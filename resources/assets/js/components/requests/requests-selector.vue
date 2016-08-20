@@ -62,9 +62,9 @@
         },
         vuex: {
             getters: {
-                requests: state => state.requests,
-                currentRequest: state => state.currentRequest,
-                search: state => state.search,
+                requests: state => state.requests.requests,
+                currentRequest: state => state.requests.currentRequest,
+                search: state => state.search.search,
             },
             actions: {
                 loadRequests,
@@ -75,7 +75,6 @@
                 deleteRequest: ({dispatch}, request) => {
                     dispatch('DELETE_REQUEST', request)
                 },
-
                 insertRequest: ({dispatch}, request) => {
                     dispatch('INSERT_REQUEST', request)
                 },

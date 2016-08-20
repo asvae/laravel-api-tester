@@ -16,7 +16,7 @@
     export default {
         vuex: {
             getters: {
-                mode: state => state.requestEditor.mode,
+                mode: state => state.request.mode,
             },
             actions: {
                 setMode: ({dispatch}, mode) => dispatch('SET_EDITOR_MODE', mode)

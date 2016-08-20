@@ -35,7 +35,7 @@ return [
     |
     | Define list of middleware, that should be used for api-tester.
     | This allows automatic CRSF token handling.
-    | Also, you can use middleware groups, such as 'web', for Laravel 5.2+ here.
+    | You can also use middleware groups, such as 'web' (Laravel 5.2+).
     |
     */
 
@@ -99,7 +99,6 @@ return [
     'include' => '.*',
     'exclude' => null,
 
-
     /*
     |--------------------------------------------------------------------------
     | Repositories
@@ -114,7 +113,6 @@ return [
         //Asvae\ApiTester\Repositories\RouteDingoRepository::class,
     ],
 
-
     /*
     |--------------------------------------------------------------------------
     | Request Repository
@@ -124,7 +122,6 @@ return [
     */
 
     'request_repository' => Asvae\ApiTester\Repositories\RequestRepository::class,
-
 
     /*
     |--------------------------------------------------------------------------

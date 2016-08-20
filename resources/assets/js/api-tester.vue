@@ -42,7 +42,7 @@ Application main page.
 </template>
 
 <script>
-    import vmSearchPanel from './components/search-panel.vue'
+    import vmSearchPanel from './components/search/search-panel.vue'
     import vmActionPanel from './components/action-panel/action-panel.vue'
 
     import vmNavigationTabs from './components/ligth-components/navigation-tabs.vue'
