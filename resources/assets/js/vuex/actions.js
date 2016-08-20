@@ -70,7 +70,6 @@ export const saveRequest = function ({dispatch}, request, next = () => {
         .then(function (data) {
             dispatch('SET_REQUEST_IS_SAVING', false)
             dispatch('SET_CURRENT_REQUEST', data.data)
-            dispatch('SET_CURRENT_REQUEST', data.data)
             next()
         })
 }
