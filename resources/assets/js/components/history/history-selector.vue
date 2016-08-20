@@ -41,7 +41,7 @@
                 history: (store) => store.history.history,
                 search: (store) => store.search.search,
                 isSending: state => state.request.isSending,
-                currentRequest: state => state.currentRequest,
+                currentRequest: state => state.requests.currentRequest,
 
             },
             actions: {
