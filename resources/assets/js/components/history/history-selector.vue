@@ -1,7 +1,8 @@
 <template>
     <div class="history-selector">
         <div class="columns is-multiline is-centered">
-            <div v-if="history.length !== 0" class="clear-history column is-narrow">
+            <div v-if="history.length !== 0"
+                 class="clear-history column is-narrow">
                 <a class="button is-bordered"
                    @click="clearHistory"
                 >Clear history</a>
@@ -19,7 +20,6 @@
         </div>
     </div>
 </template>
-
 
 
 <script>
@@ -40,9 +40,8 @@
             getters: {
                 history: (store) => store.history.history,
                 search: (store) => store.search.search,
-                isSending: state => state.request.isSending,
-                currentRequest: state => state.currentRequest,
-
+                sendingIsScheduled: state => state.request.sendingIsScheduled,
+                currentRequest: state => state.requests.currentRequest,
             },
             actions: {
                 setHistory: ({dispatch}, history) => {
@@ -77,7 +76,6 @@
                 return toDisplay.reverse()
             },
         },
-
         methods: {
             loadHistory(){
                 let history = window.localStorage.getItem('api-tester.history')
@@ -93,8 +91,8 @@
             }
         },
         watch: {
-            isSending(isSending){
-                if (isSending) {
+            sendingIsScheduled(sendingIsScheduled){
+                if (sendingIsScheduled) {
                     let history = _.cloneDeep(this.history)
                     history.push({
                         method: this.currentRequest.method,
@@ -114,6 +112,7 @@
     .column {
         padding: 0 10px;
     }
+
     .clear-history {
         padding-bottom: 10px;
     }

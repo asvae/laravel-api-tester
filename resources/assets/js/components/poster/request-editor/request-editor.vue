@@ -2,7 +2,7 @@
     <div class="request-editor">
         <div class="columns is-multiline" v-if="request">
             <div class="column is-full">
-                <input class="input"
+                <input class="input is-minimal"
                        type="text"
                        placeholder="Name"
                        title="Name"

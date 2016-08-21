@@ -24,7 +24,7 @@
         </div>
         <div v-if="loadedWithError">
             <div class="notification is-danger">
-                Error while getting route list
+                We can't retrieve route list from your app. Check console for details.
             </div>
         </div>
     </div>
