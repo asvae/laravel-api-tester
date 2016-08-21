@@ -88,4 +88,4 @@ export const updateRequest = function ({dispatch}, request, next = () => {
         })
 }
 
-export const scheduleSending = ({dispatch}, status) => dispatch('SET_SENDING_SCHEDULED', status)
+export const scheduleRequest = ({dispatch}, request) => dispatch('SCHEDULE_REQUEST', _.cloneDeep(request))

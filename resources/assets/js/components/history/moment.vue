@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import {setCurrentRequest, scheduleSending} from '../../vuex/actions.js'
+    import {setCurrentRequest, scheduleRequest} from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
     import vmCardItem from '../ligth-components/card-item.vue'
     import _ from 'lodash'
@@ -28,7 +28,7 @@
             getters: {
                 currentRoute: (store) => store.routes.currentRoute,
             },
-            actions: {setCurrentRequest, scheduleSending}
+            actions: {setCurrentRequest, scheduleRequest}
         },
 
         data(){

@@ -2,7 +2,7 @@ const state = {
         mode: 'data',
         isSending: false,
         isSaving: false,
-        sendingIsScheduled: false,
+        scheduledList: [],
 }
 
 const mutations = {
@@ -12,7 +12,6 @@ const mutations = {
     SET_INFO_ERROR(state, response){
         state.infoError = response
     },
-    
     SET_EDITOR_MODE(state, mode){
         state.mode = mode
     },
@@ -22,8 +21,8 @@ const mutations = {
     SET_REQUEST_IS_SAVING(state, value = true){
         state.isSaving = value
     },
-    SET_SENDING_SCHEDULED(state, isScheduled = true){
-        state.sendingIsScheduled = isScheduled
+    SCHEDULE_EDIT(state, request){
+        state.scheduledList.push(request)
     },
 }
 

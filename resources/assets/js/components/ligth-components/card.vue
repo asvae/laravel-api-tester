@@ -29,7 +29,6 @@
                 type: String,
             },
         },
-
         methods: {
             hasSlot(name){
                 return this._slotContents[name] !== undefined

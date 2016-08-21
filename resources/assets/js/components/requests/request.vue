@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import {setCurrentRequest, scheduleSending, deleteRequest} from '../../vuex/actions.js'
+    import {setCurrentRequest, scheduleRequest, deleteRequest} from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
     import vmCardItem from '../ligth-components/card-item.vue'
 
@@ -41,7 +41,7 @@
         vuex: {
             actions: {
                 setCurrentRequest,
-                scheduleSending,
+                scheduleRequest,
                 deleteRequest,
             },
         },

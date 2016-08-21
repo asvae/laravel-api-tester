@@ -13,7 +13,7 @@
 
     import RandExp from 'randexp'
 
-    import {scheduleSending} from '../../vuex/actions.js'
+    import {scheduleRequest} from '../../vuex/actions.js'
 
     import requestEditorData from './request-editor/request-editor-data.js'
 
@@ -132,7 +132,7 @@
                 infoMode: (state) => state.infoMode,
             },
             actions: {
-                scheduleSending,
+                scheduleRequest,
                 setInfoError: ({dispatch}, bool) => dispatch('SET_INFO_ERROR', bool),
                 setResponse: ({dispatch}, response) => dispatch('SET_RESPONSE', response),
                 setRouteInfo: ({dispatch}, route) => dispatch('SET_CURRENT_ROUTE', route),

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import {setCurrentRequestFromRoute, scheduleSending} from '../../vuex/actions.js'
+    import {setCurrentRequestFromRoute, scheduleRequest} from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
     import vmCardItem from '../ligth-components/card-item.vue'
     import _ from 'lodash'
@@ -34,7 +34,7 @@
             },
             actions: {
                 setCurrentRequestFromRoute,
-                scheduleSending
+                scheduleRequest
             }
         },
         props: {

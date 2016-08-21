@@ -53,7 +53,7 @@
             updateRequest,
             loadRequests,
             setCurrentRequest,
-            scheduleSending
+            scheduleRequest
     } from '../../vuex/actions.js'
 
     export default {
@@ -71,7 +71,7 @@
                 updateRequest,
                 loadRequests,
                 setCurrentRequest,
-                scheduleSending,
+                scheduleRequest,
             },
         },
         methods: {

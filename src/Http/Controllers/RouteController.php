@@ -25,6 +25,8 @@ class RouteController extends Controller
             config('api-tester.exclude')
         );
 
+        abort(404);
+
         return response()->json(compact('data'));
     }
 }

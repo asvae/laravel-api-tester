@@ -1,22 +1,17 @@
 <template>
-    <!-- Wrapper: for escape fragmentation -->
-    <div>
-        <vm-card class="routes-selector is-fullwidth">
-            <vm-search-panel
-                    class="card-header-title"
-                    slot="header"
-            ></vm-search-panel>
-
+    <div class="routes-selector">
+        <vm-card class="is-fullwidth">
+            <vm-search-panel slot="header"></vm-search-panel>
             <a class="button is-large is-white is-fullheight"
                @click="loadRoutes"
-               :class="{'is-loading' : isLoading}"
                slot="header"
+               :class="{'is-loading' : isLoading}"
             >
-                <i class="fa fa-refresh" ></i>
+                <i class="fa fa-refresh"></i>
             </a>
 
             <div class="notification"
-                 v-if="routes.length !== 0 && filteredRoutes.length === 0"
+                 v-if="routes.length !== 0"
                  transition="fade-in"
             >
                 No routes matched.
@@ -28,22 +23,14 @@
                       :route="route"
             ></vm-route>
 
-            <div class="notification"
-                 v-if="routes.length === 0 && !loadedWithError"
-                 transition="fade-in"
-            >
-                No routes found.
-            </div><!-- /Placeholder -->
-
-            <!-- Placeholder -->
-            <div class="notification"
+            <div class="notification is-danger"
                  v-if="loadedWithError"
                  transition="fade-in"
             >
-                We can't retrieve route list from your app. Check console for details.
-            </div><!-- /Placeholder -->
-        </vm-card><!-- /Card -->
-    </div><!-- /Wrapper -->
+                Can't load routes. Check console for details.
+            </div>
+        </vm-card>
+    </div>
 </template>
 
 <script>
@@ -104,5 +91,10 @@
 <style scoped>
     .column {
         padding: 0 10px;
+    }
+
+    .notification {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
     }
 </style>
