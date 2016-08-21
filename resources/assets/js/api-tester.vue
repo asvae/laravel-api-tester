@@ -42,59 +42,31 @@ Application main page.
                     </div>
                 </nav>
                 <div class="column">
-                    <vm-action-panel :request-poster="$refs.requestPoster"
-                                     v-if="$refs.requestPoster"
-                    ></vm-action-panel>
+                    <vm-action-panel></vm-action-panel>
                 </div>
             </div>
         </div>
         <div class="bottom">
             <div class="left-side is-full is-multiline">
-                <vm-navigation-tabs
-                        :pages="['routes', 'requests', 'history']"
-                        :mode.sync="mode"
-                ></vm-navigation-tabs>
-                <vm-routes-selector v-show="mode === 'routes'"
-                ></vm-routes-selector>
-                <vm-requests-selector v-show="mode === 'requests'"
-                ></vm-requests-selector>
-                <vm-history-selector v-show="mode === 'history'"
-                ></vm-history-selector>
+                <vm-lists-block></vm-lists-block>
             </div>
             <div class="right-side">
-                <vm-request-poster v-ref:request-poster></vm-request-poster>
+                <vm-request-poster></vm-request-poster>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import vmSearchPanel from './components/search/search-panel.vue'
+    import vmListsBlock from './components/lists-block/lists-block.vue'
     import vmActionPanel from './components/action-panel/action-panel.vue'
-
-    import vmNavigationTabs from './components/ligth-components/navigation-tabs.vue'
-    import vmRoutesSelector from './components/routes/routes-selector.vue'
-    import vmRequestsSelector from './components/requests/requests-selector.vue'
-    import vmHistorySelector from './components/history/history-selector.vue'
-
-    import vmRequestPoster from './components/poster/request-poster.vue'
+    import vmRequestPoster from './components/edit-block/edit-block.vue'
 
     export default {
-        data (){
-            return {
-                mode: "routes",
-            }
-        },
         components: {
             vmActionPanel,
-            vmSearchPanel,
-
-            vmRoutesSelector,
-            vmRequestsSelector,
+            vmListsBlock,
             vmRequestPoster,
-            vmHistorySelector,
-
-            vmNavigationTabs,
         },
     }
 </script>

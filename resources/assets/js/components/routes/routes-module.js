@@ -14,8 +14,8 @@ const mutations = {
     SET_ROUTES_ERROR(state, result){
         state.errorLoading = result
     },
-    SET_CURRENT_ROUTE: (state, route) => {
-        if(route === null){
+    SET_REQUEST_INFO: (state, route) => {
+        if (route === null) {
             return state.currentRoute = route
         }
         state.currentRoute = _.find(state.routes, route)

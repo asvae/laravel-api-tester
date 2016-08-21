@@ -6,6 +6,7 @@ use Asvae\ApiTester\Contracts\RequestRepositoryInterface;
 use Asvae\ApiTester\Entities\RequestEntity;
 use Asvae\ApiTester\Http\Requests\StoreRequest;
 use Asvae\ApiTester\Http\Requests\UpdateRequest;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 /**
@@ -58,11 +59,13 @@ class RequestController extends Controller
     }
 
     /**
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->id;
+
         if (! $this->repository->exists($id)) {
             return response(null, 404);
         }
@@ -84,6 +87,8 @@ class RequestController extends Controller
      */
     public function update(UpdateRequest $httpRequest, $request)
     {
+        // TODO What's happening in here?
+
         $requestEntity = $this->repository->find($request);
 
         if (!$requestEntity instanceof RequestEntity) {

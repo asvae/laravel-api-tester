@@ -6,8 +6,8 @@ const state = {
 }
 
 import routes from '../components/routes/routes-module.js'
-import response from '../components/poster/response-viewer/response-viewer-module.js'
-import request from '../components/poster/request-editor/request-editor-module.js'
+import response from '../components/edit-block/response-viewer/response-viewer-module.js'
+import request from '../components/edit-block/request-editor-module.js'
 import search from '../components/search/search-module.js'
 import requests from '../components/requests/requests-module.js'
 import history from '../components/history/history-module.js'

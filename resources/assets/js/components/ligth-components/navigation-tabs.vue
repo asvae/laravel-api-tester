@@ -32,5 +32,7 @@
 </script>
 
 <style scoped>
-
+    .navigation-tabs:not(:last-child) {
+        margin-bottom: 10px;
+    }
 </style>

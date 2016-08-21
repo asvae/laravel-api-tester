@@ -1,18 +1,14 @@
 <template>
-    <!-- Wrapper: for escape fragmentation -->
-    <div>
-        <vm-card class="history-selector">
-            <vm-search-panel
-                class="card-header-title"
-                slot="header"
+    <div class="history-selector card is-fullwidth">
+        <header class="card-header">
+            <vm-search-panel class="card-header-title"
             ></vm-search-panel>
-
             <a class="button is-white is-large"
                v-if="history.length !== 0"
                @click="clearHistory"
-               slot="header"
             ><i class="fa fa-trash"></i></a>
-
+        </header>
+        <div class="card-content">
             <div class="notification"
                  v-if="history.length === 0"
                  transition="fade-in"
@@ -20,12 +16,12 @@
                 No history stored
             </div>
             <vm-moment
-                v-for="moment in filteredMoments"
-                class="column is-full"
-                transition="slip"
-                :moment="moment"
+                    v-for="moment in filteredMoments"
+                    class="column is-full"
+                    transition="slip"
+                    :moment="moment"
             ></vm-moment>
-        </vm-card>
+        </div>
     </div>
 </template>
 
@@ -34,7 +30,6 @@
     import _ from 'lodash'
 
     import vmMoment from './moment.vue'
-    import vmCard from '../ligth-components/card.vue'
     import vmSearchPanel from  '../search/search-panel.vue'
 
     export default {
@@ -45,6 +40,10 @@
                     'path',
                 ],
             }
+        },
+        components: {
+            vmMoment,
+            vmSearchPanel
         },
         vuex: {
             getters: {
@@ -65,9 +64,6 @@
         },
         ready (){
             this.loadHistory()
-        },
-        components: {
-            vmMoment, vmCard, vmSearchPanel
         },
         computed: {
             filteredMoments () {

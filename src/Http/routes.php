@@ -6,15 +6,14 @@ Route::get('/', [
     'uses' => 'HomeController@index',
 ]);
 
-// The only route for "routes" is index.
-// Because we won't do anything but ask for the list.
+// Fetch all Laravel routes.
 Route::post('routes/index', 'RouteController@index');
 
-// "_" used to prevent collisions with your app.
-Route::resource('requests', 'RequestController', [
-    'only'       => ['index', 'store', 'update', 'destroy'],
-    'parameters' => ['requests' => '_request'],
-]);
+Route::post('requests/index', 'RequestController@index');
+Route::post('requests/store', 'RequestController@store');
+Route::post('requests/update', 'RequestController@update');
+Route::post('requests/destroy', 'RequestController@destroy');
+
 
 // We won't publish library's assets.
 // Instead we'll pass them via app which is slower but fine for development.

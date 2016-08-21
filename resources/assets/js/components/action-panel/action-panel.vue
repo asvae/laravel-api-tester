@@ -1,6 +1,6 @@
 <template>
     <form class="action-panel control has-addons"
-          @submit.prevent="scheduleSending(true)"
+          @submit.prevent="scheduleRequest(request)"
     >
         <vm-request-type-select
                 :method="request.method"
@@ -13,6 +13,7 @@
                title="Path"
                v-model="request.path"
         >
+
         <button class="button is-success is-icon"
                 :class="{'is-loading': sending}"
                 type="submit"
@@ -46,15 +47,15 @@
 
 <script>
     import vmRequestTypeSelect from './request-type-select.vue'
-    import requestEditorData from '../poster/request-editor/request-editor-data.js'
+    import requestEditorData from '../edit-block/request-editor/request-editor-data.js'
 
     import {
-            saveRequest,
-            updateRequest,
             loadRequests,
             setCurrentRequest,
             scheduleRequest
     } from '../../vuex/actions.js'
+
+    import {saveRequest, updateRequest} from './request-actions.js'
 
     export default {
         data: () => requestEditorData,
@@ -77,11 +78,10 @@
         methods: {
             save (){
                 // Saves or updates depending on whether request has id
-                let request = this.request
                 let afterUpdate = () => {
                     this.loadRequests()
                 }
-                request.id ? this.updateRequest(request, afterUpdate) : this.saveRequest(request, afterUpdate)
+                request.id ? this.updateRequest(this.request, afterUpdate) : this.saveRequest(this.request, afterUpdate)
             },
 
             copy(){
@@ -106,13 +106,13 @@
         width: 100%;
     }
 
-    .input,.input:hover {
+    .input, .input:hover {
         transition: all ease .1s;
         background-color: #0092a2;
         border-color: #0092a2;
         color: #c6faff;
         font-weight: 100;
-        font-family:  droid sans mono, consolas, monospace, courier new, courier, sans-serif;
+        font-family: droid sans mono, consolas, monospace, courier new, courier, sans-serif;
     }
 
     .input:focus {

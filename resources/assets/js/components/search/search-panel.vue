@@ -1,20 +1,18 @@
 <template>
-    <div>
-        <p class="search control has-addons">
-            <input class="input is-expanded"
-                   type="text"
-                   placeholder="Search"
-                   title="Search"
-                   v-model="text"
-            >
-            <a class="button is-white is-primary"
-               v-if="text !== ''"
-               @click="reset()"
-            >
-                <i class="fa fa-remove"></i>
-            </a>
-        </p>
-    </div>
+    <p class="search has-addons">
+        <input class="input is-expanded"
+               type="text"
+               placeholder="Search"
+               title="Search"
+               v-model="text"
+        >
+        <a class="button is-white is-primary"
+           v-if="text !== ''"
+           @click="reset"
+        >
+            <i class="fa fa-remove"></i>
+        </a>
+    </p>
 </template>
 
 <script>
@@ -25,8 +23,6 @@
             }
         },
         watch: {
-
-            // two way binding
             search (search) {
                 this.text = search
             },
@@ -35,7 +31,7 @@
             },
         },
         vuex: {
-            getters:{
+            getters: {
                 search: (state) => state.search.search
             },
             actions: {
@@ -53,7 +49,7 @@
 </script>
 
 <style scoped>
-    .search{
+    .search {
         width: 100%;
     }
 </style>

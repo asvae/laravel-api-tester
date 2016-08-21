@@ -1,25 +1,23 @@
 <template>
-    <!-- Wrapper: for escape fragmentation -->
-    <div>
-        <vm-card class="requests-selector">
-            <vm-search-panel
-                    class="card-header-title"
-                    slot="header"
+    <div class="requests-selector card is-fullwidth">
+        <header class="card-header">
+            <vm-search-panel class="card-header-title"
             ></vm-search-panel>
+        </header>
+        <div class="card-content">
             <div class="notification"
                  v-if="requests.length === 0"
                  transition="fade-in"
             >
                 No requests yet
             </div>
-
             <vm-request v-for="request in filteredRequests"
                         class="is-fullwidth"
                         track-by="$index"
                         transition="slip"
                         :request="request"
             ></vm-request>
-        </vm-card>
+        </div>
     </div>
 </template>
 
@@ -29,12 +27,12 @@
     import {loadRequests, setRequests} from '../../vuex/actions.js'
 
     import vmRequest from './request.vue'
-    import vmCard from '../ligth-components/card.vue'
     import vmSearchPanel from  '../search/search-panel.vue'
 
     export default {
         components: {
-            vmRequest,vmSearchPanel, vmCard
+            vmRequest,
+            vmSearchPanel
         },
         computed: {
             filteredRequests() {
@@ -116,9 +114,9 @@
                     // Иначе нам нужно обновить её
                     else {
                         this.prepareRequest(request)
-                        let index = _.findIndex(this.requests,{id: path})
+                        let index = _.findIndex(this.requests, {id: path})
 
-                        if(index !== -1){
+                        if (index !== -1) {
                             this.updateRequest(request)
                         } else {
                             this.insertRequest(request)

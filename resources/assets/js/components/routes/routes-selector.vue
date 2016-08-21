@@ -1,35 +1,33 @@
 <template>
-    <div class="routes-selector">
-        <vm-card class="is-fullwidth">
-            <vm-search-panel slot="header"></vm-search-panel>
+    <div class="routes-selector card is-fullwidth">
+        <header class="card-header">
+            <vm-search-panel class="card-header-title"></vm-search-panel>
             <a class="button is-large is-white is-fullheight"
                @click="loadRoutes"
-               slot="header"
                :class="{'is-loading' : isLoading}"
             >
                 <i class="fa fa-refresh"></i>
             </a>
-
+        </header>
+        <div class="card-content">
             <div class="notification"
-                 v-if="routes.length !== 0"
+                 v-if="filteredRoutes.length === 0 && ! isLoading"
                  transition="fade-in"
             >
                 No routes matched.
             </div>
-
             <vm-route v-for="route in filteredRoutes"
                       class="is-fullwidth"
                       transition="slip"
                       :route="route"
             ></vm-route>
-
             <div class="notification is-danger"
                  v-if="loadedWithError"
                  transition="fade-in"
             >
                 Can't load routes. Check console for details.
             </div>
-        </vm-card>
+        </div>
     </div>
 </template>
 
@@ -37,13 +35,16 @@
     import _ from 'lodash'
 
     import vmRoute from './route.vue'
-    import vmCard from '../ligth-components/card.vue'
     import vmSearchPanel from  '../search/search-panel.vue'
     import {loadRoutes} from '../../vuex/actions.js'
 
     export default {
         data () {
             return {}
+        },
+        components: {
+            vmRoute,
+            vmSearchPanel,
         },
         vuex: {
             getters: {
@@ -57,18 +58,14 @@
         ready (){
             this.loadRoutes()
         },
-        components: {
-            vmRoute, vmCard, vmSearchPanel
-        },
         computed: {
             // TODO With vuex 2 this should be refactored as computed property.
             filteredRoutes () {
                 let toDisplay = []
 
                 let search = this.search.toUpperCase()
-                // Let's find out what to display first.
-                this.routes.forEach(function (route) {
 
+                this.routes.forEach(function (route) {
                     if (
                             route.methods.join(',').toUpperCase()
                                  .includes(search)
