@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p class="search control control has-addons is-fullwidth">
+        <p class="search control has-addons">
             <input class="input is-expanded"
                    type="text"
                    placeholder="Search"
@@ -53,4 +53,7 @@
 </script>
 
 <style scoped>
+    .search{
+        width: 100%;
+    }
 </style>
