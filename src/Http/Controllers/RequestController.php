@@ -55,6 +55,7 @@ class RequestController extends Controller
 
         $this->repository->flush();
 
+        // TODO Serializable?
         return response(['data' => $request->toArray()], 201);
     }
 
@@ -87,16 +88,14 @@ class RequestController extends Controller
      */
     public function update(UpdateRequest $request)
     {
-        // TODO What's happening in here?
-
         $requestEntity = $this->repository->find($request->id);
 
+        // TODO What's happening in here?
         if (!$requestEntity instanceof RequestEntity) {
             return response(404);
         }
 
         $requestEntity->update($request->all());
-
         $this->repository->flush();
 
         return response(['data' => $requestEntity->toArray()], 200);
