@@ -33,7 +33,6 @@
              * Ask laravel what route are we dealing with, if any.
              */
             getCurrentRequestRoute () {
-                this.setInfoError(null)
                 let headers = _.cloneDeep(this.currentRequest.headers)
                 let wheres = _.cloneDeep(this.currentRequest.wheres)
 
@@ -55,31 +54,10 @@
 
                 this.$api.ajax(request.method, path, request.body, headers)
                     .done((response) => {
-                        let route = response.data
-                        this.setCurrentRoute(route)
+                        this.setRouteInfo(response.data)
                     })
                     .fail((xhr, status, error) => {
-
-                        data = xhr.responseText
-
-                        try {
-                            data = JSON.parse(data)
-                        } catch (e) {
-                        }
-
-                        let response = {}
-
-                        response.status = xhr.status + ' : ' + error
-                        response.data = data
-
-                        this.setViewerMode('preview')
-
-                        if (this.infoMode === 'request') {
-                            this.setCurrentRoute(null)
-                        }
-
-                        this.setInfoError(response)
-                        this.setEditorMode('info')
+                        this.setRouteInfo(null)
                     })
             },
             send (){
@@ -157,7 +135,7 @@
                 scheduleSending,
                 setInfoError: ({dispatch}, bool) => dispatch('SET_INFO_ERROR', bool),
                 setResponse: ({dispatch}, response) => dispatch('SET_RESPONSE', response),
-                setCurrentRoute: ({dispatch}, route) => dispatch('SET_CURRENT_ROUTE', route),
+                setRouteInfo: ({dispatch}, route) => dispatch('SET_CURRENT_ROUTE', route),
                 setCurrentRequest: ({dispatch}, route) => dispatch('SET_CURRENT_REQUEST', route),
                 setIsSending: ({dispatch}, sending) => dispatch('SET_REQUEST_IS_SENDING', sending),
                 setViewerMode: ({dispatch}, mode) => dispatch('SET_VIEWER_MODE', mode),
