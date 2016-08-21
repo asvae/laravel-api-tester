@@ -1,34 +1,34 @@
 <template>
-    <div class="moment">
-        <div class="columns is-mobile">
-            <div class="column is-narrow time" v-text="time"></div>
-            <a @click="setCurrentRequest(moment)"
-               class="column is-bold"
-               v-text="moment.path"
-               style="white-space: nowrap"
-            ></a>
-        </div>
+    <div>
+        <vm-card-item>
+            <div
+                    class="moment-box"
+                    @click="setCurrentRequest(moment)"
+            >
+                <div class="time" v-text="time"></div>
+                <a
+                        v-text="moment.path"
+                        style="white-space: nowrap"
+                ></a>
+            </div>
+        </vm-card-item>
     </div>
 </template>
 
 <script>
     import {setCurrentRequest, scheduleSending} from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
+    import vmCardItem from '../ligth-components/card-item.vue'
     import _ from 'lodash'
     import moment from 'moment'
 
     export default {
-        components: {
-            vmMethodButton,
-        },
+        components: {vmMethodButton, vmCardItem},
         vuex: {
             getters: {
                 currentRoute: (store) => store.routes.currentRoute,
             },
-            actions: {
-                setCurrentRequest,
-                scheduleSending,
-            }
+            actions: {setCurrentRequest, scheduleSending}
         },
 
         data(){
@@ -36,6 +36,7 @@
               time : ''
           }
         },
+
         props: {
             moment: {
                 type: Object,
@@ -62,5 +63,8 @@
 <style scoped>
     .time{
         color: #ccc;
+    }
+    .moment-box{
+        padding: 5px;
     }
 </style>

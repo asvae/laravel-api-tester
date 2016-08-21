@@ -4,6 +4,7 @@ const state = {
     errorLoading: false,
     routes: [],
     currentRoute: null,
+    isLoading: false,
 }
 
 const mutations = {
@@ -19,6 +20,10 @@ const mutations = {
         }
         state.currentRoute = _.find(state.routes, route)
     },
+
+    SET_ROUTES_LOADING: (sate, isLoading) => {
+        state.isLoading = isLoading
+    }
 }
 
 export default {state, mutations}

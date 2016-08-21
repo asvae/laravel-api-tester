@@ -2,18 +2,21 @@ import _ from 'lodash'
 import RandExp from 'randexp'
 
 export const loadRoutes = function ({dispatch}) {
+    dispatch('SET_ROUTES_LOADING', true)
+
     this.$api_demo2.load({url: 'routes/index'})
         .then((response) => {
             dispatch('SET_ROUTES_ERROR', false)
             dispatch('SET_ROUTES', response.data)
+            dispatch('SET_ROUTES_LOADING', false)
         })
         .catch((xhr, status, error) => {
-            let response = {}
-
-            response.status = xhr.status + ' : ' + error
-            response.data = xhr.responseText
-
+            let response = {
+                status : xhr.status + ' : ' + error,
+                data : xhr.responseText
+            }
             dispatch('SET_ROUTES_ERROR', response)
+            dispatch('SET_ROUTES_LOADING', false)
         })
 }
 

@@ -31,10 +31,10 @@
   &-transition {
     transition: all .5s ease;
     overflow: hidden;
-    height: 25px;
+    max-height: 50px;
   }
   &-enter, &-leave {
     opacity: 0;
-    height: 0;
+    max-height: 0;
   }
 }

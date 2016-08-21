@@ -1,20 +1,25 @@
 <template>
-    <div class="requests-selector">
-        <div class="columns is-multiline">
+    <!-- Wrapper: for escape fragmentation -->
+    <div>
+        <vm-card class="requests-selector">
+            <vm-search-panel
+                    class="card-header-title"
+                    slot="header"
+            ></vm-search-panel>
+            <div class="notification"
+                 v-if="requests.length === 0"
+                 transition="fade-in"
+            >
+                No requests yet
+            </div>
+
             <vm-request v-for="request in filteredRequests"
-                        class="column is-full"
+                        class="is-fullwidth"
                         track-by="$index"
                         transition="slip"
                         :request="request"
             ></vm-request>
-            <div class="column is-full"
-                 v-if="requests.length === 0"
-            >
-                <div class="content">
-                    <blockquote>No requests yet</blockquote>
-                </div>
-            </div>
-        </div>
+        </vm-card>
     </div>
 </template>
 
@@ -24,10 +29,12 @@
     import {loadRequests, setRequests} from '../../vuex/actions.js'
 
     import vmRequest from './request.vue'
+    import vmCard from '../ligth-components/card.vue'
+    import vmSearchPanel from  '../search/search-panel.vue'
 
     export default {
         components: {
-            vmRequest,
+            vmRequest,vmSearchPanel, vmCard
         },
         computed: {
             filteredRequests() {

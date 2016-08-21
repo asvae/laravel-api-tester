@@ -1,34 +1,34 @@
 <template>
-    <div class="request"
-         :class="{selected: currentRequest === request}"
-    >
-        <div class="columns is-mobile">
-            <div class="column is-narrow">
-                <vm-method-button
-                        @click="setCurrentRequest(request), scheduleSending(true)"
-                        v-text="request.method"
-                ></vm-method-button>
-            </div>
-            <a @click="setCurrentRequest(request)"
-               class="column is-bold"
-               v-text="displayedName"
-               style=""
+    <!-- Wrapper: for escape fragmentation -->
+    <div>
+        <vm-card-item
+             :class="{selected: currentRequest === request}"
+        >
+            <vm-method-button
+                    class="is-white"
+                    @click="setCurrentRequest(request), scheduleSending(true)"
+                    v-text="request.method"
+            ></vm-method-button>
+
+            <a  @click="setCurrentRequest(request)"
+                class="is-bold"
+                v-text="displayedName"
             ></a>
-            <a class="column is-narrow"
-               v-text="'X'"
-               @click="deleteRequest(request)"
+            <a  v-text="'X'"
+                @click="deleteRequest(request)"
             ></a>
-        </div>
+        </vm-card-item>
     </div>
 </template>
 
 <script>
     import {setCurrentRequest, scheduleSending, deleteRequest} from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
+    import vmCardItem from '../ligth-components/card-item.vue'
 
     export default {
         components: {
-            vmMethodButton,
+            vmMethodButton, vmCardItem
         },
         computed: {
             displayedName (){

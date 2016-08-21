@@ -18,10 +18,13 @@
                 type="submit"
                 title="Send"
         >
-            <i class="fa fa-send-o"></i>
+            <span class="icon">
+                <i class="fa fa-send-o"> </i>
+            </span>
+            <span>Send request</span>
         </button>
 
-        <button class="button"
+        <button class="button is-primary"
                 :class="{'is-loading': saving}"
                 type="button"
                 @click="save"
@@ -30,7 +33,7 @@
             <i class="fa fa-save"></i>
         </button>
 
-        <button class="button is-icon"
+        <button class="button is-icon is-primary"
                 type="button"
                 @click="copy"
                 title="Copy"
@@ -94,8 +97,27 @@
 </script>
 
 <style scoped>
+    .button, .button:hover, .button:active {
+        border-color: #0092a2 !important;
+    }
+
     .action-panel {
         margin: 0;
         width: 100%;
+    }
+
+    .input,.input:hover {
+        transition: all ease .1s;
+        background-color: #0092a2;
+        border-color: #0092a2;
+        color: #c6faff;
+        font-weight: 100;
+        font-family:  droid sans mono, consolas, monospace, courier new, courier, sans-serif;
+    }
+
+    .input:focus {
+        background-color: #ffffff;
+        color: #69707a;
+        border-color: #1fc8db;
     }
 </style>

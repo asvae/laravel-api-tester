@@ -1,40 +1,57 @@
 <template>
-    <div class="routes-selector">
-        <div class="columns is-multiline">
-            <!-- Refresh route list -->
-            <div class="column is-full">
-                <a class="button"
-                   @click="loadRoutes"
-                >
-                    <i class="fa fa-refresh"></i>
-                </a>
+    <!-- Wrapper: for escape fragmentation -->
+    <div>
+        <vm-card class="routes-selector is-fullwidth">
+            <vm-search-panel
+                    class="card-header-title"
+                    slot="header"
+            ></vm-search-panel>
+
+            <a class="button is-large is-white is-fullheight"
+               @click="loadRoutes"
+               :class="{'is-loading' : isLoading}"
+               slot="header"
+            >
+                <i class="fa fa-refresh" ></i>
+            </a>
+
+            <div class="notification"
+                 v-if="routes.length !== 0 && filteredRoutes.length === 0"
+                 transition="fade-in"
+            >
+                No routes matched.
             </div>
-            <!-- Route list -->
+
             <vm-route v-for="route in filteredRoutes"
-                      class="column is-full"
+                      class="is-fullwidth"
                       transition="slip"
                       :route="route"
             ></vm-route>
+
+            <div class="notification"
+                 v-if="routes.length === 0"
+                 transition="fade-in"
+            >
+                No saved routes found.
+            </div><!-- /Placeholder -->
+
             <!-- Placeholder -->
-            <div class="column is-full" v-if="routes.length === 0">
-                <div class="content">
-                    <blockquote>No saved routes found</blockquote>
-                </div>
-            </div>
-        </div>
-        <div v-if="loadedWithError">
-            <div class="notification is-danger">
-                Error while getting route list
-            </div>
-        </div>
-    </div>
+            <div class="notification"
+                 v-if="loadedWithError"
+                 transition="fade-in"
+            >
+                No saved routes found.
+            </div><!-- /Placeholder -->
+        </vm-card><!-- /Card -->
+    </div><!-- /Wrapper -->
 </template>
 
 <script>
     import _ from 'lodash'
 
     import vmRoute from './route.vue'
-
+    import vmCard from '../ligth-components/card.vue'
+    import vmSearchPanel from  '../search/search-panel.vue'
     import {loadRoutes} from '../../vuex/actions.js'
 
     export default {
@@ -44,6 +61,7 @@
         vuex: {
             getters: {
                 routes: store => store.routes.routes,
+                isLoading: store => store.routes.isLoading,
                 loadedWithError: store => store.routes.errorLoading,
                 search: store => store.search.search
             },
@@ -53,7 +71,7 @@
             this.loadRoutes()
         },
         components: {
-            vmRoute,
+            vmRoute, vmCard, vmSearchPanel
         },
         computed: {
             // TODO With vuex 2 this should be refactored as computed property.

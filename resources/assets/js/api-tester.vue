@@ -2,11 +2,45 @@ Application main page.
 
 <template>
     <div class="api-tester-main">
-        <div class="top-fixed">
+        <div class="top-fixed has-shadow">
             <div class="columns">
-                <div class="column is-narrow">
-                    <vm-search-panel></vm-search-panel>
-                </div>
+                <nav class="nav" style="width: 400px">
+                    <div class="nav-left">
+                        <a class="nav-item" href="https://github.com/asvae/laravel-api-tester">
+                            <span class="nav-icon" style="font-weight: 500">API-TESTER</span>
+                        </a>
+                    </div>
+                    <div class="nav-right">
+                        <a class="nav-item"
+                           title="project"
+                           href="https://github.com/asvae/laravel-api-tester"
+                           target="_blank"
+                        >
+                            <i class="fa fa-github nav-icon"></i>
+                        </a>
+                        <a class="nav-item"
+                           title="wiki"
+                           href="https://github.com/asvae/laravel-api-tester/wiki"
+                           target="_blank"
+                        >
+                            <i class="fa fa-book nav-icon"></i>
+                        </a>
+                        <a class="nav-item"
+                           title="fork me"
+                           href="https://github.com/asvae/laravel-api-tester/fork"
+                           target="_blank"
+                        >
+                            <i class="fa fa-code-fork nav-icon"></i>
+                        </a>
+                        <a class="nav-item"
+                           title="bugs, issues"
+                           href="https://github.com/asvae/laravel-api-tester/issues"
+                           target="_blank"
+                        >
+                            <i class="fa fa-bug nav-icon"></i>
+                        </a>
+                    </div>
+                </nav>
                 <div class="column">
                     <vm-action-panel :request-poster="$refs.requestPoster"
                                      v-if="$refs.requestPoster"
@@ -15,24 +49,17 @@ Application main page.
             </div>
         </div>
         <div class="bottom">
-            <div class="left-side-background"></div>
-            <div class="left-side">
-                <div class="columns is-multiline">
-                    <div class="column is-boxed">
-                        <vm-navigation-tabs
-                                :pages="['routes', 'requests', 'history']"
-                                :mode.sync="mode"
-                        ></vm-navigation-tabs>
-                    </div>
-                    <div class="column is-full">
-                        <vm-routes-selector v-show="mode === 'routes'"
-                        ></vm-routes-selector>
-                        <vm-requests-selector v-show="mode === 'requests'"
-                        ></vm-requests-selector>
-                        <vm-history-selector v-show="mode === 'history'"
-                        ></vm-history-selector>
-                    </div>
-                </div>
+            <div class="left-side is-full is-multiline">
+                <vm-navigation-tabs
+                        :pages="['routes', 'requests', 'history']"
+                        :mode.sync="mode"
+                ></vm-navigation-tabs>
+                <vm-routes-selector v-show="mode === 'routes'"
+                ></vm-routes-selector>
+                <vm-requests-selector v-show="mode === 'requests'"
+                ></vm-requests-selector>
+                <vm-history-selector v-show="mode === 'history'"
+                ></vm-history-selector>
             </div>
             <div class="right-side">
                 <vm-request-poster v-ref:request-poster></vm-request-poster>
@@ -75,24 +102,29 @@ Application main page.
 We decided to forsake all the mobile support stuff. It requires bulma @media
 which requires scss in .vue file, which is not supported by phpstorm ATM.
 <style scoped>
+    .nav {
+        background-color: transparent;
+    }
+
+    .nav-item > .nav-icon {
+        transition: all ease .1s;
+        color: #006679;
+        text-shadow: 1px 1px 1px #3debff, -1px -1px 1px #0092a2;
+    }
+    .nav-item > .nav-icon:hover{
+        color: #c6faff;
+        text-shadow: -1px -1px 1px #3debff, 1px 1px 1px #0092a2;
+    }
+
     .top-fixed {
-        box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px rgba(17, 17, 17, 0.1);
         width: 100%;
         padding: 10px;
         top: 0;
         left: 0;
         position: fixed;
-        background-color: rgba(255, 255, 255, 0.9);
+        background-color: #1fc8db;
         z-index: 5;
-    }
-
-    /* Purely decorational element */
-    .left-side-background {
-        position: fixed;
-        width: 400px;
-        height: 100%;
-        background-color: white;
-        z-index: -1;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, .15);
     }
 
     .left-side {

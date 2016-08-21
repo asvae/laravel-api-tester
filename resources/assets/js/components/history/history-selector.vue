@@ -1,22 +1,31 @@
 <template>
-    <div class="history-selector">
-        <div class="columns is-multiline is-centered">
-            <div v-if="history.length !== 0" class="clear-history column is-narrow">
-                <a class="button is-bordered"
-                   @click="clearHistory"
-                >Clear history</a>
+    <!-- Wrapper: for escape fragmentation -->
+    <div>
+        <vm-card class="history-selector">
+            <vm-search-panel
+                class="card-header-title"
+                slot="header"
+            ></vm-search-panel>
+
+            <a class="button is-white is-large"
+               v-if="history.length !== 0"
+               @click="clearHistory"
+               slot="header"
+            ><i class="fa fa-trash"></i></a>
+
+            <div class="notification"
+                 v-if="history.length === 0"
+                 transition="fade-in"
+            >
+                No history stored
             </div>
-            <vm-moment v-for="moment in filteredMoments"
-                       class="column is-full"
-                       transition="slip"
-                       :moment="moment"
+            <vm-moment
+                v-for="moment in filteredMoments"
+                class="column is-full"
+                transition="slip"
+                :moment="moment"
             ></vm-moment>
-            <div class="column is-full" v-if="history.length === 0">
-                <div class="content">
-                    <blockquote>No history stored</blockquote>
-                </div>
-            </div>
-        </div>
+        </vm-card>
     </div>
 </template>
 
@@ -26,6 +35,8 @@
     import _ from 'lodash'
 
     import vmMoment from './moment.vue'
+    import vmCard from '../ligth-components/card.vue'
+    import vmSearchPanel from  '../search/search-panel.vue'
 
     export default {
         data () {
@@ -57,7 +68,7 @@
             this.loadHistory()
         },
         components: {
-            vmMoment,
+            vmMoment, vmCard, vmSearchPanel
         },
         computed: {
             filteredMoments () {
