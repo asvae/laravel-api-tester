@@ -34,12 +34,7 @@
 
     export default {
         data () {
-            return {
-                columns: [
-                    'method',
-                    'path',
-                ],
-            }
+            return {}
         },
         components: {
             vmMoment,
@@ -49,9 +44,6 @@
             getters: {
                 history: (store) => store.history.history,
                 search: (store) => store.search.search,
-                isSending: state => state.request.isSending,
-                currentRequest: state => state.requests.currentRequest,
-
             },
             actions: {
                 setHistory: ({dispatch}, history) => {
@@ -59,6 +51,9 @@
                 },
                 clearHistory: ({dispatch}) => {
                     dispatch('CLEAR_HISTORY')
+                },
+                loadHistory: ({dispatch}) => {
+                    dispatch('LOAD_HISTORY')
                 }
             },
         },
@@ -83,35 +78,6 @@
                 return toDisplay.reverse()
             },
         },
-        methods: {
-            loadHistory(){
-                let history = window.localStorage.getItem('api-tester.history')
-
-                try {
-                    history = JSON.parse(history)
-                    if (_.isNull(history)) history = []
-                } catch (e) {
-                    history = []
-                }
-
-                this.setHistory(history)
-            }
-        },
-        watch: {
-            sendingIsScheduled(sendingIsScheduled){
-                if (sendingIsScheduled) {
-                    let history = _.cloneDeep(this.history)
-                    history.push({
-                        method: this.currentRequest.method,
-                        path: this.currentRequest.path,
-                        body: this.currentRequest.body,
-                        headers: this.currentRequest.headers,
-                        createdAt: new Date().getTime()
-                    })
-                    this.setHistory(history)
-                }
-            }
-        }
     }
 </script>
 

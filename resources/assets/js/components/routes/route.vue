@@ -4,10 +4,10 @@
     >
         <vm-method-button
                 class="is-white"
-                @click="setCurrentRequestFromRoute(route), scheduleRequest(true)"
+                @click="setCurrentRequest(routeRequest), scheduleRequest(routeRequest)"
                 v-text="route.methods[0]"
         ></vm-method-button>
-        <a @click="setCurrentRequestFromRoute(route)"
+        <a @click="setCurrentRequest(routeRequest)"
            class="column is-bold"
            :class="{'has-error': hasErrors(route)}"
            v-text="route.path"
@@ -18,7 +18,7 @@
 
 <script>
     import {
-            setCurrentRequestFromRoute,
+            setCurrentRequest,
             scheduleRequest
     } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
@@ -28,12 +28,27 @@
         components: {
             vmMethodButton
         },
+        computed: {
+            routeRequest (){
+                return {
+                    method: this.route.methods[0],
+                    path: this.route.path,
+                    name: "",
+                    body: this.route.hasOwnProperty('body') ? this.route.body : "",
+                    wheres: this.route.hasOwnProperty('wheres') ? this.route.wheres : {},
+                    headers: this.route.hasOwnProperty('headers') ? this.route.headers : [],
+                    config: {
+                        addCRSF: true,
+                    }
+                }
+            }
+        },
         vuex: {
             getters: {
                 currentRoute: (store) => store.routes.currentRoute,
             },
             actions: {
-                setCurrentRequestFromRoute,
+                setCurrentRequest,
                 scheduleRequest
             }
         },

@@ -14,6 +14,9 @@ const mutations = {
     SCHEDULE_REQUEST(state, request){
         state.scheduledList.push(request)
     },
+    SHIFT_REQUEST(state){
+        state.scheduledList.shift()
+    },
 }
 
 export default {state, mutations,}

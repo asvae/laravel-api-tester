@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class PreventRedirect
 {
-    const CATCH_REDIRECT = 'catch-redirect';
+    const CATCH_REDIRECT_HEADER = 'catch-redirect';
 
     public function handle(Request $request, Closure $next)
     {
@@ -16,9 +16,10 @@ class PreventRedirect
          */
         $response = $next($request);
 
-        // In case the request was sent by Api Tester and wanted catch-redirect
+        // In case the request was sent by Api Tester
+        // and catching request is wanted
         // we will halt the response and output redirect information instead.
-        if ($request->header('X-Api-Tester') === static::CATCH_REDIRECT) {
+        if ($request->header('X-Api-Tester') === static::CATCH_REDIRECT_HEADER) {
             if ($response->isRedirection()) {
                 /**
                  * @var \Symfony\Component\HttpFoundation\RedirectResponse $response

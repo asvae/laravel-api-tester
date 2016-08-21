@@ -24,14 +24,31 @@
         },
         data: () => requestEditorData,
         methods: {
+            prepareRequest(request){
+                request = _.cloneDeep(request)
+                // Prepare request for jquery
+                // TODO rename body to data to be more consistent.
+
+                // Prepend '/' to path if not already prepended.
+                // We need all our routes to be absolute.
+                // TODO Think of better ways.
+                let url = request.path[0] === '/' ? request.path : '/' + request.path
+
+                return {
+                    method: request.method,
+                    url,
+                    data: request.body,
+                    headers: request.headers,
+                }
+                return request
+            },
             // Ask laravel what route are we dealing with, if any.
             getRequestInfo () {
-                let request = this.request
+                let request = this.prepareRequest(this.request)
 
                 // If we won't stick the following header laravel will
                 // process the request as usual and won't give any info.
-                let headers = _.cloneDeep(request.headers)
-                headers.push({key: 'X-Api-Tester', value: 'route-info'})
+                request.headers.push({key: 'X-Api-Tester', value: 'route-info'})
 
                 // Modifies path if wheres are declared in request.
                 // Otherwise, we'll send to unmodified path.
@@ -40,39 +57,36 @@
                     let mocker = new RandExp(new RegExp(wheres[index]))
                     let dummy = new RegExp('{' + index + '}', 'g')
 
-                    path = path.replace(dummy, mocker.gen())
+                    request.path = request.url.replace(dummy, mocker.gen())
                 }
 
                 // Do sending.
-                this.$api_demo2.load({
-                    method: request.method,
-                    path: this.request.path,
-                    data: request.body,
-                    headers,
-                }).then((response) => {
-                    console.log(response)
+                console.log(request)
+                this.$api.ajax(request.method, request.url, request.data, request.headers).then((response) => {
                     this.setRequestInfo(response.data)
                 }).catch(() => {
                     this.setRequestInfo(null)
                 })
             },
-            send (){
+            send (request){
+                request = this.prepareRequest(request)
+
+                // Clear response viewer
                 this.setResponse(null)
+                // Spin loading icon
                 this.setIsSending(true)
 
-                let request = this.request
+                // Apply special header so that middleware will prevent redirects.
+                request.headers.push({
+                    key: 'X-Api-Tester',
+                    value: 'catch-redirect'
+                })
 
-                let headers = _.cloneDeep(this.request.headers)
-                headers.push({key: 'X-Api-Tester', value: 'catch-redirect'})
-
-                this.getResult(request.method, request.path, request.body, headers)
+                // When redirects occurs it triggers the same function recursively.
+                this.getResult(request, [])
             },
-//            followRedirect(data, redirects, headers){
-//                redirects.push(data)
-//                this.getResult('GET', data.location, null, headers, redirects)
-//            },
-            getResult(method, path, body, headers, redirects = []){
-                this.$api.ajax(method, path, body, headers)
+            getResult(request, redirects){
+                this.$api.ajax(request.method, request.url, request.data, request.headers)
                     .always(function (dataOrXHR, status, XHROrError) {
                         // NOTE Jquery ajax is sometimes not quite sane.
                         let xhr = dataOrXHR.hasOwnProperty('responseText') ? dataOrXHR : XHROrError
@@ -82,19 +96,28 @@
                         } catch (e) {
                         }
 
-                        // TODO What this line is doing?
+                        // Server-side might hint us that the response
+                        // triggers redirect. If that's the case,
+                        // we'll record redirect and move to next location.
                         if (xhr.getResponseHeader('X-Api-Tester') === 'redirect') {
-                            this.followRedirect(data.data, redirects, headers);
+                            redirects.push(data)
+                            let nextRequest = {
+                                method: 'GET',
+                                path: data.data.location,
+                                data: null,
+                                headers: request.headers,
+                            }
+                            this.getResult(nextRequest, redirects)
+                            // Early return here, request is still incomplete.
                             return
                         }
 
                         let response = {
                             data,
+                            redirects,
                             isJson: typeof data !== 'string',
                             headers: xhr.getAllResponseHeaders(),
-                            redirects: redirects
                         }
-
                         this.setResponse(response)
                         this.setIsSending(false)
                     })
@@ -102,33 +125,35 @@
         },
         vuex: {
             getters: {
-                history: state => state.history,
-                scheduledRequests: state => state.requests.scheduledList,
-                sendingIsScheduled: state => state.request.scheduleRequest,
-                infoMode: (state) => state.infoMode,
+                scheduledRequests: state => state.request.scheduledList,
+                currentRequest: state => state.requests.currentRequest
             },
             actions: {
                 scheduleRequest,
-                setInfoError: ({dispatch}, bool) => dispatch('SET_INFO_ERROR', bool),
                 setResponse: ({dispatch}, response) => dispatch('SET_RESPONSE', response),
                 setRequestInfo: ({dispatch}, route) => dispatch('SET_REQUEST_INFO', route),
                 setCurrentRequest: ({dispatch}, route) => dispatch('SET_CURRENT_REQUEST', route),
                 setIsSending: ({dispatch}, sending) => dispatch('SET_REQUEST_IS_SENDING', sending),
                 setViewerMode: ({dispatch}, mode) => dispatch('SET_VIEWER_MODE', mode),
                 setEditorMode: ({dispatch}, mode) => dispatch('SET_EDITOR_MODE', mode),
+                setHistoryState: ({dispatch}, moment) => dispatch('SET_HISTORY', moment),
+                shiftRequest: ({dispatch}) => dispatch('SHIFT_REQUEST'),
             },
         },
         watch: {
             currentRequest (currentRequest){
-
+                this.request = _.cloneDeep(currentRequest)
+                this.getRequestInfo()
             },
-            // Kinda vuex event
+            // We work with scheduled requests as with stack.
             scheduledRequests (requests){
-                console.log(requests)
-//                if (isScheduled) {
-//                    this.send()
-//                    this.scheduleSending(false)
-//                }
+                if (requests.length === 0){
+                    return
+                }
+
+                let request = requests[0]
+                this.send(request)
+                this.shiftRequest()
             },
         },
     }

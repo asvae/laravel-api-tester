@@ -81,16 +81,15 @@
                 let afterUpdate = () => {
                     this.loadRequests()
                 }
-                request.id ? this.updateRequest(this.request, afterUpdate) : this.saveRequest(this.request, afterUpdate)
-            },
-
-            copy(){
                 let request = this.request
+                request.id ? this.updateRequest(request, afterUpdate) : this.saveRequest(request, afterUpdate)
+            },
+            copy(){
+                // Just saves request.
                 let afterSave = () => {
                     this.loadRequests()
                 }
-
-                this.saveRequest(request, afterSave)
+                this.saveRequest(this.request, afterSave)
             }
         }
     }

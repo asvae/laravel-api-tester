@@ -14,7 +14,7 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //todo: implement rules
+            'id' => 'required'
         ];
     }
 

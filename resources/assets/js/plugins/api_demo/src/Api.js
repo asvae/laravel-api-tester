@@ -64,17 +64,13 @@ export default class Api {
      * @returns {*}
      */
     ajax(method, url, data = null, headers = []) {
-
         headers = _.clone(headers)
-
         if(!_.some(['GET', 'HEAD', 'OPTIONS'], method.toUpperCase())){
             headers.push({key: 'X-XSRF-TOKEN', value: ENV.getCookie('XSRF-TOKEN') })
         } else {
-
             if(data === null){
                 data = {}
             }
-
             data.__noCache = Date.now()
         }
 
