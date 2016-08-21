@@ -29,10 +29,10 @@
             ></vm-route>
 
             <div class="notification"
-                 v-if="routes.length === 0"
+                 v-if="routes.length === 0 && !loadedWithError"
                  transition="fade-in"
             >
-                No saved routes found.
+                No routes found.
             </div><!-- /Placeholder -->
 
             <!-- Placeholder -->
@@ -40,7 +40,7 @@
                  v-if="loadedWithError"
                  transition="fade-in"
             >
-                No saved routes found.
+                We can't retrieve route list from your app. Check console for details.
             </div><!-- /Placeholder -->
         </vm-card><!-- /Card -->
     </div><!-- /Wrapper -->
