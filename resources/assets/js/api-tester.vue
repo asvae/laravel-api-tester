@@ -111,7 +111,7 @@ which requires scss in .vue file, which is not supported by phpstorm ATM.
         color: #006679;
         text-shadow: 1px 1px 1px #3debff, -1px -1px 1px #0092a2;
     }
-    .nav-item > .nav-icon:hover{
+    .nav-item:hover > .nav-icon{
         color: #c6faff;
         text-shadow: -1px -1px 1px #3debff, 1px 1px 1px #0092a2;
     }
