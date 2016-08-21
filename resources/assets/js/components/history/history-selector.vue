@@ -30,7 +30,6 @@
 </template>
 
 
-
 <script>
     import _ from 'lodash'
 
@@ -88,7 +87,6 @@
                 return toDisplay.reverse()
             },
         },
-
         methods: {
             loadHistory(){
                 let history = window.localStorage.getItem('api-tester.history')
@@ -104,8 +102,8 @@
             }
         },
         watch: {
-            isSending(isSending){
-                if (isSending) {
+            sendingIsScheduled(sendingIsScheduled){
+                if (sendingIsScheduled) {
                     let history = _.cloneDeep(this.history)
                     history.push({
                         method: this.currentRequest.method,
@@ -125,6 +123,7 @@
     .column {
         padding: 0 10px;
     }
+
     .clear-history {
         padding-bottom: 10px;
     }
