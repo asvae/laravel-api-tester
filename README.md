@@ -4,7 +4,7 @@
 [![Unit tests](https://travis-ci.org/asvae/laravel-api-tester.svg)](https://travis-ci.org/asvae/laravel-api-tester)
 [![PHP version](https://badge.fury.io/ph/asvae%2Flaravel-api-tester.svg)](https://badge.fury.io/ph/asvae%2Flaravel-api-tester)
 
-![Interface](http://i.imgur.com/H7fkU3r.png) 
+![Interface](http://i.imgur.com/3geJtzb.png) 
 
 ## Live demo
 Try it out: [laravel-api-tester.asva.by](http://laravel-api-tester.asva.by/)
