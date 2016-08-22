@@ -54,6 +54,13 @@ export default class Api {
         return this._jqueryAjax(route, data)
     }
 
+    getCookie(name) {
+        var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ))
+        return matches ? decodeURIComponent(matches[1]) : undefined
+    }
+
     /**
      * Make ajax request
      *
@@ -66,14 +73,13 @@ export default class Api {
     ajax(method, url, data = null, headers = []) {
         headers = _.clone(headers)
         if(!_.some(['GET', 'HEAD', 'OPTIONS'], method.toUpperCase())){
-            headers.push({key: 'X-XSRF-TOKEN', value: ENV.getCookie('XSRF-TOKEN') })
+            headers.push({key: 'X-XSRF-TOKEN', value: this.getCookie('XSRF-TOKEN') })
         } else {
             if(data === null){
                 data = {}
             }
             data.__noCache = Date.now()
         }
-
 
         headers = _.reduce(headers, function (headersHash, header) {
             headersHash[header.key] = header.value
