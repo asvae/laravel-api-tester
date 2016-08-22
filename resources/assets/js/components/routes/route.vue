@@ -31,19 +31,6 @@
             vmMethodButton
         },
         computed: {
-            routeRequest (){
-                return {
-                    method: this.route.methods[0],
-                    path: this.route.path,
-                    name: "",
-                    body: this.route.hasOwnProperty('body') ? this.route.body : "",
-                    wheres: this.route.hasOwnProperty('wheres') ? this.route.wheres : {},
-                    headers: this.route.hasOwnProperty('headers') ? this.route.headers : [],
-                    config: {
-                        addCRSF: true,
-                    }
-                }
-            },
             hasError (){
                 return this.route.errors.length !== 0
             }
@@ -65,12 +52,25 @@
             }
         },
         methods: {
+            getRouteRequest (){
+                return {
+                    method: this.route.methods[0],
+                    path: this.route.path,
+                    name: "",
+                    body: this.route.hasOwnProperty('body') ? this.route.body : "",
+                    wheres: this.route.hasOwnProperty('wheres') ? this.route.wheres : {},
+                    headers: this.route.hasOwnProperty('headers') ? this.route.headers : [],
+                    config: {
+                        addCRSF: true,
+                    }
+                }
+            },
             setAndSend(){
                 this.set()
-                this.scheduleRequest(this.routeRequest)
+                this.scheduleRequest(this.getRouteRequest())
             },
             set(){
-                this.setCurrentRequest(this.routeRequest)
+                this.setCurrentRequest(this.getRouteRequest())
                 this.setResponse(null)
                 this.setRequestInfo(this.route)
             },
