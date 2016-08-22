@@ -6,8 +6,8 @@ Application main page.
             <div class="columns">
                 <nav class="nav" style="width: 400px">
                     <div class="nav-left">
-                        <a class="nav-item" href="https://github.com/asvae/laravel-api-tester">
-                            <span class="nav-icon" style="font-weight: 500">API-TESTER</span>
+                        <a class="nav-item logo" href="https://github.com/asvae/laravel-api-tester">
+                            <span class="nav-icon" >API-TESTER</span>
                         </a>
                     </div>
                     <div class="nav-right">
@@ -114,6 +114,10 @@ which requires scss in .vue file, which is not supported by phpstorm ATM.
         position: absolute;
         padding: 10px;
         width: calc(100% - 400px);
+    }
+
+    .logo {
+        padding-left: 20px;
     }
 </style>
 
