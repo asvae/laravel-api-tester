@@ -1,7 +1,7 @@
 <template>
     <div class="request-editor">
-        <div class="columns is-multiline" v-if="request">
-            <div class="column is-7">
+        <div class="columns is-multiline is-desktop" v-if="request">
+            <div class="column is-full-desktop is-7-widescreen">
                 <div class="card is-fullwidth">
                     <header class="card-header">
                         <p class="card-header-title">
@@ -13,6 +13,7 @@
                             >
                         </p>
                     </header>
+
                     <section class="card-content">
                         <vm-navigation-tabs class="is-boxed"
                                             :pages="['data', 'headers']"
@@ -20,7 +21,6 @@
                                             @changed="setMode($arguments[0])"
                         ></vm-navigation-tabs>
                     </section>
-
 
                     <!-- Editor -->
                     <div v-if="mode === 'data'">
@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <div class="column is-5">
+            <div class="column is-full-desktop is-5-widescreen">
                 <vm-route-info></vm-route-info>
             </div>
         </div>
