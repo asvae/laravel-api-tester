@@ -42,11 +42,11 @@
         methods: {
             setAndRun(){
                 this.set()
+                this.scheduleRequest(this.request)
             },
             set(){
                 this.setRequestInfo(null)
                 this.setCurrentRequest(this.request)
-                this.scheduleRequest(this.request)
             }
         },
         vuex: {
