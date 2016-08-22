@@ -2,6 +2,11 @@
     <div class="card current-route is-fullwidth">
         <header class="card-header">
             <p class="card-header-title">Route Info</p>
+            <a class="button is-medium is-white is-hidden-widescreen"
+               @click="toggleExpanded"
+            >
+                <i class="fa" :class="expanded? 'fa-minus' : 'fa-plus'"></i>
+            </a>
         </header>
         <div
             class="notification is-danger has-text-centered no-rounded-borders"
@@ -68,8 +73,9 @@
                             ></pre>
                         </td>
                     </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
@@ -79,7 +85,17 @@
         data (){
             return {
                 additionalInfo: false,
+                expanded: true,
             }
+        },
+
+        ready(){
+
+            // Тут лютый хацк... подумать как исправить
+            this.expanded = window.innerWidth > 1300
+            window.addEventListener('resize', e => {
+                this.expanded = window.innerWidth > 1300
+            })
         },
         vuex: {
             getters: {
@@ -91,9 +107,14 @@
         methods: {
             toggleAdditionalInfo(){
                 this.additionalInfo = ! this.additionalInfo
+            },
+
+            toggleExpanded(){
+              this.expanded = ! this.expanded
             }
         },
         computed: {
+
             methods () {
                 return this.currentRoute.methods.join(', ')
             },
