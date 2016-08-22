@@ -1,5 +1,5 @@
 <template>
-    <div class="request-poster">
+    <div class="edit-block">
         <vm-request-editor></vm-request-editor>
         <vm-response-viewer></vm-response-viewer>
     </div>
@@ -13,7 +13,7 @@
 
     import RandExp from 'randexp'
 
-    import {scheduleRequest} from '../../vuex/actions.js'
+    import {scheduleRequest, setRequestInfo} from '../../vuex/actions.js'
 
     import requestEditorData from './request-editor/request-editor-data.js'
 
@@ -61,11 +61,11 @@
                 }
 
                 // Do sending.
-                console.log(request)
                 this.$api.ajax(request.method, request.url, request.data, request.headers).then((response) => {
                     this.setRequestInfo(response.data)
+                    this.setInfoError(false)
                 }).catch(() => {
-                    this.setRequestInfo(null)
+                    this.setInfoError(true)
                 })
             },
             send (request){
@@ -100,10 +100,10 @@
                         // triggers redirect. If that's the case,
                         // we'll record redirect and move to next location.
                         if (xhr.getResponseHeader('X-Api-Tester') === 'redirect') {
-                            redirects.push(data)
+                            redirects.push(data.data)
                             let nextRequest = {
                                 method: 'GET',
-                                path: data.data.location,
+                                url: data.data.location,
                                 data: null,
                                 headers: request.headers,
                             }
@@ -130,8 +130,9 @@
             },
             actions: {
                 scheduleRequest,
+                setRequestInfo,
                 setResponse: ({dispatch}, response) => dispatch('SET_RESPONSE', response),
-                setRequestInfo: ({dispatch}, route) => dispatch('SET_REQUEST_INFO', route),
+                setInfoError: ({dispatch}, error) => dispatch('SET_INFO_ERROR', error),
                 setCurrentRequest: ({dispatch}, route) => dispatch('SET_CURRENT_REQUEST', route),
                 setIsSending: ({dispatch}, sending) => dispatch('SET_REQUEST_IS_SENDING', sending),
                 setViewerMode: ({dispatch}, mode) => dispatch('SET_VIEWER_MODE', mode),

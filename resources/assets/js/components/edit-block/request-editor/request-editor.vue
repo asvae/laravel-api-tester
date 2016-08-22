@@ -1,6 +1,9 @@
 <template>
     <div class="request-editor">
         <div class="columns is-multiline" v-if="request">
+            <div class="column is-full" v-if="infoError">
+                Current route is broken!
+            </div>
             <div class="column is-full">
                 <input class="input is-minimal"
                        type="text"
@@ -67,6 +70,7 @@
         vuex: {
             getters: {
                 mode: state => state.request.mode,
+                infoError: (state) => state.routes.infoError,
             },
             actions: {
                 setMode: ({dispatch}, mode) => dispatch('SET_EDITOR_MODE', mode)

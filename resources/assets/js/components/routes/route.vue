@@ -4,12 +4,12 @@
     >
         <vm-method-button
                 class="is-white"
-                @click="setCurrentRequest(routeRequest), scheduleRequest(routeRequest)"
+                @click="setAndSend"
                 v-text="route.methods[0]"
         ></vm-method-button>
-        <a @click="setCurrentRequest(routeRequest)"
+        <a @click="set"
            class="is-bold"
-           :class="{'has-error': hasErrors(route)}"
+           :class="{'has-error': hasError}"
            v-text="route.path"
            style="white-space: nowrap"
         ></a>
@@ -19,6 +19,7 @@
 <script>
     import {
             setCurrentRequest,
+            setRequestInfo,
             scheduleRequest
     } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
@@ -41,6 +42,9 @@
                         addCRSF: true,
                     }
                 }
+            },
+            hasError (){
+                return this.route.errors.length !== 0
             }
         },
         vuex: {
@@ -49,6 +53,7 @@
             },
             actions: {
                 setCurrentRequest,
+                setRequestInfo,
                 scheduleRequest
             }
         },
@@ -58,8 +63,13 @@
             }
         },
         methods: {
-            hasErrors(route){
-                return !_.isEmpty(route.errors);
+            set(){
+                this.setCurrentRequest(this.routeRequest)
+                this.setRequestInfo(this.route)
+            },
+            setAndSend(){
+                this.set()
+                this.scheduleRequest(this.routeRequest)
             }
         }
     }

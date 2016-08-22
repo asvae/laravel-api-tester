@@ -12,8 +12,8 @@ export const loadRoutes = function ({dispatch}) {
         })
         .catch((xhr, status, error) => {
             let response = {
-                status : xhr.status + ' : ' + error,
-                data : xhr.responseText
+                status: xhr.status + ' : ' + error,
+                data: xhr.responseText
             }
             dispatch('SET_ROUTES_ERROR', response)
             dispatch('SET_ROUTES_LOADING', false)
@@ -35,6 +35,8 @@ export const loadRequests = function ({dispatch}) {
 export const setRequests = function ({dispatch}, requests) {
     dispatch('SET_REQUESTS', requests)
 }
+
+export const setRequestInfo = ({dispatch}, route) => dispatch('SET_REQUEST_INFO', route)
 
 export const setCurrentRequest = ({dispatch}, request) => {
     dispatch('SET_CURRENT_REQUEST', request)

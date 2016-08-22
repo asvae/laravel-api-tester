@@ -9,10 +9,10 @@ Vue.use(function (Vue, options) {
                 return new Api(this, options)
             }
         },
-        $activeActions2: {
+        $activeActions: {
             get: () =>  accessor.activeUrls
         },
-        $accessor2: {
+        $accessor: {
             get: () => accessor
         },
     })

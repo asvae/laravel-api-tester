@@ -26,7 +26,7 @@
         </button>
 
         <button class="button is-primary"
-                :class="{'is-loading': saving}"
+                :class="{'is-loading': $activeActions['requests/store'] || $activeActions['requests/update']}"
                 type="button"
                 @click="save"
                 title="Save"
@@ -35,13 +35,13 @@
         </button>
 
         <button class="button is-icon is-primary"
+                :class="{'is-disabled': ! request.id}"
                 type="button"
                 @click="copy"
                 title="Copy"
         >
             <i class="fa fa-files-o"></i>
         </button>
-
     </form>
 </template>
 
@@ -81,6 +81,10 @@
                 let afterUpdate = () => {
                     this.loadRequests()
                 }
+
+                $api.load('requests/create', {})
+                $api.load({url: 'requests/create', method: 'POST'}, {})
+
                 let request = this.request
                 request.id ? this.updateRequest(request, afterUpdate) : this.saveRequest(request, afterUpdate)
             },

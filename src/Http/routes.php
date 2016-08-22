@@ -14,7 +14,6 @@ Route::post('requests/store', 'RequestController@store');
 Route::post('requests/update', 'RequestController@update');
 Route::post('requests/destroy', 'RequestController@destroy');
 
-
 // We won't publish library's assets.
 // Instead we'll pass them via app which is slower but fine for development.
 Route::group(['prefix' => 'assets'], function () {
