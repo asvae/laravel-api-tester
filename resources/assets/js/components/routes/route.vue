@@ -1,14 +1,14 @@
 <template>
-    <div class="route card-item"
+    <div class="route columns is-gapless is-mobile"
          :class="{selected: currentRoute === route}"
     >
         <vm-method-button
-                class="is-white"
+                class="is-white column is-narrow"
                 @click="setAndSend"
                 v-text="route.methods[0]"
         ></vm-method-button>
         <a @click="set"
-           class="is-bold"
+           class="is-bold column"
            :class="{'has-error': hasError}"
            v-text="route.path"
            style="white-space: nowrap"
@@ -80,8 +80,7 @@
         border-right: 2px solid rgb(255, 82, 82);
         background-color: #eef9f2;
     }
-
-    .route {
+    .route.columns {
         margin: 0;
         border-right: 2px solid transparent;
         border-bottom: 1px solid rgba(0, 0, 0, .025);
