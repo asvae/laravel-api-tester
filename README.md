@@ -55,6 +55,7 @@ And edit `config/api-tester.php` as you please.
 ## Powered By
 * [Vue.js](https://vuejs.org/)
 * [Bulma](http://bulma.io/)
+* [Json Editor](https://github.com/josdejong/jsoneditor)
 
 ## Feedback
 Don't hesitate to raise an issue if something doesn't work or you have a feature request. You're welcome to.
