@@ -51,7 +51,6 @@
                 // Modifies path if wheres are declared in request.
                 // Otherwise, we'll send to unmodified path.
 
-                console.log(request.wheres)
                 let path = request.url
                 if(request.wheres){
                     let wheres = request.wheres
