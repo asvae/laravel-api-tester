@@ -31,8 +31,6 @@ export default class Api {
      */
     load(options, data) {
 
-        console.log(options)
-
         let route = typeof options === 'string' ? options : options.url
 
         // Response for busy route will be discarded.
@@ -124,14 +122,11 @@ export default class Api {
         }
 
         return $.ajax(jqueryOptions)
-                .done(function (response) {
-                    if (response.message) {
-                        $.notify(response.message, 'success')
-                    }
+                .done(function () {
 
                 })
-                .fail(function (response) {
-                    console.log(response)
+                .fail(function () {
+
                 })
                 .always(function () {
                     // Mark request ended.

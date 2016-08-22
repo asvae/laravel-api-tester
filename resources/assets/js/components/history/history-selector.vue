@@ -8,20 +8,17 @@
                @click="clearHistory"
             ><i class="fa fa-trash"></i></a>
         </header>
-        <div class="card-content">
-            <div class="notification"
-                 v-if="history.length === 0"
-                 transition="fade-in"
-            >
-                No history stored
-            </div>
-            <vm-moment
-                    v-for="moment in filteredMoments"
-                    class="column is-full"
-                    transition="slip"
-                    :moment="moment"
-            ></vm-moment>
+        <div class="notification"
+             v-if="history.length === 0"
+             transition="fade-in"
+        >
+            No history stored
         </div>
+        <vm-moment v-for="moment in filteredMoments"
+                   class="card-item"
+                transition="slip"
+                :moment="moment"
+        ></vm-moment>
     </div>
 </template>
 
@@ -52,13 +49,7 @@
                 clearHistory: ({dispatch}) => {
                     dispatch('CLEAR_HISTORY')
                 },
-                loadHistory: ({dispatch}) => {
-                    dispatch('LOAD_HISTORY')
-                }
             },
-        },
-        ready (){
-            this.loadHistory()
         },
         computed: {
             filteredMoments () {
@@ -83,9 +74,8 @@
 
 <style scoped>
     .column {
-        padding: 0 10px;
+        padding: 0;
     }
-
     .clear-history {
         padding-bottom: 10px;
     }

@@ -8,7 +8,7 @@
                 v-text="route.methods[0]"
         ></vm-method-button>
         <a @click="setCurrentRequest(routeRequest)"
-           class="column is-bold"
+           class="is-bold"
            :class="{'has-error': hasErrors(route)}"
            v-text="route.path"
            style="white-space: nowrap"
@@ -70,11 +70,13 @@
         border-right: 2px solid rgb(255, 82, 82);
         background-color: #eef9f2;
     }
+
     .route {
-        margin: 4px 0;
+        margin: 0;
         border-right: 2px solid transparent;
         border-bottom: 1px solid rgba(0, 0, 0, .025);
     }
+
     .route .has-error {
         color: #FF5252;
     }

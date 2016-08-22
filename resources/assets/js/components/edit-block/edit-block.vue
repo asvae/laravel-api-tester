@@ -136,7 +136,7 @@
                 setIsSending: ({dispatch}, sending) => dispatch('SET_REQUEST_IS_SENDING', sending),
                 setViewerMode: ({dispatch}, mode) => dispatch('SET_VIEWER_MODE', mode),
                 setEditorMode: ({dispatch}, mode) => dispatch('SET_EDITOR_MODE', mode),
-                setHistoryState: ({dispatch}, moment) => dispatch('SET_HISTORY', moment),
+                setHistoryMoment: ({dispatch}, moment) => dispatch('SET_HISTORY', _.cloneDeep(moment)),
                 shiftRequest: ({dispatch}) => dispatch('SHIFT_REQUEST'),
             },
         },
@@ -153,6 +153,7 @@
 
                 let request = requests[0]
                 this.send(request)
+                this.setHistoryMoment(request)
                 this.shiftRequest()
             },
         },

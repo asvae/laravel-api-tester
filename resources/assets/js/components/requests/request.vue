@@ -1,21 +1,21 @@
 <template>
-    <div class="request card-item"
+    <div class="request columns is-gapless is-mobile"
          :class="{selected: currentRequest === request}"
     >
         <vm-method-button
-                class="is-white"
+                class="is-white column is-narrow"
                 @click="setCurrentRequest(request), scheduleRequest(request)"
                 v-text="request.method"
         ></vm-method-button>
-
         <a @click="setCurrentRequest(request)"
-           class="is-bold"
+           class="is-bold column"
            v-text="displayedName"
         ></a>
-
-        <a v-text="'X'"
+        <a class="column button is-small is-white is-narrow"
            @click="deleteRequest(request)"
-        ></a>
+        >
+            <i class="fa fa-times"></i>
+        </a>
     </div>
 </template>
 
@@ -43,7 +43,7 @@
                 setCurrentRequest,
                 scheduleRequest,
                 deleteRequest ({dispatch}, request) {
-                    this.$api_demo2.ajax('requests/delete', request)
+                    this.$api_demo2.load({url: 'requests/destroy'}, request)
                         .then(() => {
                             dispatch('DELETE_REQUEST', request)
                         })
@@ -59,5 +59,13 @@
 </script>
 
 <style scoped>
-
+    .request.columns{
+        margin: 0;
+        border-bottom: 1px solid rgba(0, 0, 0, .025);
+    }
+    .request .button{
+        border: none;
+        padding: 3px 6px;
+        border-radius: 0;
+    }
 </style>

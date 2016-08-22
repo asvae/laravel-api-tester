@@ -1,13 +1,11 @@
 <template>
-    <div class="moment card-item">
-        <div class="moment-box"
-             @click="setCurrentRequest(moment)"
-        >
-            <div class="time" v-text="time"></div>
-            <a v-text="moment.path"
-               style="white-space: nowrap"
-            ></a>
-        </div>
+    <div class="moment"
+         @click="setCurrentRequest(moment)"
+    >
+        <div class="time" v-text="time"></div>
+        <a v-text="moment.path"
+           style="white-space: nowrap"
+        ></a>
     </div>
 </template>
 
@@ -56,8 +54,10 @@
     .time {
         color: #ccc;
     }
-
-    .moment-box {
-        padding: 5px;
+    .moment {
+        padding: 4px 10px;
+    }
+    .moment:hover {
+        background-color: rgba(31, 200, 219, 0.19);
     }
 </style>

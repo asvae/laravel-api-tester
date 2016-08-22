@@ -4,20 +4,18 @@
             <vm-search-panel class="card-header-title"
             ></vm-search-panel>
         </header>
-        <div class="card-content">
-            <div class="notification"
-                 v-if="requests.length === 0"
-                 transition="fade-in"
-            >
-                No requests yet
-            </div>
+        <div class="notification"
+             v-if="requests.length === 0"
+             transition="fade-in"
+        >
+            No requests yet
+        </div>
             <vm-request v-for="request in filteredRequests"
                         class="is-fullwidth"
                         track-by="$index"
                         transition="slip"
                         :request="request"
             ></vm-request>
-        </div>
     </div>
 </template>
 
