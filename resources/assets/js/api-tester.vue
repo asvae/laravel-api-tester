@@ -6,7 +6,7 @@ Application main page.
             <div class="columns">
                 <nav class="nav" style="width: 400px">
                     <div class="nav-left">
-                        <a class="nav-item logo" href="https://github.com/asvae/laravel-api-tester">
+                        <a class="nav-item logo" href=".">
                             <span class="nav-icon" >API-TESTER</span>
                         </a>
                     </div>
