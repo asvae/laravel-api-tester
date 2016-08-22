@@ -1,47 +1,46 @@
 <template>
     <div class="request-editor">
         <div class="columns is-multiline" v-if="request">
-            <div class="column is-full" v-if="infoError">
-                Current route is broken!
-            </div>
-            <div class="column is-full">
-                <input class="input is-minimal"
-                       type="text"
-                       placeholder="Name"
-                       title="Name"
-                       v-model="request.name"
-                >
-            </div>
+            <div class="column is-7">
+                <div class="card is-fullwidth">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            <input class="input is-expanded is-fullwidth"
+                                   type="text"
+                                   placeholder="Name"
+                                   title="Title"
+                                   v-model="request.name"
+                            >
+                        </p>
+                    </header>
+                    <section class="card-content">
+                        <vm-navigation-tabs class="is-boxed"
+                                            :pages="['data', 'headers']"
+                                            :mode="mode"
+                                            @changed="setMode($arguments[0])"
+                        ></vm-navigation-tabs>
+                    </section>
 
-            <div class="column is-full">
-                <vm-navigation-tabs class="is-boxed"
-                                    :pages="['data', 'headers', 'info']"
-                                    :mode="mode"
-                                    @changed="setMode($arguments[0])"
-                ></vm-navigation-tabs>
+
+                    <!-- Editor -->
+                    <div v-if="mode === 'data'">
+                        <vm-json-editor :json="request.body"
+                                        style="height: 300px"
+                                        @changed="request.body = $arguments[0], changed = true"
+                        ></vm-json-editor>
+                    </div>
+
+                    <!-- Headers -->
+                    <div v-if="mode === 'headers'">
+                        <vm-headers :headers="request.headers"
+                                    @updated="request.headers = $arguments[0]"
+                        ></vm-headers>
+                    </div>
+                </div>
             </div>
-
-            <!-- Editor -->
-            <div class="column is-full" v-if="mode === 'data'">
-                <vm-json-editor :json="request.body"
-                                style="height: 300px"
-                                @changed="request.body = $arguments[0], changed = true"
-                ></vm-json-editor>
+            <div class="column is-5">
+                <vm-route-info></vm-route-info>
             </div>
-
-            <!-- Headers -->
-            <div class="column is-full" v-if="mode === 'headers'">
-                <vm-headers :headers="request.headers"
-                            @updated="request.headers = $arguments[0]"
-                ></vm-headers>
-            </div>
-
-            <!-- Info -->
-            <vm-route-info
-                    class="column is-full"
-                    v-if="mode === 'info'"
-            ></vm-route-info>
-
         </div>
     </div>
 </template>
@@ -49,7 +48,6 @@
 <script>
     import vmJsonEditor from '../../json-editor/json-editor.vue'
     import vmRouteInfo from './route-info.vue'
-    import vmPosterNavigation from './request-editor-navigation.vue'
     import vmHeaders from './headers/headers.vue'
 
     import vmNavigationTabs from '../../ligth-components/navigation-tabs.vue'
@@ -63,14 +61,11 @@
             vmJsonEditor,
             vmHeaders,
             vmRouteInfo,
-            vmPosterNavigation,
-
             vmNavigationTabs,
         },
         vuex: {
             getters: {
                 mode: state => state.request.mode,
-                infoError: (state) => state.routes.infoError,
             },
             actions: {
                 setMode: ({dispatch}, mode) => dispatch('SET_EDITOR_MODE', mode)

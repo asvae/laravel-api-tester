@@ -64,8 +64,8 @@
                 this.$api.ajax(request.method, request.url, request.data, request.headers).then((response) => {
                     this.setRequestInfo(response.data)
                     this.setInfoError(false)
-                }).catch(() => {
-                    this.setInfoError(true)
+                }).catch((xhr) => {
+                    this.setInfoError(xhr.status)
                 })
             },
             send (request){

@@ -78,7 +78,7 @@
 <style scoped>
     .route.selected {
         border-right: 2px solid rgb(255, 82, 82);
-        background-color: #eef9f2;
+        background-color: #e2fcff;
     }
     .route.columns {
         margin: 0;
