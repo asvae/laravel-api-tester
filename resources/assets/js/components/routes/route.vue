@@ -33,22 +33,9 @@
         },
         computed: {
             routeRequest (){
-                // Modifies path if wheres are declared in request.
-                // Otherwise, we'll send to unmodified path.
-                let path = this.route.path
-                let wheres = this.route.wheres
-                for (let index in wheres) {
-                    let mocker = new RandExp(new RegExp(wheres[index]))
-                    let dummy = new RegExp('{' + index + '}', 'g')
-
-                    path = path.replace(dummy, mocker.gen())
-                }
-
-                console.log(path)
-
                 return {
                     method: this.route.methods[0],
-                    path: path,
+                    path: this.route.path,
                     name: "",
                     body: this.route.hasOwnProperty('body') ? this.route.body : "",
                     wheres: this.route.hasOwnProperty('wheres') ? this.route.wheres : {},

@@ -48,8 +48,21 @@
                 // process the request as usual and won't give any info.
                 request.headers.push({key: 'X-Api-Tester', value: 'route-info'})
 
+                // Modifies path if wheres are declared in request.
+                // Otherwise, we'll send to unmodified path.
+                let path = request.url
+                if(request.wheres){
+                    let wheres = request.wheres
+                    for (let index in wheres) {
+                        let mocker = new RandExp(new RegExp(wheres[index]))
+                        let dummy = new RegExp('{' + index + '}', 'g')
+
+                        path = path.replace(dummy, mocker.gen())
+                    }
+                }
+
                 // Do sending.
-                this.$api.ajax(request.method, request.url, request.data, request.headers).then((response) => {
+                this.$api.ajax(request.method, path, request.data, request.headers).then((response) => {
                     this.setRequestInfo(response.data)
                     this.setInfoError(false)
                 }).catch((xhr) => {
