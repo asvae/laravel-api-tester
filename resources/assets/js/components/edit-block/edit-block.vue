@@ -10,9 +10,7 @@
 
     import vmRequestEditor from './request-editor/request-editor.vue'
     import vmResponseViewer from './response-viewer/response-viewer.vue'
-
-    import RandExp from 'randexp'
-
+    
     import {scheduleRequest, setRequestInfo, setResponse} from '../../vuex/actions.js'
 
     import requestEditorData from './request-editor/request-editor-data.js'
@@ -49,16 +47,6 @@
                 // If we won't stick the following header laravel will
                 // process the request as usual and won't give any info.
                 request.headers.push({key: 'X-Api-Tester', value: 'route-info'})
-
-                // Modifies path if wheres are declared in request.
-                // Otherwise, we'll send to unmodified path.
-                let wheres = _.cloneDeep(request.wheres)
-                for (let index in wheres) {
-                    let mocker = new RandExp(new RegExp(wheres[index]))
-                    let dummy = new RegExp('{' + index + '}', 'g')
-
-                    request.path = request.url.replace(dummy, mocker.gen())
-                }
 
                 // Do sending.
                 this.$api.ajax(request.method, request.url, request.data, request.headers).then((response) => {
