@@ -19,50 +19,52 @@
             <span> No info </span>
         </div>
         <!-- Info -->
-        <blockquote  v-if="currentRoute">
+        <div class="route-info"
+             v-if="currentRoute"
+        >
             <table class="table">
                 <tbody>
-                <tr v-if="annotation">
-                    <td colspan="2">
-                        <pre  v-text="annotation"></pre>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Methods</td>
-                    <td v-text="methods"></td>
-                </tr>
-                <tr>
-                    <td>Middleware</td>
-                    <td>
-                        <pre v-text="middleware"></pre>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Name</td>
-                    <td v-text="name"></td>
-                </tr>
-                <tr>
-                    <td>Action</td>
-                    <td v-text="action"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" >
-                        <a v-if="! additionalInfo"
-                           @click="toggleAdditionalInfo"
-                           v-text="'Show additional info'"
-                        ></a>
-                        <a v-if="additionalInfo"
-                           @click="toggleAdditionalInfo"
-                           v-text="'Hide additional info'"
-                        ></a>
-                        <pre v-if="additionalInfo"
-                             v-text="currentRoute | json"
-                        ></pre>
-                    </td>
-                </tr>
+                    <tr v-if="annotation">
+                        <td colspan="2">
+                            <pre  v-text="annotation"></pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Methods</td>
+                        <td v-text="methods"></td>
+                    </tr>
+                    <tr>
+                        <td>Middleware</td>
+                        <td>
+                            <pre v-text="middleware"></pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td v-text="name"></td>
+                    </tr>
+                    <tr>
+                        <td>Action</td>
+                        <td v-text="action"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" >
+                            <a v-if="! additionalInfo"
+                               @click="toggleAdditionalInfo"
+                               v-text="'Show additional info'"
+                            ></a>
+                            <a v-if="additionalInfo"
+                               @click="toggleAdditionalInfo"
+                               v-text="'Hide additional info'"
+                            ></a>
+                            <pre v-if="additionalInfo"
+                                 v-text="currentRoute | json"
+                            ></pre>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-        </blockquote>
+        </div>
     </div>
 </template>
 
@@ -141,5 +143,9 @@
     }
     .card-header-title{
         color: #0092a2;
+    }
+
+    .route-info{
+        overflow-x: scroll;
     }
 </style>
