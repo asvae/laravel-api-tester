@@ -25,7 +25,6 @@
     } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
     import _ from 'lodash'
-    import RandExp from 'randexp'
 
     export default {
         components: {

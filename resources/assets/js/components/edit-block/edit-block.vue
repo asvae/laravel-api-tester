@@ -12,7 +12,7 @@
     import vmResponseViewer from './response-viewer/response-viewer.vue'
 
     import {scheduleRequest, setRequestInfo, setResponse} from '../../vuex/actions.js'
-
+    import RandExp from 'randexp'
     import requestEditorData from './request-editor/request-editor-data.js'
 
     export default {
@@ -37,8 +37,8 @@
                     url,
                     data: request.body,
                     headers: request.headers,
+                    wheres: request.wheres,
                 }
-                return request
             },
             // Ask laravel what route are we dealing with, if any.
             getRequestInfo () {
@@ -50,6 +50,8 @@
 
                 // Modifies path if wheres are declared in request.
                 // Otherwise, we'll send to unmodified path.
+
+                console.log(request.wheres)
                 let path = request.url
                 if(request.wheres){
                     let wheres = request.wheres
