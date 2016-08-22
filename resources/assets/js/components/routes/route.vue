@@ -20,7 +20,8 @@
     import {
             setCurrentRequest,
             setRequestInfo,
-            scheduleRequest
+            scheduleRequest,
+    setResponse,
     } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
     import _ from 'lodash'
@@ -54,7 +55,8 @@
             actions: {
                 setCurrentRequest,
                 setRequestInfo,
-                scheduleRequest
+                scheduleRequest,
+                setResponse,
             }
         },
         props: {
@@ -63,14 +65,15 @@
             }
         },
         methods: {
-            set(){
-                this.setCurrentRequest(this.routeRequest)
-                this.setRequestInfo(this.route)
-            },
             setAndSend(){
                 this.set()
                 this.scheduleRequest(this.routeRequest)
-            }
+            },
+            set(){
+                this.setCurrentRequest(this.routeRequest)
+                this.setResponse(null)
+                this.setRequestInfo(this.route)
+            },
         }
     }
 </script>

@@ -13,7 +13,8 @@
     import {
             setCurrentRequest,
             setRequestInfo,
-            scheduleRequest
+            scheduleRequest,
+            setResponse,
     } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
     import _ from 'lodash'
@@ -27,7 +28,12 @@
             getters: {
                 currentRoute: (store) => store.routes.currentRoute,
             },
-            actions: {setCurrentRequest, setRequestInfo, scheduleRequest}
+            actions: {
+                setCurrentRequest,
+                setRequestInfo,
+                scheduleRequest,
+                setResponse,
+            }
         },
         data(){
             return {
@@ -45,6 +51,7 @@
         methods: {
             set(){
                 this.setRequestInfo(null)
+                this.setResponse(null)
                 this.setCurrentRequest(this.moment)
             },
             tick(){

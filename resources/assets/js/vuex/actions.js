@@ -32,6 +32,8 @@ export const loadRequests = function ({dispatch}) {
         })
 }
 
+export const setResponse = ({dispatch}, response) => dispatch('SET_RESPONSE', response)
+
 export const setRequests = function ({dispatch}, requests) {
     dispatch('SET_REQUESTS', requests)
 }

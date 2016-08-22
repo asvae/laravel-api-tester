@@ -24,6 +24,7 @@
             setCurrentRequest,
             scheduleRequest,
             setRequestInfo,
+            setResponse,
     } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
 
@@ -46,6 +47,7 @@
             },
             set(){
                 this.setRequestInfo(null)
+                this.setResponse(null)
                 this.setCurrentRequest(this.request)
             }
         },
@@ -54,6 +56,7 @@
                 setCurrentRequest,
                 scheduleRequest,
                 setRequestInfo,
+                setResponse,
                 deleteRequest ({dispatch}, request) {
                     this.$api_demo2.load({url: 'requests/destroy'}, request)
                         .then(() => {
@@ -71,11 +74,12 @@
 </script>
 
 <style scoped>
-    .request.columns{
+    .request.columns {
         margin: 0;
         border-bottom: 1px solid rgba(0, 0, 0, .025);
     }
-    .request .button{
+
+    .request .button {
         border: none;
         padding: 3px 6px;
         border-radius: 0;

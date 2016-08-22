@@ -13,7 +13,7 @@
 
     import RandExp from 'randexp'
 
-    import {scheduleRequest, setRequestInfo} from '../../vuex/actions.js'
+    import {scheduleRequest, setRequestInfo, setResponse} from '../../vuex/actions.js'
 
     import requestEditorData from './request-editor/request-editor-data.js'
 
@@ -131,7 +131,7 @@
             actions: {
                 scheduleRequest,
                 setRequestInfo,
-                setResponse: ({dispatch}, response) => dispatch('SET_RESPONSE', response),
+                setResponse,
                 setInfoError: ({dispatch}, error) => dispatch('SET_INFO_ERROR', error),
                 setCurrentRequest: ({dispatch}, route) => dispatch('SET_CURRENT_REQUEST', route),
                 setIsSending: ({dispatch}, sending) => dispatch('SET_REQUEST_IS_SENDING', sending),
