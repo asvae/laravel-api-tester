@@ -76,7 +76,7 @@
 <style scoped>
     .request.columns {
         margin: 0;
-        border-bottom: 1px solid rgba(0, 0, 0, .025);
+        border-top: 1px solid rgba(0, 0, 0, .025);
     }
 
     .request .button {

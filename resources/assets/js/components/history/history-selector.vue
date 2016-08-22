@@ -6,7 +6,7 @@
             <a class="button is-white is-large"
                v-if="history.length !== 0"
                @click="clearHistory"
-            ><i class="fa fa-trash"></i></a>
+            ><i class="fa fa-ban"></i></a>
         </header>
         <div class="notification"
              v-if="history.length === 0"
@@ -75,8 +75,5 @@
 <style scoped>
     .column {
         padding: 0;
-    }
-    .clear-history {
-        padding-bottom: 10px;
     }
 </style>

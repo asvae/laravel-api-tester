@@ -1,5 +1,5 @@
 <template>
-    <p class="search has-addons">
+    <p class="search control has-addons">
         <input class="input is-expanded"
                type="text"
                placeholder="Search"
@@ -49,7 +49,7 @@
 </script>
 
 <style scoped>
-    .search {
-        width: 100%;
+    .search{
+        margin-bottom: 0;
     }
 </style>

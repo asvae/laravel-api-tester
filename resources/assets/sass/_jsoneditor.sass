@@ -8,13 +8,24 @@ div.jsoneditor
       .ace_active-line
         background-color: lighten($primary, 40%)
   .jsoneditor-menu
-    background-color: $white
+    background-color: $primary
     border-bottom-color: transparent
+    .jsoneditor-frame
+      padding: 0
+      background-color: #0092a2
+      input
+        color: #c6faff
+        line-height: 1.7
+        margin: 0
+        &:focus
+          color: $black
+          background-color: $white
     .jsoneditor-poweredBy
-      color: $grey
+      color: $white
     button
       border-radius: 0
       background-color: $primary
+      margin: 0
       &:hover,&:active,&:focus
         background-color: darken($primary, 10%)
         outline: 0
