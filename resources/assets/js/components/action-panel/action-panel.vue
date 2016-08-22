@@ -82,9 +82,6 @@
                     this.loadRequests()
                 }
 
-                $api.load('requests/create', {})
-                $api.load({url: 'requests/create', method: 'POST'}, {})
-
                 let request = this.request
                 request.id ? this.updateRequest(request, afterUpdate) : this.saveRequest(request, afterUpdate)
             },

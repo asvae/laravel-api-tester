@@ -4,10 +4,10 @@
     >
         <vm-method-button
                 class="is-white column is-narrow"
-                @click="setCurrentRequest(request), scheduleRequest(request)"
+                @click="setAndRun"
                 v-text="request.method"
         ></vm-method-button>
-        <a @click="setCurrentRequest(request)"
+        <a @click="set"
            class="is-bold column"
            v-text="displayedName"
         ></a>
@@ -23,6 +23,7 @@
     import {
             setCurrentRequest,
             scheduleRequest,
+            setRequestInfo,
     } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
 
@@ -38,10 +39,21 @@
         data (){
             return {}
         },
+        methods: {
+            setAndRun(){
+                this.set()
+            },
+            set(){
+                this.setRequestInfo(null)
+                this.setCurrentRequest(this.request)
+                this.scheduleRequest(this.request)
+            }
+        },
         vuex: {
             actions: {
                 setCurrentRequest,
                 scheduleRequest,
+                setRequestInfo,
                 deleteRequest ({dispatch}, request) {
                     this.$api_demo2.load({url: 'requests/destroy'}, request)
                         .then(() => {

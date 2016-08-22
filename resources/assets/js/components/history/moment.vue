@@ -1,6 +1,6 @@
 <template>
     <div class="moment"
-         @click="setCurrentRequest(moment)"
+         @click="set"
     >
         <div class="time" v-text="time"></div>
         <a v-text="moment.path"
@@ -10,7 +10,11 @@
 </template>
 
 <script>
-    import {setCurrentRequest, scheduleRequest} from '../../vuex/actions.js'
+    import {
+            setCurrentRequest,
+            setRequestInfo,
+            scheduleRequest
+    } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
     import _ from 'lodash'
     import moment from 'moment'
@@ -23,7 +27,7 @@
             getters: {
                 currentRoute: (store) => store.routes.currentRoute,
             },
-            actions: {setCurrentRequest, scheduleRequest}
+            actions: {setCurrentRequest, setRequestInfo, scheduleRequest}
         },
         data(){
             return {
@@ -39,6 +43,10 @@
             this.start()
         },
         methods: {
+            set(){
+                this.setRequestInfo(null)
+                this.setCurrentRequest(this.moment)
+            },
             tick(){
                 this.time = moment.unix(this.moment.createdAt / 1000).fromNow();
             },
@@ -54,9 +62,11 @@
     .time {
         color: #ccc;
     }
+
     .moment {
         padding: 4px 10px;
     }
+
     .moment:hover {
         background-color: rgba(31, 200, 219, 0.19);
     }
