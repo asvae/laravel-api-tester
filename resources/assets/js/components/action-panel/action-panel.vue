@@ -14,15 +14,15 @@
                v-model="request.path"
         >
 
-        <button class="button is-success is-icon"
+        <button class="button is-success"
                 :class="{'is-loading': sending}"
                 type="submit"
                 title="Send"
         >
             <span class="icon">
-                <i class="fa fa-send-o"> </i>
+                <i class="fa fa-send-o"></i>
             </span>
-            <span>Send request</span>
+            <span>Send</span>
         </button>
 
         <button class="button is-primary"
@@ -119,5 +119,9 @@
         background-color: #ffffff;
         color: #69707a;
         border-color: #1fc8db;
+    }
+
+    .button {
+        overflow: hidden;
     }
 </style>
