@@ -19,6 +19,7 @@
                     <pre v-if="response.isJson">{{ response.data | json}}</pre>
                 </div>
                 <div  v-show="mode === 'headers'" class="content">
+                    <pre><code>Status: {{response.status}} {{response.statusText}}</code></pre>
                     <pre><code>{{response.headers}}</code></pre>
                 </div>
                 <div  v-show="mode === 'redirects'" class="content">

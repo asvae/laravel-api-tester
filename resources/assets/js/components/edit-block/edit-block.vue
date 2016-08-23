@@ -120,6 +120,8 @@
                             redirects,
                             isJson: typeof data !== 'string',
                             headers: xhr.getAllResponseHeaders(),
+                            status: xhr.status,
+                            statusText: xhr.statusText,
                         }
                         this.setResponse(response)
                         this.setIsSending(false)
