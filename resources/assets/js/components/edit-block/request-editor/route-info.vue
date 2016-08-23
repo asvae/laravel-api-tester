@@ -1,78 +1,82 @@
 <template>
     <div class="card current-route is-fullwidth">
         <header class="card-header">
-            <p class="card-header-title">Route Info</p>
+            <p class="card-header-title">Route Info
+                <span v-if="! expanded" class="header-action" v-text="action"></span>
+            </p>
+
             <a class="button is-medium is-white is-hidden-widescreen"
                @click="toggleExpanded"
             >
                 <i class="fa" :class="expanded? 'fa-minus' : 'fa-plus'"></i>
             </a>
         </header>
-        <div
-            class="notification is-danger has-text-centered no-rounded-borders"
-            v-if="infoError === 500"
-        >
-            <span><i class="fa fa-warning"> </i> Current route is broken!</span>
-        </div>
-        <div
-            class="notification is-warning has-text-centered no-rounded-borders"
-            v-if="infoError === 404"
-        >
-            <span><i class="fa fa-warning"> </i> No matching route found :( </span>
-        </div>
-        <div
-                class="notification is-warning has-text-centered no-rounded-borders"
-                v-if="infoError === 405"
-        >
-            <span><i class="fa fa-warning"> </i> Method not allowed :( </span>
-        </div>
-        <div class="notification"  v-if="! currentRoute">
-            <span> No info </span>
-        </div>
-        <!-- Info -->
-        <div class="route-info"
-             v-if="currentRoute"
-        >
-            <table class="table">
-                <tbody>
-                    <tr v-if="annotation">
-                        <td colspan="2">
-                            <pre  v-text="annotation"></pre>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Methods</td>
-                        <td v-text="methods"></td>
-                    </tr>
-                    <tr>
-                        <td>Middleware</td>
-                        <td>
-                            <pre v-text="middleware"></pre>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Name</td>
-                        <td v-text="name"></td>
-                    </tr>
-                    <tr>
-                        <td>Action</td>
-                        <td v-text="action"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" >
-                            <a v-if="! additionalInfo"
-                               @click="toggleAdditionalInfo"
-                               v-text="'Show additional info'"
-                            ></a>
-                            <a v-if="additionalInfo"
-                               @click="toggleAdditionalInfo"
-                               v-text="'Hide additional info'"
-                            ></a>
-                            <pre v-if="additionalInfo"
-                                 v-text="currentRoute | json"
-                            ></pre>
-                        </td>
-                    </tr>
+        <div v-if="expanded">
+            <div
+                    class="notification is-danger has-text-centered no-rounded-borders"
+                    v-if="infoError === 500"
+            >
+                <span><i class="fa fa-warning"> </i> Current route is broken!</span>
+            </div>
+            <div
+                    class="notification is-warning has-text-centered no-rounded-borders"
+                    v-if="infoError === 404"
+            >
+                <span><i class="fa fa-warning"> </i> No matching route found :( </span>
+            </div>
+            <div
+                    class="notification is-warning has-text-centered no-rounded-borders"
+                    v-if="infoError === 405"
+            >
+                <span><i class="fa fa-warning"> </i> Method not allowed :( </span>
+            </div>
+            <div class="notification" v-if="! currentRoute">
+                <span> No info </span>
+            </div>
+            <!-- Info -->
+            <div class="route-info"
+                 v-if="currentRoute"
+            >
+                <table class="table">
+                    <tbody>
+                        <tr v-if="annotation">
+                            <td colspan="2">
+                                <pre v-text="annotation"></pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Methods</td>
+                            <td v-text="methods"></td>
+                        </tr>
+                        <tr>
+                            <td>Middleware</td>
+                            <td>
+                                <pre v-text="middleware"></pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td v-text="name"></td>
+                        </tr>
+                        <tr>
+                            <td>Action</td>
+                            <td v-text="action"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <a v-if="! additionalInfo"
+                                       @click="toggleAdditionalInfo"
+                                       v-text="'Show additional info'"
+                                ></a>
+                                <a v-if="additionalInfo"
+                                       @click="toggleAdditionalInfo"
+                                       v-text="'Hide additional info'"
+                                ></a>
+                                <pre v-if="additionalInfo"
+                                        v-text="currentRoute | json"
+                                ></pre>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -106,11 +110,11 @@
         },
         methods: {
             toggleAdditionalInfo(){
-                this.additionalInfo = ! this.additionalInfo
+                this.additionalInfo = !this.additionalInfo
             },
 
             toggleExpanded(){
-              this.expanded = ! this.expanded
+                this.expanded = !this.expanded
             }
         },
         computed: {
@@ -121,7 +125,7 @@
 
             middleware () {
                 let middleware = this.currentRoute.action.middleware
-                if(middleware){
+                if (middleware) {
                     let isString = typeof middleware === 'string'
                     return isString ? middleware : middleware.join('\n')
                 }
@@ -131,7 +135,7 @@
 
             annotation(){
                 let annotation = this.currentRoute.annotation
-                if(annotation){
+                if (annotation) {
                     return annotation.replace(/\n\s+/g, '\n')
                 }
 
@@ -160,7 +164,8 @@
         width: 100%;
         min-height: 500px;
     }
-    table.table{
+
+    table.table {
         background-color: transparent;
         color: #69707a;
     }
@@ -168,11 +173,16 @@
     .notification .fa {
         vertical-align: baseline;
     }
-    .card-header-title{
+
+    .card-header-title {
         color: #0092a2;
     }
 
-    .route-info{
+    .route-info {
         overflow-x: scroll;
+    }
+    .header-action{
+        font-weight: 200;
+        padding: 0 10px;
     }
 </style>
