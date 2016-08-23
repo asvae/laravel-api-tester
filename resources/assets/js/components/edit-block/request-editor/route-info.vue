@@ -15,6 +15,12 @@
         >
             <span><i class="fa fa-warning"> </i> No matching route found :( </span>
         </div>
+        <div
+                class="notification is-warning has-text-centered no-rounded-borders"
+                v-if="infoError === 405"
+        >
+            <span><i class="fa fa-warning"> </i> Method not allowed :( </span>
+        </div>
         <div class="notification"  v-if="! currentRoute">
             <span> No info </span>
         </div>
