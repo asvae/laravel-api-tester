@@ -92,9 +92,9 @@
         ready(){
 
             // Тут лютый хацк... подумать как исправить
-            this.expanded = window.innerWidth > 1300
+            this.expanded = window.innerWidth > 1366
             window.addEventListener('resize', e => {
-                this.expanded = window.innerWidth > 1300
+                this.expanded = window.innerWidth > 1366
             })
         },
         vuex: {
