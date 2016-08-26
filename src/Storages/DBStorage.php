@@ -56,13 +56,12 @@ class DBStorage implements StorageInterface
      */
     public function put(RequestCollection $data)
     {
-        $toUpdate = $data->onlyExists()->onlyDiff();
+        $diff = $data->onlyDiff();
         $toDelete = $data->onlyToDelete();
-        $toInsert = $data->onlyNotExists()->onlyNotMarkedToDelete();
 
-        $this->update($toUpdate);
         $this->delete($toDelete);
-        $this->insert($toInsert);
+
+        $this->updateOrInsert($diff);
     }
 
     /**
@@ -70,23 +69,29 @@ class DBStorage implements StorageInterface
      */
     private function getAll()
     {
-        return $this->table()->get();
+        $requests = [];
+        foreach ($this->getResult() as $row){
+            $requests[] = json_decode($row->content, true);
+        }
+
+        return $requests;
     }
 
     private function makeCollection($rows)
     {
-        return $this->collection->load($rows);
+        return $this->collection->make()->load($rows);
     }
 
     /**
-     * @param RequestEntity[]|RequestCollection $toUpdate
+     * @param RequestEntity[]|RequestCollection $batch
      */
-    private function update($toUpdate)
+    private function updateOrInsert($batch)
     {
-        foreach ($toUpdate as $request){
-            $this->table()
-                ->where('id', $request->getId())
-                ->update($request->toArray());
+        foreach ($batch as $request) {
+            $this->table()->updateOrInsert([
+                'id' => $request->getId(),
+                'content' => $request->toJson()
+            ]);
         }
     }
 
@@ -105,11 +110,8 @@ class DBStorage implements StorageInterface
         }
     }
 
-    /**
-     * @param RequestEntity[]|RequestCollection $toInsert
-     */
-    private function insert($toInsert)
+    private function getResult()
     {
-        $this->table()->insert($toInsert->toArray());
+        return $this->table()->get();
     }
 }
