@@ -131,7 +131,7 @@ return [
     |
     */
 
-    'storage_driver' => 'database',
+    'storage_driver' => 'file',
 
     'storage_drivers' => [
         'file' => [
