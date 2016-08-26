@@ -6,7 +6,8 @@ namespace Asvae\ApiTester\Storages;
 use Asvae\ApiTester\Collections\RequestCollection;
 use Asvae\ApiTester\Contracts\StorageInterface;
 use Asvae\ApiTester\Entities\RequestEntity;
-use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionInterface;
+
 
 class DBStorage implements StorageInterface
 {
@@ -28,10 +29,10 @@ class DBStorage implements StorageInterface
     /**
      * DBStorage constructor.
      * @param RequestCollection $collection
-     * @param Connection $connection
+     * @param ConnectionInterface $connection
      * @param $table
      */
-    public function __construct(RequestCollection $collection, Connection $connection, $table)
+    public function __construct(RequestCollection $collection, ConnectionInterface $connection, $table)
     {
         $this->collection = $collection;
         $this->connection = $connection;
@@ -56,12 +57,14 @@ class DBStorage implements StorageInterface
      */
     public function put(RequestCollection $data)
     {
-        $diff = $data->onlyDiff();
+        $toInsert = $data->onlyDiff()->onlyNotExists();
+        $toUpdate = $data->onlyDiff()->onlyExists();
         $toDelete = $data->onlyToDelete();
 
         $this->delete($toDelete);
 
-        $this->updateOrInsert($diff);
+        $this->insert($toInsert);
+        $this->update($toUpdate);
     }
 
     /**
@@ -83,13 +86,12 @@ class DBStorage implements StorageInterface
     }
 
     /**
-     * @param RequestEntity[]|RequestCollection $batch
+     * @param RequestEntity[]|RequestCollection $toUpdate
      */
-    private function updateOrInsert($batch)
+    private function update($toUpdate)
     {
-        foreach ($batch as $request) {
-            $this->table()->updateOrInsert([
-                'id' => $request->getId(),
+        foreach ($toUpdate as $request) {
+            $this->table()->where('id', $request->getId())->update([
                 'content' => $request->toJson()
             ]);
         }
@@ -113,5 +115,18 @@ class DBStorage implements StorageInterface
     private function getResult()
     {
         return $this->table()->get();
+    }
+
+    /**
+     * @param RequestEntity[]|RequestCollection $toInsert
+     */
+    private function insert($toInsert)
+    {
+        foreach ($toInsert as $request) {
+            $this->table()->insert([
+                'id' => $request->getId(),
+                'content' => $request->toJson()
+            ]);
+        }
     }
 }

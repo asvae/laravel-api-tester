@@ -131,7 +131,7 @@ return [
     |
     */
 
-    'storage_driver' => 'file',
+    'storage_driver' => 'database',
 
     'storage_drivers' => [
         'file' => [
@@ -150,6 +150,15 @@ return [
                 'options' => ['admin' => true],
                 'data' => [],
             ]
+        ],
+
+        'database' => [
+            'class' => Asvae\ApiTester\Storages\DBStorage::class,
+            'options' => [
+                'table' => 'requests',
+            ],
+
+            'connection' => 'mysql'
         ]
     ]
 ];
