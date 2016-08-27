@@ -74,9 +74,35 @@ class RequestCollectionTest extends TestCase
         $this->assertEquals($request, $foundRequest);
     }
 
+    public function testScopes(){
+        $this->hydrateRequest();
+        $count = $this->requests->count();
+
+        $request = $this->requests->first();
+        $request->update(['path' => 'new/path']);
+        $this->assertEquals(1, $this->requests->onlyDiff()->count());
+        $this->assertEquals(1, $this->requests->onlyDirty()->count());
+        $this->assertEquals($count, $this->requests->count());
+        $this->assertEquals($count, $this->requests->onlyNotMarkedToDelete()->count());
+        $this->assertEquals(0, $this->requests->onlyToDelete()->count());
+
+        $this->requests->insert(new RequestEntity(['path' => 'newPath']));
+        $this->assertEquals($count, $this->requests->onlyExists()->count());
+        $this->assertEquals(1, $this->requests->onlyNotExists()->count());
+        $this->assertEquals($count+1, $this->requests->count());
+        $this->assertEquals(1, $this->requests->onlyDirty()->count());
+        $this->assertEquals(0, $this->requests->onlyToDelete()->count());
+
+        $request = $this->requests->last();
+        $request->markToDelete();
+        $this->assertEquals(1, $this->requests->onlyToDelete()->count());
+        $this->assertEquals($count, $this->requests->onlyExists()->count());
+        $this->assertEquals($count, $this->requests->onlyNotMarkedToDelete()->count());
+    }
+
     private function hydrateRequest()
     {
-        $this->requests->load($this->generateData());
+        $this->requests = $this->requests->make()->load($this->generateData());
     }
 
     private function generateData()

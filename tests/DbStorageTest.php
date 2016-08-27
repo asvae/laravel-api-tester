@@ -10,8 +10,6 @@ use Illuminate\Database\SQLiteConnection;
 
 class DbStorageTest extends TestCase
 {
-    protected $db;
-
     /**
      * @var DBStorage
      */
@@ -29,50 +27,72 @@ class DbStorageTest extends TestCase
 
     public function setUp(){
 
+        $this->storage = $this->setUpStorage();
+
+        $this->collection = new RequestCollection();
+    }
+
+    private function setUpStorage()
+    {
         $pdo = new PDO(
             'sqlite::memory:', null, null, array(PDO::ATTR_PERSISTENT => true)
         );
-        $this->db = new SQLiteConnection($pdo, 'test');
-        $this->collection = new RequestCollection();
-        $this->db->setSchemaGrammar(new SQLiteGrammar());
-        $builder = new MySqlBuilder($this->db);
+
+        $db = new SQLiteConnection($pdo, 'test');
+
+        $db->setSchemaGrammar(new SQLiteGrammar());
+
+        $this->presetDataBase($db);
+
+        return new DBStorage(new RequestCollection(), $db, 'requests');
+    }
+
+    private function presetDataBase($db)
+    {
+        $builder = new MySqlBuilder($db);
+
         $builder->dropIfExists('requests');
+
         $builder->create('requests', function (Blueprint $table){
             $table->string('id');
             $table->json('content');
             $table->primary('id');
         });
 
-        $this->storage = new DBStorage(new RequestCollection(), $this->db, 'requests');
+
     }
 
     public function testStoringAndGettingData(){
-        $id = str_random();
+
 
         $reference = ['path' => 'test'];
 
-        $req = new RequestEntity($reference);
-
-        $req->setId($id);
-
-        $this->collection->insert($req);
-
-        $this->storage->put($this->collection);
-
-        $request = $this->storage->get()->first();
-
         $expected = $reference;
-
+        $id = str_random();
         $expected['id'] = $id;
 
+        //Put data
+        $req = new RequestEntity($reference);
+        $req->setId($id);
+        $this->collection->insert($req);
+        $this->storage->put($this->collection);
+        $request = $this->storage->get()->first();
         $this->assertEquals($expected, $request->toArray());
 
-        $this->collection->find($id)->markToDelete();
-
+        // Update data
+        $this->collection = $this->storage->get();
+        $request = $this->collection->find($id);
+        $request->update(['path' => 'test2']);
         $this->storage->put($this->collection);
-
-        $result = $this->storage->get();
-
-        $this->assertEquals(0, $result->count());
+        $this->collection = $this->storage->get();
+        $request = $this->collection->find($id);
+        $this->assertEquals(['id'=> $id, 'path' => 'test2'], $request->toArray());
+        
+        //Delete data
+        $this->collection->find($id)->markToDelete();
+        $this->storage->put($this->collection);
+        $this->collection = $this->storage->get();
+        $this->assertEquals(0, $this->collection->count());
     }
+
 }
