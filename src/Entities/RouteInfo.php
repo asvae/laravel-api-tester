@@ -12,12 +12,12 @@ use JsonSerializable;
 class RouteInfo implements Arrayable, JsonSerializable
 {
     /**
-     * @var \ReflectionFunctionAbstract|null
+     * @var \ReflectionClass|null
      */
     protected $routeReflection = null;
 
     /**
-     * @var \ReflectionClass|null
+     * @var \ReflectionFunctionAbstract|null
      */
     protected $actionReflection = null;
 
@@ -145,6 +145,9 @@ class RouteInfo implements Arrayable, JsonSerializable
         return null;
     }
 
+    /**
+     * @return \ReflectionClass
+     */
     protected function getRouteReflection()
     {
         if ($this->routeReflection) {
