@@ -3,29 +3,29 @@
         <header class="card-header">
             <vm-search-panel class="card-header-title"></vm-search-panel>
             <a class="button is-large is-white is-fullheight"
-               @click="loadRoutes"
+               @click="refresh"
                :class="{'is-loading' : isLoading}"
             >
                 <i class="fa fa-refresh"></i>
             </a>
         </header>
-            <div class="notification"
-                 v-if="filteredRoutes.length === 0 && ! isLoading"
-                 transition="fade-in"
-            >
-                No routes matched.
-            </div>
-            <vm-route v-for="route in filteredRoutes"
-                      class="is-fullwidth"
-                      transition="slip"
-                      :route="route"
-            ></vm-route>
-            <div class="notification is-danger"
-                 v-if="loadedWithError"
-                 transition="fade-in"
-            >
-                Can't load routes. Check console for details.
-            </div>
+        <div class="notification"
+             v-if="filteredRoutes.length === 0 && ! isLoading"
+             transition="fade-in"
+        >
+            No routes matched.
+        </div>
+        <vm-route v-for="route in routes"
+                  class="is-fullwidth"
+                  transition="slip"
+                  :route="route"
+        ></vm-route>
+        <div class="notification is-danger"
+             v-if="loadedWithError"
+             transition="fade-in"
+        >
+            Can't load routes. Check console for details.
+        </div>
     </div>
 </template>
 
@@ -44,42 +44,19 @@
             vmRoute,
             vmSearchPanel,
         },
-        vuex: {
-            getters: {
-                routes: store => store.routes.routes,
-                isLoading: store => store.routes.isLoading,
-                loadedWithError: store => store.routes.errorLoading,
-                search: store => store.search.search
-            },
-            actions: {loadRoutes},
-        },
         ready (){
-            this.loadRoutes()
+            this._blur()refresh()
         },
-        computed: {
-            // TODO With vuex 2 this should be refactored as computed property.
-            filteredRoutes () {
-                let toDisplay = []
-
-                let search = this.search.toUpperCase()
-
-                this.routes.forEach(function (route) {
-                    if (
-                            route.methods.join(',').toUpperCase()
-                                 .includes(search)
-                            || route.path.toUpperCase().includes(search)
-                            || (route.action.controller && route.action.controller.toUpperCase()
-                                                                .includes(search))
-                            || (route.name && route.name.toUpperCase()
-                                                   .includes(search))
-                    ) {
-                        toDisplay.push(route)
-                    }
-                })
-
-                return toDisplay
+        methods: {
+            refresh (){
+                this.$store.dispatch('loadRoutes')
             }
         },
+        computed: {
+            routes (state) {
+                return state.routes.routes
+            }
+        }
     }
 </script>
 

@@ -1,25 +1,5 @@
 import _ from 'lodash'
 
-export const loadRoutes = function ({dispatch}) {
-    dispatch('SET_ROUTES_LOADING', true)
-    dispatch('SET_ROUTES', [])
-
-    this.$api_demo2.load({url: 'routes/index'})
-        .then((response) => {
-            dispatch('SET_ROUTES_ERROR', false)
-            dispatch('SET_ROUTES', response.data)
-            dispatch('SET_ROUTES_LOADING', false)
-        })
-        .catch((xhr, status, error) => {
-            let response = {
-                status: xhr.status + ' : ' + error,
-                data: xhr.responseText
-            }
-            dispatch('SET_ROUTES_ERROR', response)
-            dispatch('SET_ROUTES_LOADING', false)
-        })
-}
-
 export const loadRequests = function ({dispatch}) {
     // TODO split Firebase and JSON storage.
     if (ENV.firebaseToken && ENV.firebaseToken) {

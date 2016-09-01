@@ -27,7 +27,7 @@
     "vue-strap": "^1.0.7",
     "vueify": "^8.3.9",
     "vueify-insert-css": "^1.0.0",
-    "vuex": "^1.0.0-rc.2"
+    "vuex": "^2.0.0-rc.5"
   },
   "browserify": {
     "transform": [
