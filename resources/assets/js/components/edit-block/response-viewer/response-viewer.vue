@@ -15,8 +15,8 @@
                         :json="response.data"
                 ></vm-json-viewer>
                 <div v-show="mode === 'data'">
-                    <pre v-if="! response.isJson"><code>{{ response.data }}</code></pre>
-                    <pre v-if="response.isJson">{{ response.data | json}}</pre>
+                    <pre style="overflow-x: auto;" v-if="! response.isJson"><code>{{ response.data }}</code></pre>
+                    <pre style="overflow-x: auto;" v-if="response.isJson">{{ response.data | json}}</pre>
                 </div>
                 <div  v-show="mode === 'headers'" class="content">
                     <pre><code>Status: {{response.status}} {{response.statusText}}</code></pre>
