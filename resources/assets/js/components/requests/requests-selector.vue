@@ -5,12 +5,12 @@
             ></vm-search-panel>
         </header>
         <div class="notification"
-             v-if="requests.length === 0"
+             v-if="! $store.state.requests.list.length"
              transition="fade-in"
         >
             No requests yet
         </div>
-            <vm-request v-for="request in filteredRequests"
+            <vm-request v-for="request in $store.getters.filteredRequests"
                         class="is-fullwidth"
                         track-by="$index"
                         transition="slip"
@@ -33,26 +33,11 @@
             vmSearchPanel
         },
         computed: {
-            filteredRequests() {
-                let toDisplay = []
-                let search = this.search.toUpperCase()
 
-                for (let request of this.requests) {
-                    if (
-                            request.method.toUpperCase().includes(search)
-                            || request.path.toUpperCase().includes(search)
-                            || (request.name && request.name.toUpperCase()
-                                                       .includes(search))
-                    ) {
-                        toDisplay.push(request)
-                    }
-                }
-
-                return toDisplay
-            }
         },
         ready (){
-            // подписываемся на файрбейз
+            // TODO Move to actions or somewhere. Not the right place.
+            // Subscribe to firebase
             if (ENV.firebaseToken && ENV.firebaseToken) {
                 let source = new EventSource(ENV.firebaseSource + 'requests.json?auth=' + ENV.firebaseToken)
                 source.addEventListener('put', ((e) => {
@@ -61,14 +46,9 @@
                 }))
             }
 
-            this.loadRequests()
+            this.$store.dispatch('loadRequests')
         },
         vuex: {
-            getters: {
-                requests: state => state.requests.requests,
-                currentRequest: state => state.requests.currentRequest,
-                search: state => state.search.search,
-            },
             actions: {
                 loadRequests,
                 setRequests,

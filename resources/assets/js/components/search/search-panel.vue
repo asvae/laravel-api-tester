@@ -19,7 +19,7 @@
     export default {
         data (){
             return {
-                text: ''
+                text: '',
             }
         },
         watch: {
@@ -27,22 +27,17 @@
                 this.text = search
             },
             text (text) {
-                this.setSearch(text)
+                this.$store.dispatch('setSearch', text)
             },
-        },
-        vuex: {
-            getters: {
-                search: (state) => state.search.search
-            },
-            actions: {
-                setSearch ({dispatch}, search){
-                    dispatch('SET_SEARCH', search)
-                },
-            }
         },
         methods: {
             reset(){
                 this.text = ''
+            }
+        },
+        computed: {
+            search (){
+                return this.$store.state.search.text
             }
         }
     }

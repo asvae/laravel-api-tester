@@ -10,12 +10,12 @@
             </a>
         </header>
         <div class="notification"
-             v-if="filteredRoutes.length === 0 && ! isLoading"
+             v-if="$store.getters.filteredRoutes.length === 0 && ! isLoading"
              transition="fade-in"
         >
             No routes matched.
         </div>
-        <vm-route v-for="route in routes"
+        <vm-route v-for="route in $store.state.routes.routes"
                   class="is-fullwidth"
                   transition="slip"
                   :route="route"
@@ -45,18 +45,13 @@
             vmSearchPanel,
         },
         ready (){
-            this._blur()refresh()
+            this.refresh()
         },
         methods: {
             refresh (){
                 this.$store.dispatch('loadRoutes')
             }
         },
-        computed: {
-            routes (state) {
-                return state.routes.routes
-            }
-        }
     }
 </script>
 

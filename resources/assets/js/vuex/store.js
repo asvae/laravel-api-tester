@@ -10,6 +10,7 @@ import response from '../components/edit-block/response-viewer/response-viewer-m
 import request from '../components/edit-block/request-editor-module.js'
 import requests from '../components/requests/requests-module.js'
 import history from '../components/history/history-module.js'
+import search from '../components/search/search-module.js'
 
 export default new Vuex.Store({
     strict: true,
@@ -20,5 +21,6 @@ export default new Vuex.Store({
         request,
         requests,
         history,
+        search,
     }
 })

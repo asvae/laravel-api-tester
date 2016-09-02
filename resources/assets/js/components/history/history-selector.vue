@@ -5,11 +5,11 @@
             ></vm-search-panel>
             <a class="button is-white is-large"
                v-if="history.length !== 0"
-               @click="clearHistory"
+               @click="$store.dispatch('clearHistory')"
             ><i class="fa fa-ban"></i></a>
         </header>
         <div class="notification"
-             v-if="history.length === 0"
+             v-if="! $store.state.history.list.length"
              transition="fade-in"
         >
             No history stored
@@ -36,38 +36,6 @@
         components: {
             vmMoment,
             vmSearchPanel
-        },
-        vuex: {
-            getters: {
-                history: (store) => store.history.history,
-                search: (store) => store.search.search,
-            },
-            actions: {
-                setHistory: ({dispatch}, history) => {
-                    dispatch('SET_HISTORY', history)
-                },
-                clearHistory: ({dispatch}) => {
-                    dispatch('CLEAR_HISTORY')
-                },
-            },
-        },
-        computed: {
-            filteredMoments () {
-                let toDisplay = []
-
-                let search = this.search.toUpperCase()
-                // Let's find out what to display first.
-                this.history.forEach(function (moment) {
-                    if (
-                            moment.method.includes(search)
-                            || moment.path.toUpperCase().includes(search)
-                    ) {
-                        toDisplay.push(moment)
-                    }
-                })
-
-                return toDisplay.reverse()
-            },
         },
     }
 </script>

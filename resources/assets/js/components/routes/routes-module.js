@@ -1,4 +1,6 @@
 import _ from 'lodash'
+import Vue from 'vue'
+let vm = new Vue
 
 export default {
     state: {
@@ -13,24 +15,21 @@ export default {
         'set-routes': (state, routes) => {
             state.routes = routes
         },
-        SET_ROUTES_ERROR(state, result){
+        'set-routes-error'(state, result){
             state.errorLoading = result
         },
-        SET_INFO_ERROR: (state, error) => {
+        'set-info-error': (state, error) => {
             state.infoError = error
         },
-        SET_REQUEST_INFO: (state, route) => {
+        'set-request-info': (state, route) => {
             if (route === null) {
                 state.currentRoute = route
                 return
             }
             state.currentRoute = _.find(state.routes, route)
         },
-        'set-routes-loading': (sate, isLoading) => {
+        'set-routes-loading': (state, isLoading) => {
             state.isLoading = isLoading
-        },
-        SET_SEARCH: (state, search) => {
-            state.search = search
         },
     },
     getters: {
@@ -57,14 +56,19 @@ export default {
         }
     },
     actions: {
+        setSearch ({commit}, search){
+            commit('set-search', search)
+        },
         loadRoutes ({commit}) {
             commit('set-routes-loading', true)
             commit('set-routes', [])
 
-            this.$api_demo2.load({url: 'routes/index'})
+            console.log(this)
+
+            vm.$api_demo2.load({url: 'routes/index'})
                 .then((response) => {
-                    commit('SET_ROUTES_ERROR', false)
-                    commit('SET_ROUTES', response.data)
+                    commit('set-routes-error', false)
+                    commit('set-routes', response.data)
                     commit('set-routes-loading', false)
                 })
                 .catch((xhr, status, error) => {
