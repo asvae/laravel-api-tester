@@ -75,6 +75,7 @@ export default class Api {
         if(!_.some(['GET', 'HEAD', 'OPTIONS'], method.toUpperCase())){
             headers.push({key: 'X-XSRF-TOKEN', value: this.getCookie('XSRF-TOKEN') })
         } else {
+            // TODO Не понятно, что это делает.
             if(data === null){
                 data = {}
             }
