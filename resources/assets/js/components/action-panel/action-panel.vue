@@ -1,6 +1,6 @@
 <template>
     <form class="action-panel control has-addons"
-          @submit.prevent="scheduleRequest(request)"
+          @submit.prevent="$store.dispatch('scheduleRequest', request)"
     >
         <vm-request-type-select
                 :method="request.method"
@@ -49,8 +49,6 @@
     import vmRequestTypeSelect from './request-type-select.vue'
     import requestEditorData from '../edit-block/request-editor/request-editor-data.js'
 
-    import {saveRequest, updateRequest} from './request-actions.js'
-
     export default {
         data: () => requestEditorData,
         components: {
@@ -59,19 +57,18 @@
         methods: {
             save (){
                 // Saves or updates depending on whether request has id
-                let afterUpdate = () => {
-                    this.loadRequests()
-                }
-
-                let request = this.request
-                request.id ? this.updateRequest(request, afterUpdate) : this.saveRequest(request, afterUpdate)
+                let action = this.request.id ? 'updateRequest' : 'saveRequest'
+                this.$store.dispatch(action, this.request)
+                        .then(() => {
+                            this.$store.dispatch('loadRequests')
+                        })
             },
             copy(){
                 // Just saves request.
-                let afterSave = () => {
-                    this.loadRequests()
-                }
-                this.saveRequest(this.request, afterSave)
+                this.$store.dispatch('saveRequest', this.request)
+                    .then(() => {
+                        this.$store.dispatch('loadRequests')
+                    })
             }
         }
     }

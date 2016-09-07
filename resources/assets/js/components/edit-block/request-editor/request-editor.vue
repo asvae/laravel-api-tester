@@ -15,10 +15,11 @@
                     </header>
 
                     <section class="card-content">
-                        <vm-navigation-tabs class="is-boxed"
-                                            :pages="['data', 'headers']"
-                                            :mode="mode"
-                                            @changed="setMode($arguments[0])"
+                        <vm-navigation-tabs
+                                class="is-boxed"
+                                :pages="['data', 'headers']"
+                                :mode="mode"
+                                @changed="$store.dispatch('setRequestEditorMode', $arguments[0])"
                         ></vm-navigation-tabs>
                     </section>
 
@@ -50,10 +51,9 @@
     import vmRouteInfo from './route-info/route-info.vue'
     import vmHeaders from './headers/headers.vue'
 
-    import vmNavigationTabs from '../../light-components/navigation-tabs.vue'
+    import vmNavigationTabs from '../../ligth-components/navigation-tabs.vue'
 
     import requestEditorData from './request-editor-data.js'
-
 
     export default {
         data: () => requestEditorData,
@@ -64,15 +64,9 @@
             vmNavigationTabs,
         },
         computed: {
-
-        },
-        vuex: {
-            getters: {
-                mode: state => state.request.mode,
+            mode (){
+                return this.$store.getters.requestEditorMode
             },
-            actions: {
-                setMode: ({dispatch}, mode) => dispatch('SET_EDITOR_MODE', mode)
-            }
         },
     }
 </script>

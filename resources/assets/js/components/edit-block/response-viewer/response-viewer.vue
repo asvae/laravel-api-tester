@@ -2,10 +2,11 @@
     <div class="response-viewer">
         <div class="card is-fullwidth" v-if="response">
             <div class="card-content">
-                <vm-navigation-tabs class="is-boxed"
-                                    :pages="['data', 'headers', 'preview', 'redirects']"
-                                    :mode="mode"
-                                    @changed="setMode($arguments[0])"
+                <vm-navigation-tabs
+                        class="is-boxed"
+                        :pages="['data', 'headers', 'preview', 'redirects']"
+                        :mode="mode"
+                        @changed="$store.dispatch('setResponseViewerMode', $arguments[0])"
                 ></vm-navigation-tabs>
                 <iframe :class="{'is-visible': iframeVisible}"
                         :srcdoc="response.data"
@@ -15,15 +16,17 @@
                         :json="response.data"
                 ></vm-json-viewer>
                 <div v-show="mode === 'data'">
-                    <pre style="overflow-x: auto;" v-if="! response.isJson"><code>{{ response.data }}</code></pre>
+                    <pre style="overflow-x: auto;"
+                         v-if="! response.isJson"><code>{{ response.data }}</code></pre>
                     <pre style="overflow-x: auto;" v-if="response.isJson">{{ response.data | json}}</pre>
                 </div>
-                <div  v-show="mode === 'headers'" class="content">
+                <div v-show="mode === 'headers'" class="content">
                     <pre><code>Status: {{response.status}} {{response.statusText}}</code></pre>
                     <pre><code>{{response.headers}}</code></pre>
                 </div>
-                <div  v-show="mode === 'redirects'" class="content">
-                    <table class="table" v-if="response.redirects !== undefined && response.redirects.length !== 0">
+                <div v-show="mode === 'redirects'" class="content">
+                    <table class="table"
+                           v-if="response.redirects !== undefined && response.redirects.length !== 0">
                         <tbody>
                         <tr>
                             <th>#</th>
@@ -49,7 +52,7 @@
 </template>
 
 <script>
-    import vmNavigationTabs from '../../light-components/navigation-tabs.vue'
+    import vmNavigationTabs from '../../ligth-components/navigation-tabs.vue'
     import vmJsonViewer from '../../json-editor/json-viewer.vue'
 
     export default {
@@ -58,19 +61,16 @@
             vmJsonViewer,
         },
         computed: {
+            response (){
+                return this.$store.getters.response
+            },
+            mode (){
+                return this.$store.getters.responseViewerMode
+            },
             iframeVisible (){
                 return this.mode === 'preview' && !this.response.isJson;
             }
         },
-        vuex: {
-            getters: {
-                mode: (state) => state.response.mode,
-                response: (state) => state.response.response,
-            },
-            actions: {
-                setMode: ({dispatch}, mode) => dispatch('SET_VIEWER_MODE', mode)
-            },
-        }
     }
 </script>
 
@@ -80,11 +80,11 @@
         height: 0;
     }
 
-    table.table{
+    table.table {
         background-color: transparent;
     }
 
-    table.table tbody tr th, table.table tbody tr td  {
+    table.table tbody tr th, table.table tbody tr td {
         color: #69707a !important;
     }
 

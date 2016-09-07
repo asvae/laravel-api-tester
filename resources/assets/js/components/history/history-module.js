@@ -32,6 +32,6 @@ export default {
     },
     actions: {
         clearHistory: ({commit}) => commit('clear-history'),
-        addMoment: ({commit}) => commit('add-request-to-history', request),
+        addMoment: ({commit}, request) => commit('add-request-to-history', request),
     }
 }

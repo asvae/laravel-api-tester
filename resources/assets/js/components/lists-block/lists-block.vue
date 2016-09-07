@@ -14,7 +14,7 @@
 </template>
 
 <script>
-    import vmNavigationTabs from '../light-components/navigation-tabs.vue'
+    import vmNavigationTabs from '../ligth-components/navigation-tabs.vue'
     import vmRoutesSelector from '../routes/routes-selector.vue'
     import vmRequestsSelector from '../requests/requests-selector.vue'
     import vmHistorySelector from '../history/history-selector.vue'

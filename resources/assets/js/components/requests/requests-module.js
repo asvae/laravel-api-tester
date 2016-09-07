@@ -2,6 +2,7 @@ import _ from 'lodash'
 import Vue from 'vue'
 let vm = new Vue
 
+
 export default {
     state: {
         requests: [],
@@ -49,8 +50,14 @@ export default {
 
             vm.$api_demo2.load({url: 'requests/index'})
               .then(({data}) => {
-                  dispatch('set-requests', data)
+                  commit('set-requests', data)
               })
+        },
+        deleteRequest: ({commit}, request) => {
+            vm.$api_demo2.load({url: 'requests/destroy'}, request)
+                .then(() => {
+                    commit('delete-request', request)
+                })
         },
         setCurrentRequest: ({commit}, request) => commit('set-current-request', request),
         setRequests: ({commit}, requests) => commit('set-requests', requests),

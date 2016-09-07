@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    import vmMethodButton from '../light-components/method-button.vue'
+    import vmMethodButton from '../ligth-components/method-button.vue'
     import _ from 'lodash'
 
     export default {
@@ -46,7 +46,7 @@
             },
             setAndSend(){
                 this.set()
-                this.scheduleRequest(this.convertToRequest())
+                this.$store.dispatch('scheduleRequest', this.convertToRequest())
             },
             set(){
                 this.$store.dispatch('setCurrentRequest', this.convertToRequest())
@@ -54,6 +54,8 @@
                 // TODO Probably not the best place.
                 this.$store.dispatch('setResponse', null)
                 this.$store.dispatch('setInfo', this.route)
+
+                this.$store.dispatch('loadCurrentRequestInfo')
             },
         }
     }
