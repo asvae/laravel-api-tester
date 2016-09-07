@@ -16,7 +16,7 @@
             scheduleRequest,
             setResponse,
     } from '../../vuex/actions.js'
-    import vmMethodButton from '../ligth-components/method-button.vue'
+    import vmMethodButton from '../light-components/method-button.vue'
     import _ from 'lodash'
     import moment from 'moment'
 

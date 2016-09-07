@@ -9,40 +9,29 @@ try {
 
 export default {
     state: {
-        list: history,
+        history,
     },
     mutations: {
-        'set-history': (state, moment) => {
-            state.list.push({
-                method: moment.method,
-                path : moment.path,
-                body : moment.body,
-                headers: moment.headers,
+        'add-request-to-history': (state, request) => {
+            state.history.push({
+                method: request.method,
+                path: request.path,
+                body: request.body,
+                headers: request.headers,
                 createdAt: new Date().getTime(),
             })
-            window.localStorage.setItem('api-tester.history', JSON.stringify(state.list))
+            window.localStorage.setItem('api-tester.history', JSON.stringify(state.history))
         },
         'clear-history': (state) => {
             window.localStorage.setItem('api-tester.history', '')
-            state.list = []
+            state.history = []
         },
     },
     getters: {
-        filteredMoments: store => {
-            let toDisplay = []
-
-            let search = store.search.text.toUpperCase()
-            // Let's find out what to display first.
-            this.history.forEach(function (moment) {
-                if (
-                    moment.method.includes(search)
-                    || moment.path.toUpperCase().includes(search)
-                ) {
-                    toDisplay.push(moment)
-                }
-            })
-
-            return toDisplay.reverse()
-        },
+        history: state => state.history,
     },
+    actions: {
+        clearHistory: ({commit}) => commit('clear-history'),
+        addMoment: ({commit}) => commit('add-request-to-history', request),
+    }
 }

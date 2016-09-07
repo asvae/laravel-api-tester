@@ -49,31 +49,12 @@
     import vmRequestTypeSelect from './request-type-select.vue'
     import requestEditorData from '../edit-block/request-editor/request-editor-data.js'
 
-    import {
-            loadRequests,
-            setCurrentRequest,
-            scheduleRequest
-    } from '../../vuex/actions.js'
-
     import {saveRequest, updateRequest} from './request-actions.js'
 
     export default {
         data: () => requestEditorData,
         components: {
             vmRequestTypeSelect,
-        },
-        vuex: {
-            getters: {
-                sending: (store) => store.request.isSending,
-                saving: (store) => store.request.isSaving,
-            },
-            actions: {
-                saveRequest,
-                updateRequest,
-                loadRequests,
-                setCurrentRequest,
-                scheduleRequest,
-            },
         },
         methods: {
             save (){

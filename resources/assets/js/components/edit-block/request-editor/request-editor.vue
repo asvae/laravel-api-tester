@@ -47,10 +47,10 @@
 
 <script>
     import vmJsonEditor from '../../json-editor/json-editor.vue'
-    import vmRouteInfo from './route-info.vue'
+    import vmRouteInfo from './route-info/route-info.vue'
     import vmHeaders from './headers/headers.vue'
 
-    import vmNavigationTabs from '../../ligth-components/navigation-tabs.vue'
+    import vmNavigationTabs from '../../light-components/navigation-tabs.vue'
 
     import requestEditorData from './request-editor-data.js'
 
@@ -62,6 +62,9 @@
             vmHeaders,
             vmRouteInfo,
             vmNavigationTabs,
+        },
+        computed: {
+
         },
         vuex: {
             getters: {

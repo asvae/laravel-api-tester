@@ -2,7 +2,10 @@
 
 export default {
     state: {
-        text: '',
+        search: '',
+    },
+    getters: {
+        search: state => state.search
     },
     mutations: {
         'set-search': (state, search) => {

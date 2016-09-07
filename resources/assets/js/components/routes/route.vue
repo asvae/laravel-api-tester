@@ -1,6 +1,6 @@
 <template>
     <div class="route columns is-gapless is-mobile"
-         :class="{selected: currentRoute === route}"
+         :class="{selected: $store.getters.currentRoute === route}"
     >
         <vm-method-button
                 class="is-white column is-narrow"
@@ -17,13 +17,7 @@
 </template>
 
 <script>
-    import {
-            setCurrentRequest,
-            setRequestInfo,
-            scheduleRequest,
-    setResponse,
-    } from '../../vuex/actions.js'
-    import vmMethodButton from '../ligth-components/method-button.vue'
+    import vmMethodButton from '../light-components/method-button.vue'
     import _ from 'lodash'
 
     export default {
@@ -35,24 +29,9 @@
                 return this.route.errors.length !== 0
             }
         },
-        vuex: {
-            getters: {
-                currentRoute: (store) => store.routes.currentRoute,
-            },
-            actions: {
-                setCurrentRequest,
-                setRequestInfo,
-                scheduleRequest,
-                setResponse,
-            }
-        },
-        props: {
-            route: {
-                type: Object,
-            }
-        },
+        props: ['route'],
         methods: {
-            getRouteRequest (){
+            convertToRequest (){
                 return {
                     method: this.route.methods[0],
                     path: this.route.path,
@@ -67,12 +46,14 @@
             },
             setAndSend(){
                 this.set()
-                this.scheduleRequest(this.getRouteRequest())
+                this.scheduleRequest(this.convertToRequest())
             },
             set(){
-                this.setCurrentRequest(this.getRouteRequest())
-                this.setResponse(null)
-                this.setRequestInfo(this.route)
+                this.$store.dispatch('setCurrentRequest', this.convertToRequest())
+
+                // TODO Probably not the best place.
+                this.$store.dispatch('setResponse', null)
+                this.$store.dispatch('setInfo', this.route)
             },
         }
     }
@@ -88,7 +69,6 @@
         border-right: 2px solid transparent;
         border-top: 1px solid rgba(0, 0, 0, .025);
     }
-
     .route .has-error {
         color: #FF5252;
     }

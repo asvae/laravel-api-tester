@@ -4,9 +4,8 @@
             <p class="card-header-title">Route Info
                 <span v-if="! expanded" class="header-action" v-text="action"></span>
             </p>
-
-            <a class="button is-medium is-white is-hidden-widescreen"
-               @click="toggleExpanded"
+            <a class="button is-medium is-white"
+               @click="expanded = ! expanded"
             >
                 <i class="fa" :class="expanded? 'fa-minus' : 'fa-plus'"></i>
             </a>
@@ -30,12 +29,12 @@
             >
                 <span><i class="fa fa-warning"> </i> Method not allowed :( </span>
             </div>
-            <div class="notification" v-if="! currentRoute">
+            <div class="notification" v-if="! info">
                 <span> No info </span>
             </div>
             <!-- Info -->
             <div class="route-info"
-                 v-if="currentRoute"
+                 v-if="info"
             >
                 <table class="table">
                     <tbody>
@@ -73,7 +72,7 @@
                                        v-text="'Hide additional info'"
                                 ></a>
                                 <pre v-if="additionalInfo"
-                                        v-text="currentRoute | json"
+                                        v-text="info | json"
                                 ></pre>
                             </td>
                         </tr>
@@ -92,39 +91,23 @@
                 expanded: true,
             }
         },
-
-        ready(){
-
-            // Тут лютый хацк... подумать как исправить
-            this.expanded = window.innerWidth > 1366
-            window.addEventListener('resize', e => {
-                this.expanded = window.innerWidth > 1366
-            })
-        },
-        vuex: {
-            getters: {
-                currentRoute: (state) => state.routes.currentRoute,
-                infoMode: (state) => state.infoMode,
-                infoError: (state) => state.routes.infoError
-            }
-        },
         methods: {
             toggleAdditionalInfo(){
                 this.additionalInfo = !this.additionalInfo
             },
-
-            toggleExpanded(){
-                this.expanded = !this.expanded
-            }
         },
         computed: {
-
-            methods () {
-                return this.currentRoute.methods.join(', ')
+            info (){
+                return this.$store.getters.info
             },
-
+            infoError (){
+                return this.$store.getters.infoError
+            },
+            methods () {
+                return this.info.methods.join(', ')
+            },
             middleware () {
-                let middleware = this.currentRoute.action.middleware
+                let middleware = this.info.action.middleware
                 if (middleware) {
                     let isString = typeof middleware === 'string'
                     return isString ? middleware : middleware.join('\n')
@@ -132,9 +115,8 @@
 
                 return 'None'
             },
-
             annotation(){
-                let annotation = this.currentRoute.annotation
+                let annotation = this.info.annotation
                 if (annotation) {
                     return annotation.replace(/\n\s+/g, '\n')
                 }
@@ -142,11 +124,11 @@
                 return null;
             },
             name(){
-                let name = this.currentRoute.action.as
+                let name = this.info.action.as
                 return name ? name : 'None.'
             },
             action () {
-                let action = this.currentRoute.action.uses
+                let action = this.info.action.uses
                 let isString = typeof action === 'string'
                 return isString ? action : 'This route is defined by closure.'
             },

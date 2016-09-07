@@ -49,7 +49,7 @@
 </template>
 
 <script>
-    import vmNavigationTabs from '../../ligth-components/navigation-tabs.vue'
+    import vmNavigationTabs from '../../light-components/navigation-tabs.vue'
     import vmJsonViewer from '../../json-editor/json-viewer.vue'
 
     export default {

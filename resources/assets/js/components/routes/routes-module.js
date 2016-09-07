@@ -4,18 +4,15 @@ let vm = new Vue
 
 export default {
     state: {
-        search: '',
-        errorLoading: false, // Can't load routes
-        infoError: false, // Can't retrieve route info
         routes: [],
         currentRoute: null,
-        isLoading: false,
+        errorLoading: false, // Can't load routes
     },
     mutations: {
         'set-routes': (state, routes) => {
             state.routes = routes
         },
-        'set-routes-error'(state, result){
+        'set-error-loading'(state, result){
             state.errorLoading = result
         },
         'set-info-error': (state, error) => {
@@ -28,57 +25,29 @@ export default {
             }
             state.currentRoute = _.find(state.routes, route)
         },
-        'set-routes-loading': (state, isLoading) => {
-            state.isLoading = isLoading
-        },
     },
     getters: {
-        filteredRoutes: state => {
-            let toDisplay = []
-
-            let search = state.search.toUpperCase()
-
-            state.routes.forEach(function (route) {
-                if (
-                    route.methods.join(',').toUpperCase()
-                         .includes(search)
-                    || route.path.toUpperCase().includes(search)
-                    || (route.action.controller && route.action.controller.toUpperCase()
-                                                        .includes(search))
-                    || (route.name && route.name.toUpperCase()
-                                           .includes(search))
-                ) {
-                    toDisplay.push(route)
-                }
-            })
-
-            return toDisplay
-        }
+        routes: state => state.routes,
+        currentRoute: state => state.currentRoute,
+        routesErrorLoading: state => state.errorLoading,
     },
     actions: {
-        setSearch ({commit}, search){
-            commit('set-search', search)
-        },
         loadRoutes ({commit}) {
-            commit('set-routes-loading', true)
-            commit('set-routes', [])
-
-            console.log(this)
-
             vm.$api_demo2.load({url: 'routes/index'})
-                .then((response) => {
-                    commit('set-routes-error', false)
-                    commit('set-routes', response.data)
-                    commit('set-routes-loading', false)
-                })
-                .catch((xhr, status, error) => {
-                    let response = {
-                        status: xhr.status + ' : ' + error,
-                        data: xhr.responseText
-                    }
-                    commit('SET_ROUTES_ERROR', response)
-                    commit('set-routes-loading', false)
-                })
+              .then(({data}) => {
+                  commit('set-error-loading', false)
+                  commit('set-routes', data)
+              })
+              .catch(({responseText}, status, error) => {
+                  let response = {
+                      status: status + ' : ' + error,
+                      data: responseText
+                  }
+                  commit('set-error-loading', response)
+              })
+        },
+        setCurrentRoute ({commit}, route) {
+            commit('set-current-route', route)
         }
     }
 }

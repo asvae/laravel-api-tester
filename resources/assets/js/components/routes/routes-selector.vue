@@ -10,12 +10,13 @@
             </a>
         </header>
         <div class="notification"
-             v-if="$store.getters.filteredRoutes.length === 0 && ! isLoading"
+             v-if="filteredRoutes.length === 0 && ! isLoading"
              transition="fade-in"
         >
             No routes matched.
         </div>
-        <vm-route v-for="route in $store.state.routes.routes"
+        <vm-route v-for="route in filteredRoutes"
+                  v-if="! $activeActions['routes/index']"
                   class="is-fullwidth"
                   transition="slip"
                   :route="route"
@@ -34,12 +35,8 @@
 
     import vmRoute from './route.vue'
     import vmSearchPanel from  '../search/search-panel.vue'
-    import {loadRoutes} from '../../vuex/actions.js'
 
     export default {
-        data () {
-            return {}
-        },
         components: {
             vmRoute,
             vmSearchPanel,
@@ -52,6 +49,29 @@
                 this.$store.dispatch('loadRoutes')
             }
         },
+        computed: {
+            filteredRoutes (){
+                let {search, routes} = this.$store.getters
+                search = search.toUpperCase()
+                let toDisplay = []
+
+                routes.forEach(function (route) {
+                    if (
+                            route.methods.join(',').toUpperCase()
+                                 .includes(search)
+                            || route.path.toUpperCase().includes(search)
+                            || (route.action.controller && route.action.controller.toUpperCase()
+                                                                .includes(search))
+                            || (route.name && route.name.toUpperCase()
+                                                   .includes(search))
+                    ) {
+                        toDisplay.push(route)
+                    }
+                })
+
+                return toDisplay
+            }
+        }
     }
 </script>
 

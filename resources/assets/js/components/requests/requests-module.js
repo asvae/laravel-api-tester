@@ -1,9 +1,15 @@
 import _ from 'lodash'
+import Vue from 'vue'
+let vm = new Vue
 
 export default {
     state: {
-        list: [],
+        requests: [],
         currentRequest: {method: 'GET', path: '/', headers: [], body: ''},
+    },
+    getters: {
+        requests: state => state.requests,
+        currentRequest: state => state.currentRequest,
     },
     mutations: {
         'set-current-request': (state, currentRequest) => {
@@ -34,23 +40,22 @@ export default {
             }
         },
     },
-    getters: {
-        filteredRequests: state => {
-            let toDisplay = []
-            let search = state.search.text.toUpperCase()
-
-            for (let request of this.requests) {
-                if (
-                    request.method.toUpperCase().includes(search)
-                    || request.path.toUpperCase().includes(search)
-                    || (request.name && request.name.toUpperCase()
-                                               .includes(search))
-                ) {
-                    toDisplay.push(request)
-                }
+    actions: {
+        loadRequests: ({commit}) => {
+            // TODO split Firebase and JSON storage.
+            if (ENV.firebaseToken && ENV.firebaseToken) {
+                return
             }
 
-            return toDisplay
-        }
+            vm.$api_demo2.load({url: 'requests/index'})
+              .then(({data}) => {
+                  dispatch('set-requests', data)
+              })
+        },
+        setCurrentRequest: ({commit}, request) => commit('set-current-request', request),
+        setRequests: ({commit}, requests) => commit('set-requests', requests),
+        insertRequest: ({commit}, request) => commit('insert-request', request),
+        deleteRequest: ({commit}, request) => commit('delete-request', request),
+        updateRequest: ({commit}, request) => commit('update-request', request),
     }
 }

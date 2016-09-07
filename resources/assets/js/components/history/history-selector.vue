@@ -4,20 +4,20 @@
             <vm-search-panel class="card-header-title"
             ></vm-search-panel>
             <a class="button is-white is-large"
-               v-if="history.length !== 0"
+               v-if="$store.getters.history.length !== 0"
                @click="$store.dispatch('clearHistory')"
             ><i class="fa fa-ban"></i></a>
         </header>
         <div class="notification"
-             v-if="! $store.state.history.list.length"
+             v-if="! filteredMoments.length"
              transition="fade-in"
         >
             No history stored
         </div>
         <vm-moment v-for="moment in filteredMoments"
                    class="card-item"
-                transition="slip"
-                :moment="moment"
+                   transition="slip"
+                   :moment="moment"
         ></vm-moment>
     </div>
 </template>
@@ -37,6 +37,21 @@
             vmMoment,
             vmSearchPanel
         },
+        computed: {
+            filteredMoments() {
+                let {search, history} = this.$store.getters
+                search = search.toUpperCase()
+                let toDisplay = []
+
+                history.forEach(function (moment) {
+                    let inSearch = moment.method.includes(search)
+                            || moment.path.toUpperCase().includes(search)
+                    inSearch && toDisplay.push(moment)
+                })
+
+                return toDisplay.reverse()
+            },
+        }
     }
 </script>
 
