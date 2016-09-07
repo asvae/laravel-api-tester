@@ -11,7 +11,11 @@
     import vmRequestEditor from './request-editor/request-editor.vue'
     import vmResponseViewer from './response-viewer/response-viewer.vue'
 
-    import {scheduleRequest, setRequestInfo, setResponse} from '../../vuex/actions.js'
+    import {
+            scheduleRequest,
+            setRequestInfo,
+            setResponse
+    } from '../../vuex/actions.js'
     import RandExp from 'randexp'
     import requestEditorData from './request-editor/request-editor-data.js'
 
@@ -52,7 +56,7 @@
                 // Otherwise, we'll send to unmodified path.
 
                 let path = request.url
-                if(request.wheres){
+                if (request.wheres) {
                     let wheres = request.wheres
                     for (let index in wheres) {
                         let mocker = new RandExp(new RegExp(wheres[index]))
@@ -63,12 +67,12 @@
                 }
 
                 // Do sending.
-                this.$api.ajax(request.method, path, request.data, request.headers).then((response) => {
-                    this.setRequestInfo(response.data)
-                    this.setInfoError(false)
-                }).catch((xhr) => {
-                    this.setInfoError(xhr.status)
-                })
+                this.$api.ajax(request.method, path, request.data, request.headers)
+                    .then((response) => {
+                        this.setRequestInfo(response.data)
+                        this.setInfoError(false)
+                    })
+                    .catch(xhr => this.setInfoError(xhr.status))
             },
             send (request){
                 request = this.prepareRequest(request)
@@ -90,8 +94,11 @@
             getResult(request, redirects){
                 this.$api.ajax(request.method, request.url, request.data, request.headers)
                     .always(function (dataOrXHR, status, XHROrError) {
+
+                        let isXHR = dataOrXHR && dataOrXHR.hasOwnProperty('responseText')
+
                         // NOTE Jquery ajax is sometimes not quite sane.
-                        let xhr = dataOrXHR.hasOwnProperty('responseText') ? dataOrXHR : XHROrError
+                        let xhr = isXHR ? dataOrXHR : XHROrError
                         let data = xhr.responseText
                         try {
                             data = JSON.parse(data)
@@ -152,7 +159,7 @@
             },
             // We work with scheduled requests as with stack.
             scheduledRequests (requests){
-                if (requests.length === 0){
+                if (requests.length === 0) {
                     return
                 }
 
