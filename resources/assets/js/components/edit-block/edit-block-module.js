@@ -143,18 +143,5 @@ export default {
                 commit('set-is-sending', false)
             })
         },
-        saveRequest: function ({commit}, request) {
-            return vm.$api_demo2.load({url: 'requests/store'}, request)
-                     .then(({data}) => {
-                         commit('set-current-request', data)
-                     })
-        },
-        updateRequest: function ({commit}, request) {
-            return vm.$api_demo2.load({url: 'requests/update'}, request)
-                     .then(({data}) => {
-                         commit('set-current-request', data)
-                         commit('update-request', data)
-                     })
-        },
     }
 }

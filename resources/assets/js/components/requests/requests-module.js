@@ -20,24 +20,21 @@ export default {
             state.requests = requests
         },
         'insert-request': (state, request) => {
-            let requests = _.cloneDeep(state.requests)
+            let requests = state.requests
             requests.push(request)
-            state.requests = requests
         },
         'delete-request': (state, request) => {
-            let requests = _.cloneDeep(state.requests)
+            let requests = state.requests
             let index = _.findIndex(requests, request);
             if (index !== -1) {
                 requests.splice(index, 1)
-                state.requests = requests
             }
         },
         'update-request': (state, request) => {
-            let requests = _.cloneDeep(state.requests)
+            let requests = state.requests
             let index = _.findIndex(requests, {id: request.id});
             if (index !== -1) {
                 requests.splice(index, 1, request)
-                state.requests = requests
             }
         },
     },
@@ -55,14 +52,33 @@ export default {
         },
         deleteRequest: ({commit}, request) => {
             vm.$api_demo2.load({url: 'requests/destroy'}, request)
-                .then(() => {
-                    commit('delete-request', request)
-                })
+              .then(() => {
+                  commit('delete-request', request)
+              })
         },
-        setCurrentRequest: ({commit}, request) => commit('set-current-request', request),
+        setCurrentRequest: ({commit}, request) => {
+            commit('set-current-request', request)
+        },
         setRequests: ({commit}, requests) => commit('set-requests', requests),
-        insertRequest: ({commit}, request) => commit('insert-request', request),
-        deleteRequest: ({commit}, request) => commit('delete-request', request),
-        updateRequest: ({commit}, request) => commit('update-request', request),
+
+        // TODO This relates to firebase and should be moved to somewhere.
+        // insertRequest: ({commit}, request) => commit('insert-request', request),
+        // deleteRequest: ({commit}, request) => commit('delete-request', request),
+        // amendRequest: ({commit}, request) => commit('update-request', request),
+
+        saveRequest: ({commit}, request) => {
+            vm.$api_demo2.load({url: 'requests/store'}, request)
+              .then(({data}) => {
+                  commit('set-current-request', data)
+                  commit('insert-request', data)
+              })
+        },
+        updateRequest: ({commit}, request) => {
+            vm.$api_demo2.load({url: 'requests/update'}, request)
+              .then(({data}) => {
+                  commit('set-current-request', data)
+                  commit('update-request', data)
+              })
+        },
     }
 }

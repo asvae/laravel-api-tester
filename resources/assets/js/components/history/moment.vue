@@ -10,12 +10,6 @@
 </template>
 
 <script>
-    import {
-            setCurrentRequest,
-            setRequestInfo,
-            scheduleRequest,
-            setResponse,
-    } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
     import _ from 'lodash'
     import moment from 'moment'
@@ -24,35 +18,20 @@
         components: {
             vmMethodButton
         },
-        vuex: {
-            getters: {
-                currentRoute: (store) => store.routes.currentRoute,
-            },
-            actions: {
-                setCurrentRequest,
-                setRequestInfo,
-                scheduleRequest,
-                setResponse,
-            }
-        },
         data(){
             return {
                 time: ''
             }
         },
-        props: {
-            moment: {
-                type: Object,
-            }
-        },
+        props: ['moment'],
         ready(){
             this.start()
         },
         methods: {
             set(){
-                this.setRequestInfo(null)
-                this.setResponse(null)
-                this.setCurrentRequest(this.moment)
+                this.$store.dispatch('setInfo', null)
+                this.$store.dispatch('setResponse', null)
+                this.$store.dispatch('setCurrentRequest', this.moment)
             },
             tick(){
                 this.time = moment.unix(this.moment.createdAt / 1000).fromNow();

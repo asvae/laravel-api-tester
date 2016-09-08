@@ -1,10 +1,5 @@
 import Vuex from 'vuex'
 
-const state = {
-    infoMode: 'route',
-    infoError: false,
-}
-
 import routes from '../components/routes/routes-module.js'
 import search from '../components/search/search-module.js'
 import routeInfo from '../components/edit-block/request-editor/route-info/info-module.js'
@@ -16,7 +11,6 @@ import requestEditor from '../components/edit-block/request-editor/request-edito
 
 export default new Vuex.Store({
     strict: true,
-    state,
     modules: {
         routes,
         search,

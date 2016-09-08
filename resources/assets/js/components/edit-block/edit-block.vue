@@ -11,11 +11,6 @@
     import vmRequestEditor from './request-editor/request-editor.vue'
     import vmResponseViewer from './response-viewer/response-viewer.vue'
 
-    import {
-        scheduleRequest,
-        setRequestInfo,
-        setResponse
-    } from '../../vuex/actions.js'
     import requestEditorData from './request-editor/request-editor-data.js'
 
     export default {
@@ -27,6 +22,7 @@
         watch: {
             currentRequest (currentRequest){
                 this.request = _.cloneDeep(currentRequest)
+                this.$store.dispatch('loadCurrentRequestInfo')
             },
             // We work with scheduled requests as with stack.
             scheduledRequests (requests){

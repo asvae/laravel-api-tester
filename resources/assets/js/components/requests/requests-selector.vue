@@ -69,9 +69,7 @@
                 // Remove slash from the path, so it won't mess up the request.
                 path = path.replace('/', '')
 
-                // TODO Test the thing and comment properly
-                // Если путь пуст, это значит что мы работаем с самой первой загрузкой,
-                // И должны вставить все записи.
+                // Empty path means we got all requests.
                 if (path === '') {
                     let requests = []
 
@@ -98,7 +96,7 @@
                 let index = _.findIndex(this.requests, {id: path})
 
                 if (index !== -1) {
-                    this.$store.dispatch('updateRequest', request)
+                    this.$store.dispatch('amendRequest', request)
                 } else {
                     this.$store.dispatch('insertRequest', request)
                 }

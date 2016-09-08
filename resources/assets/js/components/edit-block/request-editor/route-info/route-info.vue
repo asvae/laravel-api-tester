@@ -38,28 +38,28 @@
             >
                 <table class="table">
                     <tbody>
-                        <tr v-if="annotation">
+                        <tr v-if="computedInfo.annotation">
                             <td colspan="2">
                                 <pre v-text="annotation"></pre>
                             </td>
                         </tr>
                         <tr>
                             <td>Methods</td>
-                            <td v-text="methods"></td>
+                            <td v-text="computedInfo.methods"></td>
                         </tr>
                         <tr>
                             <td>Middleware</td>
                             <td>
-                                <pre v-text="middleware"></pre>
+                                <pre v-text="computedInfo.middleware"></pre>
                             </td>
                         </tr>
                         <tr>
                             <td>Name</td>
-                            <td v-text="name"></td>
+                            <td v-text="computedInfo.name"></td>
                         </tr>
                         <tr>
                             <td>Action</td>
-                            <td v-text="action"></td>
+                            <td v-text="computedInfo.action"></td>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -95,18 +95,7 @@
             toggleAdditionalInfo(){
                 this.additionalInfo = !this.additionalInfo
             },
-        },
-        computed: {
-            info (){
-                return this.$store.getters.info
-            },
-            infoError (){
-                return this.$store.getters.infoError
-            },
-            methods () {
-                return this.info.methods.join(', ')
-            },
-            middleware () {
+            parseMiddleware(){
                 let middleware = this.info.action.middleware
                 if (middleware) {
                     let isString = typeof middleware === 'string'
@@ -115,7 +104,7 @@
 
                 return 'None'
             },
-            annotation(){
+            parseAnnotation (){
                 let annotation = this.info.annotation
                 if (annotation) {
                     return annotation.replace(/\n\s+/g, '\n')
@@ -123,14 +112,32 @@
 
                 return null;
             },
-            name(){
-                let name = this.info.action.as
-                return name ? name : 'None.'
-            },
-            action () {
+            parseAction(){
                 let action = this.info.action.uses
                 let isString = typeof action === 'string'
                 return isString ? action : 'This route is defined by closure.'
+            }
+        },
+        computed: {
+            info (){
+                return this.$store.getters.info
+            },
+            computedInfo (){
+                let info = this.$store.getters.info
+                if (! info){
+                    return {}
+                }
+
+                return {
+                    methods: info.methods.join(', '),
+                    middleware: this.parseMiddleware(),
+                    annotatiom: this.parseAnnotation(),
+                    name: this.info.action.as ? this.info.action.as : 'None.',
+                    actiom: this.parseAction(),
+                }
+            },
+            infoError (){
+                return this.$store.getters.infoError
             },
         },
     }

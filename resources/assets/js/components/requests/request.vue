@@ -20,12 +20,6 @@
 </template>
 
 <script>
-    import {
-            setCurrentRequest,
-            scheduleRequest,
-            setRequestInfo,
-            setResponse,
-    } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
 
     export default {
@@ -42,14 +36,15 @@
         },
         props: ['request'],
         methods: {
-            setAndRun(){
-                this.set()
-                this.$store.dispatch('scheduleRequest', this.request)
-            },
             set(){
+                console.log(this.request)
                 this.$store.dispatch('setInfo', null)
                 this.$store.dispatch('setResponse', null)
                 this.$store.dispatch('setCurrentRequest', this.request)
+            },
+            setAndRun(){
+                this.set()
+                this.$store.dispatch('scheduleRequest', this.request)
             }
         },
     }

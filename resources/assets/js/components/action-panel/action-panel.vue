@@ -59,16 +59,10 @@
                 // Saves or updates depending on whether request has id
                 let action = this.request.id ? 'updateRequest' : 'saveRequest'
                 this.$store.dispatch(action, this.request)
-                        .then(() => {
-                            this.$store.dispatch('loadRequests')
-                        })
             },
             copy(){
                 // Just saves request.
                 this.$store.dispatch('saveRequest', this.request)
-                    .then(() => {
-                        this.$store.dispatch('loadRequests')
-                    })
             }
         }
     }

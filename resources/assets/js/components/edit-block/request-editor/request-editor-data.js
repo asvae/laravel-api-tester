@@ -1,3 +1,3 @@
 export default {
-    request: {'path': '/', 'name': '', 'method': 'GET', 'headers': [], },
+    request: {'body': '', 'path': '/', 'name': '', 'method': 'GET', 'headers': [], },
 }
