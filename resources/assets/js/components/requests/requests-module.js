@@ -2,11 +2,19 @@ import _ from 'lodash'
 import Vue from 'vue'
 let vm = new Vue
 
+function prepareRequest(request) {
+    request = _.cloneDeep(request)
+    request.body = JSON.stringify(request.body)
+
+    console.log(request)
+
+    return request
+}
 
 export default {
     state: {
         requests: [],
-        currentRequest: {method: 'GET', path: '/', headers: [], body: ''},
+        currentRequest: {method: 'GET', path: '/', headers: [], body: "{}"},
     },
     getters: {
         requests: state => state.requests,
@@ -70,14 +78,15 @@ export default {
         // amendRequest: ({commit}, request) => commit('update-request', request),
 
         saveRequest: ({commit}, request) => {
-            vm.$api_demo2.load({url: 'requests/store'}, request)
+            vm.$api_demo2.load({url: 'requests/store'}, prepareRequest(request))
               .then(({data}) => {
                   commit('set-current-request', data)
                   commit('insert-request', data)
               })
         },
         updateRequest: ({commit}, request) => {
-            vm.$api_demo2.load({url: 'requests/update'}, request)
+
+            vm.$api_demo2.load({url: 'requests/update'}, prepareRequest(request))
               .then(({data}) => {
                   commit('set-current-request', data)
                   commit('update-request', data)

@@ -37,7 +37,6 @@
         props: ['request'],
         methods: {
             set(){
-                console.log(this.request)
                 this.$store.dispatch('setInfo', null)
                 this.$store.dispatch('setResponse', null)
                 this.$store.dispatch('setCurrentRequest', this.request)

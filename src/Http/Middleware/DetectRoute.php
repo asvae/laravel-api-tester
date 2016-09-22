@@ -29,7 +29,7 @@ class DetectRoute
 
     public function handle(Request $request, Closure $next)
     {
-        // In case the request was sent by Api Tester and wanted route-info
+        // In case the request was sent by Api Tester and route info is wanted
         // we will halt the request and output route information instead.
         if ($request->header('X-Api-Tester') === static::ROUTE_INFO) {
 
@@ -47,8 +47,10 @@ class DetectRoute
     }
 
     public function handleMatchedRoute($route){
+        $routeInfo = new RouteInfo($route);
+
         response()->json([
-            'data' => new RouteInfo($route),
+            'data' => $routeInfo,
         ])->send();
 
         exit();

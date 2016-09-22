@@ -36,7 +36,7 @@
                     method: this.route.methods[0],
                     path: this.route.path,
                     name: "",
-                    body: this.route.hasOwnProperty('body') ? this.route.body : "",
+                    body: this.route.hasOwnProperty('body') ? this.route.body : '""',
                     wheres: this.route.hasOwnProperty('wheres') ? this.route.wheres : {},
                     headers: this.route.hasOwnProperty('headers') ? this.route.headers : [],
                     config: {
@@ -50,12 +50,9 @@
             },
             set(){
                 this.$store.dispatch('setCurrentRequest', this.convertToRequest())
-
-                // TODO Probably not the best place.
                 this.$store.dispatch('setResponse', null)
-                this.$store.dispatch('setInfo', this.route)
 
-                this.$store.dispatch('loadCurrentRequestInfo')
+                this.$store.dispatch('setInfo', this.route)
             },
         }
     }

@@ -21,7 +21,11 @@
         data: () => requestEditorData, // {request: {}}
         watch: {
             currentRequest (currentRequest){
-                this.request = _.cloneDeep(currentRequest)
+                let request = _.cloneDeep(currentRequest)
+
+                request.body = JSON.parse(request.body)
+                this.request = request
+
                 this.$store.dispatch('loadCurrentRequestInfo')
             },
             // We work with scheduled requests as with stack.

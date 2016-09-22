@@ -56,10 +56,13 @@ class JsonStorage implements StorageInterface
     {
         $this->files = $files;
         $this->collection = $collection;
+
         $path = explode('/', $path);
         $this->filename = array_pop($path);
 
         $this->path = app()->basePath() . '/' . implode($path, '/');
+
+        $this->createDirectoryIfNotExists();
     }
 
     /**
@@ -115,8 +118,6 @@ class JsonStorage implements StorageInterface
      */
     public function put(RequestCollection $data)
     {
-        $this->createDirectoryIfNotExists();
-
         $content = $this->prepareContent($data->onlyNotMarkedToDelete());
 
         $this->files->put($this->getFilePath(), $content);

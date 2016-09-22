@@ -16,7 +16,7 @@ const prepareRequest = (request) => {
     return {
         method: request.method,
         url,
-        data: request.body,
+        data: JSON.parse(request.body),
         headers: request.headers,
         wheres: request.wheres,
     }
