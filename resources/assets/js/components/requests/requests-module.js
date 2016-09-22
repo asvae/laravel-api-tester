@@ -38,6 +38,7 @@ export default {
             }
         },
     },
+
     actions: {
         loadRequests: ({commit}) => {
             // TODO split Firebase and JSON storage.
@@ -56,9 +57,11 @@ export default {
                   commit('delete-request', request)
               })
         },
+
         setCurrentRequest: ({commit}, request) => {
             commit('set-current-request', request)
         },
+
         setRequests: ({commit}, requests) => commit('set-requests', requests),
 
         // TODO This relates to firebase and should be moved to somewhere.

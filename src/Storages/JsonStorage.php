@@ -45,16 +45,21 @@ class JsonStorage implements StorageInterface
      * Storage constructor.
      *
      * @param \Illuminate\Filesystem\Filesystem $files
-     * @param RequestCollection $collection
-     * @param $path
+     * @param RequestCollection                 $collection
+     * @param                                   $path
      */
-    public function __construct(Filesystem $files, RequestCollection $collection, $path)
+    public function __construct(
+        Filesystem $files,
+        RequestCollection $collection,
+        $path
+    )
     {
         $this->files = $files;
         $this->collection = $collection;
         $path = explode('/', $path);
         $this->filename = array_pop($path);
-        $this->path = implode($path, '/');
+
+        $this->path = app()->basePath() . '/' . implode($path, '/');
     }
 
     /**
@@ -82,7 +87,7 @@ class JsonStorage implements StorageInterface
      */
     public function getFilePath()
     {
-        return $this->getPath() . '/' . $this->getFilename();
+        return $this->getPath().'/'.$this->getFilename();
     }
 
     /**
@@ -122,7 +127,7 @@ class JsonStorage implements StorageInterface
      */
     protected function createDirectoryIfNotExists()
     {
-        if (!is_dir($this->getPath())) {
+        if (! is_dir($this->getPath())) {
             $this->files->makeDirectory($this->getPath(), 0755, true);
         }
     }
@@ -161,7 +166,7 @@ class JsonStorage implements StorageInterface
         $content = '';
 
         foreach ($data as $row) {
-            $content .= $this->convertToJson($row) . static::ROW_DELIMITER;
+            $content .= $this->convertToJson($row).static::ROW_DELIMITER;
         }
 
         return $content;
