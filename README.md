@@ -1,6 +1,6 @@
 # Laravel Api Tester
 
-[![Integration tests](https://travis-ci.org/asvae/laravel-spa-boilerplate.svg)](https://travis-ci.org/asvae/laravel-spa-boilerplate)
+<!--[![Integration tests](https://travis-ci.org/asvae/laravel-spa-boilerplate.svg)](https://travis-ci.org/asvae/laravel-spa-boilerplate)-->
 [![Unit tests](https://travis-ci.org/asvae/laravel-api-tester.svg)](https://travis-ci.org/asvae/laravel-api-tester)
 [![PHP version](https://badge.fury.io/ph/asvae%2Flaravel-api-tester.svg)](https://badge.fury.io/ph/asvae%2Flaravel-api-tester)
 
@@ -65,7 +65,7 @@ Don't hesitate to raise an issue if something doesn't work or you have a feature
 * [asvae](https://github.com/asvae) — frontends. You guessed it.
 
 ## Tests
-We do unit tests as well as integration tests, which is rare for laravel libraries. Check badges on the top for details.
+Check badges on the top for details.
 
 ## Licence
 MIT
