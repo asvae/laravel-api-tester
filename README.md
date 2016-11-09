@@ -1,7 +1,7 @@
 # Laravel Api Tester
 
 <!--[![Integration tests](https://travis-ci.org/asvae/laravel-spa-boilerplate.svg)](https://travis-ci.org/asvae/laravel-spa-boilerplate)-->
-[![Unit tests](https://travis-ci.org/asvae/laravel-api-tester.svg)](https://travis-ci.org/asvae/laravel-api-tester)
+[![Unit tests](https://travis-ci.org/asvae/laravel-api-tester.svg?branch=master)](https://travis-ci.org/asvae/laravel-api-tester)
 [![PHP version](https://badge.fury.io/ph/asvae%2Flaravel-api-tester.svg)](https://badge.fury.io/ph/asvae%2Flaravel-api-tester)
 
 ![Interface](http://i.imgur.com/3geJtzb.png) 
