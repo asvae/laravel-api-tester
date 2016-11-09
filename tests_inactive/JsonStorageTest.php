@@ -41,12 +41,9 @@ class JsonStorageTest extends TestCase
      */
     protected $referenceCollection;
 
-    /**
-     *
-     */
     public function setUp()
     {
-        $this->dir = __DIR__ . '/tmp';
+        $this->dir = __DIR__.'/tmp';
         $this->storageFilePath = $this->dir . '/test.db';
 
         $this->referenceData = [

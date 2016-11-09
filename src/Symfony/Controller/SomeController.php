@@ -36,50 +36,61 @@ class SomeController extends Controller
 </body>
 </html>
 EOT
-);
+        );
     }
 
     /**
-     * @Route("/api-tester/assets/api-tester.js")
+     * @Route("/api-tester/assets/{file}")
      */
-    public function jsAction()
+    public function loadAsset($file)
     {
-        $fileName = 'api-tester.js';
-        $fullPath = __DIR__.'/../../../resources/assets/build/'.$fileName;
+        return $this->file($file, __DIR__.'/../../../resources/assets/build/');
+    }
 
-        BinaryFileResponse::trustXSendfileTypeHeader();
-        $response = new BinaryFileResponse($fullPath);
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE,
-            $fileName, iconv('UTF-8', 'ASCII//TRANSLIT', $fileName));
+    /**
+     * @Route("api-tester/assets/img/jsoneditor-icons.svg")
+     */
+    public function loadSvg()
+    {
+
+    }
+
+    protected function file($file, $root)
+    {
+        $contents = file_get_contents($root.'/'.$file);
+        $response = new Response($contents);
+        $response->headers->set('Content-Type', $this->getFileContentType($file), $file);
+
+        // Browser will cache files for 1 year.
+        $secondsInYear = 60 * 60 * 24 * 365;
+        $response->setSharedMaxAge($secondsInYear);
+        $response->setMaxAge($secondsInYear);
+        $response->setExpires(new \DateTime('+1 year'));
 
         return $response;
     }
 
     /**
-     * @Route("/api-tester/assets/api-tester.css")
+     * Figure out appropriate "Content-Type" header
+     * by filename.
+     *
+     * @param $file
+     * @return mixed
      */
-    public function cssAction()
+    protected function getFileContentType($file)
     {
-        $fileName = 'api-tester.css';
-        $fullPath = __DIR__.'/../../../resources/assets/build/'.$fileName;
+        $array = explode('.', $file);
+        $ext = end($array);
 
-        BinaryFileResponse::trustXSendfileTypeHeader();
-        $response = new BinaryFileResponse($fullPath);
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE,
-            $fileName, iconv('UTF-8', 'ASCII//TRANSLIT', $fileName));
+        $contentTypes = [
+            'css'   => 'text/css',
+            'js'    => 'text/javascript',
+            'svg'   => 'image/svg+xml',
+            'map'   => 'text/css',
+            'woff'  => 'application/x-font-woff',
+            'woff2' => 'application/x-font-woff2',
+        ];
 
-        return $response;
-    }
-
-    /**
-     * @Route("/api-tester/assets/api-tester.css")
-     */
-    public function someAction3()
-    {
-        $basePath = __DIR__.'/../../../resources/assets/build/';
-        echo ($basePath.'api-tester.js');
-
-        return new Response('some3');
-
+        return $contentTypes[$ext];
     }
 }
