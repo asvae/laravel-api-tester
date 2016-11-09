@@ -12,12 +12,12 @@ use JsonSerializable;
 class RouteInfo implements Arrayable, JsonSerializable
 {
     /**
-     * @var \ReflectionFunctionAbstract|null
+     * @var \ReflectionClass|null
      */
     protected $routeReflection = null;
 
     /**
-     * @var \ReflectionClass|null
+     * @var \ReflectionFunctionAbstract|null
      */
     protected $actionReflection = null;
 
@@ -54,13 +54,13 @@ class RouteInfo implements Arrayable, JsonSerializable
     public function toArray()
     {
         return array_merge([
-            'name' => $this->route->getName(),
+            'name'    => $this->route->getName(),
             'methods' => $this->route->getMethods(),
-            'domain' => $this->route->domain(),
-            'path' => $this->preparePath(),
-            'action' => $this->route->getAction(),
-            'wheres' => $this->extractWheres(),
-            'errors' => $this->errors,
+            'domain'  => $this->route->domain(),
+            'path'    => $this->preparePath(),
+            'action'  => $this->route->getAction(),
+            'wheres'  => $this->extractWheres(),
+            'errors'  => $this->errors,
         ], $this->getMeta(), $this->options);
     }
 
@@ -73,7 +73,7 @@ class RouteInfo implements Arrayable, JsonSerializable
 
         // Хак, чтобы в json всегда был объект
         if (empty($wheres)) {
-            return (object)[];
+            return (object) [];
         }
 
         return $wheres;
@@ -90,11 +90,11 @@ class RouteInfo implements Arrayable, JsonSerializable
     /**
      * @return string
      */
-    protected function extractAnnotation()
+    protected function extractDocBlocks()
     {
         $reflection = $this->getActionReflection();
 
-        if (!is_null($reflection)) {
+        if (! is_null($reflection)) {
             return $reflection->getDocComment();
         }
 
@@ -111,40 +111,42 @@ class RouteInfo implements Arrayable, JsonSerializable
 
         foreach ($reflection->getParameters() as $parameter) {
 
-            // TODO Write the reasoning behind following lines.
+            // If first argument is untyped Laravel DI won't check any other
+            // arguments. So we will take a break as well.
             try {
                 $class = $parameter->getClass();
-            } catch (\ReflectionException $e){
+            } catch (\ReflectionException $e) {
                 break;
             }
 
-            // Если аргумент нетипизирован, значит он уже не будет затянут через DI,
-            // И дальнейший обход не имеет смысла, так как все последующие аргументы
-            // тоже не будут затянуты через DI, не зависимо от того типизированы они или нет.
             if (is_null($class)) {
                 break;
             }
 
-            // Если это форм-реквест.
-            if (is_subclass_of($class->name, FormRequest::class)) {
-
-                // Для вызова нестатического метода на объекте, нам необходим инстанс объекта.
-                // Мы используем build вместо make, чтобы избежать автоматического запуска валидации.
-                $formRequest = app()->build($class->name);
-
-                // Здесь используется метод call, чтобы разрешить зависимости.
-                $rules = app()->call([$formRequest, 'rules']);
-
-                return [
-                    'class' => $class->name,
-                    'rules' => $rules,
-                ];
+            // We don't care if argument is anything but FormRequest
+            if (! is_subclass_of($class->name, FormRequest::class)) {
+                continue;
             }
+
+            // To trigger non static method on object we have to instantiate it.
+            // We will `build` instead of `make` so the validation won't be triggered.
+            $formRequest = app()->build($class->name);
+
+            // Next we use `call` to resolve dependencies.
+            $rules = app()->call([$formRequest, 'rules']);
+
+            return [
+                'class' => $class->name,
+                'rules' => $rules,
+            ];
         }
 
         return null;
     }
 
+    /**
+     * @return \ReflectionClass
+     */
     protected function getRouteReflection()
     {
         if ($this->routeReflection) {
@@ -165,23 +167,27 @@ class RouteInfo implements Arrayable, JsonSerializable
 
         $uses = $this->route->getAction()['uses'];
 
-        // Если это строка и она содержит @, значит мы имем дело с методом контроллера.
+        // `uses` is string and contains '@'
+        // means we're looking at controller@method
         if (is_string($uses) && str_contains($uses, '@')) {
             list($controller, $action) = explode('@', $uses);
 
-            // Если нет контроллера.
-            if (!class_exists($controller)) {
+            // Controller is missing.
+            if (! class_exists($controller)) {
                 $this->setError('uses', 'controller does not exists');
+
                 return null;
             }
 
-            // Если нет метода в контроллере.
-            if (!method_exists($controller, $action)) {
+            // Action is missing.
+            if (! method_exists($controller, $action)) {
                 $this->setError('uses', 'controller@method does not exists');
+
                 return null;
             }
 
-            return $this->actionReflection = new \ReflectionMethod($controller, $action);
+            return $this->actionReflection = new \ReflectionMethod($controller,
+                $action);
         }
 
         if (is_callable($uses)) {
@@ -215,9 +221,9 @@ class RouteInfo implements Arrayable, JsonSerializable
     {
         if ($this->addMeta) {
             return [
-                'annotation' => $this->extractAnnotation(),
+                'annotation'  => $this->extractDocBlocks(),
                 'formRequest' => $this->extractFormRequest(),
-                'errors' => $this->errors,
+                'errors'      => $this->errors,
             ];
         }
 

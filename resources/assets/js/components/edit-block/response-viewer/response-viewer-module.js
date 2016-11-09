@@ -1,15 +1,18 @@
-const state = {
-    mode: 'data',
-    response: null,
-}
-
-const mutations = {
-    SET_RESPONSE(state, response){
-        state.response = response
+export default {
+    state: {
+        mode: 'data',
+        response: null,
     },
-    SET_VIEWER_MODE(state, mode){
-        state.mode = mode
+    mutations: {
+        'set-response': (state, response) => state.response = response,
+        'set-viewer-mode': (state, mode) => state.mode = mode,
     },
+    getters: {
+        responseViewerMode: state => state.mode,
+        response: state => state.response,
+    },
+    actions: {
+        setResponseViewerMode: ({commit}, mode) => commit('set-viewer-mode', mode),
+        setResponse: ({commit}, response) => commit('set-response', response),
+    }
 }
-
-export default {state, mutations}

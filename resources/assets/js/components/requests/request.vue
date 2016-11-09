@@ -12,7 +12,7 @@
            v-text="displayedName"
         ></a>
         <a class="column button is-small is-white is-narrow"
-           @click="deleteRequest(request)"
+           @click="$store.dispatch('deleteRequest', request)"
         >
             <i class="fa fa-times"></i>
         </a>
@@ -20,12 +20,6 @@
 </template>
 
 <script>
-    import {
-            setCurrentRequest,
-            scheduleRequest,
-            setRequestInfo,
-            setResponse,
-    } from '../../vuex/actions.js'
     import vmMethodButton from '../ligth-components/method-button.vue'
 
     export default {
@@ -35,41 +29,23 @@
         computed: {
             displayedName (){
                 return this.request.name ? this.request.name : this.request.path
+            },
+            currentRequest(){
+                return this.$store.getters.currentRequest
             }
         },
-        data (){
-            return {}
-        },
+        props: ['request'],
         methods: {
+            set(){
+                this.$store.dispatch('setInfo', null)
+                this.$store.dispatch('setResponse', null)
+                this.$store.dispatch('setCurrentRequest', this.request)
+            },
             setAndRun(){
                 this.set()
-                this.scheduleRequest(this.request)
-            },
-            set(){
-                this.setRequestInfo(null)
-                this.setResponse(null)
-                this.setCurrentRequest(this.request)
+                this.$store.dispatch('scheduleRequest', this.request)
             }
         },
-        vuex: {
-            actions: {
-                setCurrentRequest,
-                scheduleRequest,
-                setRequestInfo,
-                setResponse,
-                deleteRequest ({dispatch}, request) {
-                    this.$api_demo2.load({url: 'requests/destroy'}, request)
-                        .then(() => {
-                            dispatch('DELETE_REQUEST', request)
-                        })
-                },
-            },
-        },
-        props: {
-            request: {
-                type: Object,
-            }
-        }
     }
 </script>
 
@@ -78,7 +54,6 @@
         margin: 0;
         border-top: 1px solid rgba(0, 0, 0, .025);
     }
-
     .request .button {
         border: none;
         padding: 3px 6px;

@@ -1,33 +1,53 @@
 import _ from 'lodash'
+import Vue from 'vue'
+let vm = new Vue
 
-const state = {
-    errorLoading: false, // Can't load routes
-    infoError: false, // Can't retrieve route info
-    routes: [],
-    currentRoute: null,
-    isLoading: false,
-}
-
-const mutations = {
-    SET_ROUTES: (state, routes) => {
-        state.routes = routes
+export default {
+    state: {
+        routes: [],
+        currentRoute: null,
+        errorLoading: false, // Can't load routes
     },
-    SET_ROUTES_ERROR(state, result){
-        state.errorLoading = result
+    mutations: {
+        'set-routes': (state, routes) => {
+            state.routes = routes
+        },
+        'set-error-loading'(state, result){
+            state.errorLoading = result
+        },
+        'set-info-error': (state, error) => {
+            state.infoError = error
+        },
+        'set-request-info': (state, route) => {
+            if (route === null) {
+                state.currentRoute = route
+                return
+            }
+            state.currentRoute = _.find(state.routes, route)
+        },
     },
-    SET_INFO_ERROR: (state, error) => {
-        state.infoError = error
+    getters: {
+        routes: state => state.routes,
+        currentRoute: state => state.currentRoute,
+        routesErrorLoading: state => state.errorLoading,
     },
-    SET_REQUEST_INFO: (state, route) => {
-        if (route === null) {
-            state.currentRoute = route
-            return
+    actions: {
+        loadRoutes ({commit}) {
+            vm.$api_demo2.load({url: 'routes/index'})
+              .then(({data}) => {
+                  commit('set-error-loading', false)
+                  commit('set-routes', data)
+              })
+              .catch(({responseText}, status, error) => {
+                  let response = {
+                      status: status + ' : ' + error,
+                      data: responseText
+                  }
+                  commit('set-error-loading', response)
+              })
+        },
+        setCurrentRoute ({commit}, route) {
+            commit('set-current-route', route)
         }
-        state.currentRoute = _.find(state.routes, route)
-    },
-    SET_ROUTES_LOADING: (sate, isLoading) => {
-        state.isLoading = isLoading
     }
 }
-
-export default {state, mutations}

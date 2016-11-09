@@ -7,25 +7,31 @@ try {
     history = []
 }
 
-const state = {
-    history,
-}
-
-const mutations = {
-    SET_HISTORY(state, moment){
-        state.history.push({
-            method: moment.method,
-            path : moment.path,
-            body : moment.body,
-            headers: moment.headers,
-            createdAt: new Date().getTime(),
-        })
-        window.localStorage.setItem('api-tester.history', JSON.stringify(history))
+export default {
+    state: {
+        history,
     },
-    CLEAR_HISTORY(state){
-        window.localStorage.setItem('api-tester.history', '')
-        state.history = []
+    mutations: {
+        'add-request-to-history': (state, request) => {
+            state.history.push({
+                method: request.method,
+                path: request.path,
+                body: request.body,
+                headers: request.headers,
+                createdAt: new Date().getTime(),
+            })
+            window.localStorage.setItem('api-tester.history', JSON.stringify(state.history))
+        },
+        'clear-history': (state) => {
+            window.localStorage.setItem('api-tester.history', '')
+            state.history = []
+        },
     },
+    getters: {
+        history: state => state.history,
+    },
+    actions: {
+        clearHistory: ({commit}) => commit('clear-history'),
+        addMoment: ({commit}, request) => commit('add-request-to-history', request),
+    }
 }
-
-export default {state, mutations}

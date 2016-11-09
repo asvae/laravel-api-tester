@@ -70,14 +70,12 @@ export default class Api {
      * @param headers
      * @returns {*}
      */
-    ajax(method, url, data = null, headers = []) {
+    ajax(method, url, data = {}, headers = []) {
         headers = _.clone(headers)
         if(!_.some(['GET', 'HEAD', 'OPTIONS'], method.toUpperCase())){
             headers.push({key: 'X-XSRF-TOKEN', value: this.getCookie('XSRF-TOKEN') })
         } else {
-            if(data === null){
-                data = {}
-            }
+            // Browser won't cache request with __noCache parameter.
             data.__noCache = Date.now()
         }
 

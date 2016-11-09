@@ -152,6 +152,15 @@ return [
                 'options' => ['admin' => true],
                 'data' => [],
             ]
+        ],
+
+        'database' => [
+            'class' => Asvae\ApiTester\Storages\DBStorage::class,
+            'options' => [
+                'table' => 'requests',
+            ],
+
+            'connection' => 'mysql'
         ]
     ]
 ];

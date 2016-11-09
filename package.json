@@ -12,7 +12,6 @@
     "font-awesome": "^4.6.1",
     "gulp": "^3.9.1",
     "jquery": "^3.0.0",
-    "jquery-mask-plugin": "^1.14.0",
     "jsoneditor": "^5.5.6",
     "laravel-elixir": "^6.0.0-1",
     "laravel-elixir-browserify-official": "^0.1.2",
@@ -24,10 +23,9 @@
     "vue": "^1.0.21",
     "vue-hot-reload-api": "^2.0.5",
     "vue-resource": "^0.9.3",
-    "vue-strap": "^1.0.7",
     "vueify": "^8.3.9",
     "vueify-insert-css": "^1.0.0",
-    "vuex": "^1.0.0-rc.2"
+    "vuex": "^2.0.0-rc.5"
   },
   "browserify": {
     "transform": [

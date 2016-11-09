@@ -1,6 +1,6 @@
 <template>
     <form class="action-panel control has-addons"
-          @submit.prevent="scheduleRequest(request)"
+          @submit.prevent="$store.dispatch('scheduleRequest', request)"
     >
         <vm-request-type-select
                 :method="request.method"
@@ -14,15 +14,15 @@
                v-model="request.path"
         >
 
-        <button class="button is-success is-icon"
+        <button class="button is-success"
                 :class="{'is-loading': sending}"
                 type="submit"
                 title="Send"
         >
             <span class="icon">
-                <i class="fa fa-send-o"> </i>
+                <i class="fa fa-send-o"></i>
             </span>
-            <span>Send request</span>
+            <span>Send</span>
         </button>
 
         <button class="button is-primary"
@@ -49,48 +49,21 @@
     import vmRequestTypeSelect from './request-type-select.vue'
     import requestEditorData from '../edit-block/request-editor/request-editor-data.js'
 
-    import {
-            loadRequests,
-            setCurrentRequest,
-            scheduleRequest
-    } from '../../vuex/actions.js'
-
-    import {saveRequest, updateRequest} from './request-actions.js'
-
     export default {
         data: () => requestEditorData,
         components: {
             vmRequestTypeSelect,
         },
-        vuex: {
-            getters: {
-                sending: (store) => store.request.isSending,
-                saving: (store) => store.request.isSaving,
-            },
-            actions: {
-                saveRequest,
-                updateRequest,
-                loadRequests,
-                setCurrentRequest,
-                scheduleRequest,
-            },
-        },
         methods: {
             save (){
                 // Saves or updates depending on whether request has id
-                let afterUpdate = () => {
-                    this.loadRequests()
-                }
+                let action = this.request.id ? 'updateRequest' : 'saveRequest'
 
-                let request = this.request
-                request.id ? this.updateRequest(request, afterUpdate) : this.saveRequest(request, afterUpdate)
+                this.$store.dispatch(action, this.request)
             },
             copy(){
                 // Just saves request.
-                let afterSave = () => {
-                    this.loadRequests()
-                }
-                this.saveRequest(this.request, afterSave)
+                this.$store.dispatch('saveRequest', this.request)
             }
         }
     }
@@ -119,5 +92,9 @@
         background-color: #ffffff;
         color: #69707a;
         border-color: #1fc8db;
+    }
+
+    .button {
+        overflow: hidden;
     }
 </style>

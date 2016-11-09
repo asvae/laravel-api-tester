@@ -79,19 +79,15 @@ class RequestController extends Controller
     }
 
     /**
-     * @param \Asvae\ApiTester\Http\Requests\UpdateRequest $request
-     * @param  string                                      $request
-     *
+     * @param UpdateRequest $request
      * @return \Illuminate\Http\Response
      * @internal param int $id
-     *
      */
     public function update(UpdateRequest $request)
     {
         $requestEntity = $this->repository->find($request->id);
 
-        // TODO What's happening in here?
-        if (!$requestEntity instanceof RequestEntity) {
+        if (is_null($requestEntity)) {
             return response(404);
         }
 

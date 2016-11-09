@@ -4,11 +4,12 @@
                type="text"
                placeholder="Search"
                title="Search"
-               v-model="text"
+               :value="search"
+               @input="monitorSearch"
         >
         <a class="button is-white is-primary"
-           v-if="text !== ''"
-           @click="reset"
+           v-if="search !== ''"
+           @click="$store.dispatch('setSearch', '')"
         >
             <i class="fa fa-remove"></i>
         </a>
@@ -17,39 +18,21 @@
 
 <script>
     export default {
-        data (){
-            return {
-                text: ''
-            }
-        },
-        watch: {
-            search (search) {
-                this.text = search
-            },
-            text (text) {
-                this.setSearch(text)
-            },
-        },
-        vuex: {
-            getters: {
-                search: (state) => state.search.search
-            },
-            actions: {
-                setSearch ({dispatch}, search){
-                    dispatch('SET_SEARCH', search)
-                },
-            }
-        },
         methods: {
-            reset(){
-                this.text = ''
+            monitorSearch (e){
+                this.$store.dispatch('setSearch', e.target.value)
+            }
+        },
+        computed: {
+            search (){
+                return this.$store.getters.search
             }
         }
     }
 </script>
 
 <style scoped>
-    .search{
+    .search {
         margin-bottom: 0;
     }
 </style>

@@ -1,11 +1,20 @@
-const state = {
-    search: '',
-}
+// Search module
 
-const mutations = {
-    SET_SEARCH: (state, search) => {
-        state.search = search
+export default {
+    state: {
+        search: '',
     },
+    getters: {
+        search: state => state.search
+    },
+    mutations: {
+        'set-search': (state, search) => {
+            state.search = search
+        },
+    },
+    actions: {
+        setSearch ({commit}, search){
+            commit('set-search', search)
+        },
+    }
 }
-
-export default {state, mutations}
