@@ -21,11 +21,10 @@
 
         <div class="column is-narrow">
             <button type="button"
-                    :disabled=""
                     class="button is-danger  is-outlined is-icon"
                     @click="remove"
             >
-                <span class="icon" v-text="'×'"></span>
+                <span class="icon">×</span>
             </button>
         </div>
 

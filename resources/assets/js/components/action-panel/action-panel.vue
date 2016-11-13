@@ -26,7 +26,7 @@
         </button>
 
         <button class="button is-primary"
-                :class="{'is-loading': $activeActions['requests/store'] || $activeActions['requests/update']}"
+                :class="{'is-loading': loads}"
                 type="button"
                 @click="save"
                 title="Save"
@@ -64,6 +64,12 @@
             copy(){
                 // Just saves request.
                 this.$store.dispatch('saveRequest', this.request)
+            }
+        },
+        computed: {
+            loads (){
+                return this.$api_demo_3.runsUrl('requests/store')
+                || this.$api_demo_3.runsUrl('requests/update')
             }
         }
     }

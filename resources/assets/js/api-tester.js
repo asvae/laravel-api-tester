@@ -3,6 +3,7 @@ import './plugins/globals.js'
 import './vuex/vuex-installer.js'
 import './plugins/api_demo/api-demo-installer.js'
 import './plugins/api_demo_2/api-demo-installer.js'
+import './plugins/api_demo_3/installer.js'
 
 import Vue from 'vue'
 import vmApiTesterMain from './api-tester.vue'

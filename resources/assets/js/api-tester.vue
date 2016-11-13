@@ -73,6 +73,7 @@ Application main page.
 
 We decided to forsake all the mobile support stuff. It requires bulma @media
 which requires scss in .vue file, which is not supported by phpstorm ATM.
+
 <style scoped>
     .nav {
         background-color: transparent;
