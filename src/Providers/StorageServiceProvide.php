@@ -9,11 +9,15 @@
 namespace Asvae\ApiTester\Providers;
 
 
+use Asvae\ApiTester\Collections\RequestCollection;
 use Asvae\ApiTester\Contracts\StorageInterface;
 use Asvae\ApiTester\Storages\FireBaseStorage;
+use Asvae\ApiTester\Storages\JsonStorage;
 use Firebase\Token\TokenGenerator;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
+use League\Flysystem\Exception;
 
 class StorageServiceProvide extends ServiceProvider
 {
@@ -35,9 +39,25 @@ class StorageServiceProvide extends ServiceProvider
         // Регистрируем конкретный сторэйдж из списка доступных.
         $this->app->singleton(StorageInterface::class, function (Container $app) {
             // Defined driver
-            $driver = config('api-tester.storage_drivers')[config('api-tester.storage_driver')];
+            $selectedDriver = config('api-tester.storage_driver');
+            $driverClassName = config('api-tester.storage_drivers')[$selectedDriver];
+            $requestCollection = $app->make(RequestCollection::class);
 
-            return $app->make($driver['class'], $driver['options']);
+            if ($selectedDriver === 'firebase'){
+                $tokenGenerator = $app->make(TokenGenerator::class);
+                $base = config('api-tester.storage_drivers.firebase.options.base');
+
+                return new FireBaseStorage($requestCollection, $tokenGenerator, $base);
+            }
+
+            if ($selectedDriver === 'file'){
+                $fileSystem = $app->make(Filesystem::class);
+                $path = config('api-tester.storage_drivers.file.options.path');
+
+                return new JsonStorage($fileSystem, $requestCollection, $path);
+            }
+
+            throw new Exception("Driver $selectedDriver doesn't exist. Use either 'firebase' or 'file'.");
         });
 
         // Регистрация токен-генератора. Привязывается к ключу а не классу,

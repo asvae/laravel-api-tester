@@ -3,6 +3,7 @@
 namespace Asvae\ApiTester\Providers;
 
 
+use Asvae\ApiTester\Collections\RouteCollection;
 use Asvae\ApiTester\Contracts\RequestRepositoryInterface;
 use Asvae\ApiTester\Contracts\RouteRepositoryInterface;
 use Asvae\ApiTester\Repositories\RouteRepository;
@@ -33,7 +34,9 @@ class RepositoryServiceProvider extends ServiceProvider
                 $repositories[] = $app->make($repository);
             }
 
-            return $app->make(RouteRepository::class, ['repositories' => $repositories]);
+            $routeCollection = $app->make(RouteCollection::class);
+
+            return new RouteRepository($routeCollection, $repositories);
         });
 
         $this->app->singleton(

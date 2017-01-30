@@ -54,14 +54,29 @@ class RouteInfo implements Arrayable, JsonSerializable
     public function toArray()
     {
         return array_merge([
-            'name' => $this->route->getName(),
-            'methods' => $this->route->getMethods(),
-            'domain' => $this->route->domain(),
-            'path' => $this->preparePath(),
-            'action' => $this->route->getAction(),
-            'wheres' => $this->extractWheres(),
-            'errors' => $this->errors,
+            'name'    => $this->route->getName(),
+            'methods' => $this->getMethods(),
+            'domain'  => $this->route->domain(),
+            'path'    => $this->preparePath(),
+            'action'  => $this->route->getAction(),
+            'wheres'  => $this->extractWheres(),
+            'errors'  => $this->errors,
         ], $this->getMeta(), $this->options);
+    }
+
+    /**
+     * Cross version get methods.
+     *
+     * @return array
+     */
+    private function getMethods()
+    {
+        // Laravel <5.4
+        if (method_exists($this->route, 'getMethods')) {
+            $this->route->getMethods();
+        }
+        // Laravel 5.4+
+        return $this->route->methods();
     }
 
     protected function extractWheres()
@@ -73,7 +88,7 @@ class RouteInfo implements Arrayable, JsonSerializable
 
         // Хак, чтобы в json всегда был объект
         if (empty($wheres)) {
-            return (object)[];
+            return (object) [];
         }
 
         return $wheres;
@@ -94,7 +109,7 @@ class RouteInfo implements Arrayable, JsonSerializable
     {
         $reflection = $this->getActionReflection();
 
-        if (!is_null($reflection)) {
+        if (! is_null($reflection)) {
             return $reflection->getDocComment();
         }
 
@@ -114,7 +129,7 @@ class RouteInfo implements Arrayable, JsonSerializable
             // TODO Write the reasoning behind following lines.
             try {
                 $class = $parameter->getClass();
-            } catch (\ReflectionException $e){
+            } catch (\ReflectionException $e) {
                 break;
             }
 
@@ -170,18 +185,21 @@ class RouteInfo implements Arrayable, JsonSerializable
             list($controller, $action) = explode('@', $uses);
 
             // Если нет контроллера.
-            if (!class_exists($controller)) {
+            if (! class_exists($controller)) {
                 $this->setError('uses', 'controller does not exists');
+
                 return null;
             }
 
             // Если нет метода в контроллере.
-            if (!method_exists($controller, $action)) {
+            if (! method_exists($controller, $action)) {
                 $this->setError('uses', 'controller@method does not exists');
+
                 return null;
             }
 
-            return $this->actionReflection = new \ReflectionMethod($controller, $action);
+            return $this->actionReflection = new \ReflectionMethod($controller,
+                $action);
         }
 
         if (is_callable($uses)) {
@@ -195,12 +213,27 @@ class RouteInfo implements Arrayable, JsonSerializable
 
     protected function preparePath()
     {
-        $path = $this->route->getPath();
+        $path = $this->getUri();
         if ($path === '/') {
             return $path;
         }
 
         return trim($path, '/');
+    }
+
+    /**
+     * Backwards compatible uri getter.
+     *
+     * @return string
+     */
+    protected function getUri(){
+        if (method_exists($this->route, 'getPath')){
+            // Laravel <5.4
+            return $this->route->getPath();
+        }
+
+        // Laravel 5.4+
+        return $this->route->uri();
     }
 
     protected function setError($type, $text, $params = [])
@@ -215,9 +248,9 @@ class RouteInfo implements Arrayable, JsonSerializable
     {
         if ($this->addMeta) {
             return [
-                'annotation' => $this->extractAnnotation(),
+                'annotation'  => $this->extractAnnotation(),
                 'formRequest' => $this->extractFormRequest(),
-                'errors' => $this->errors,
+                'errors'      => $this->errors,
             ];
         }
 
