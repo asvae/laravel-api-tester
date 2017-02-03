@@ -73,7 +73,7 @@ class RouteInfo implements Arrayable, JsonSerializable
     {
         // Laravel <5.4
         if (method_exists($this->route, 'getMethods')) {
-            $this->route->getMethods();
+            return $this->route->getMethods();
         }
         // Laravel 5.4+
         return $this->route->methods();
