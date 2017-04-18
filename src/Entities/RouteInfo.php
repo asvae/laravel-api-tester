@@ -41,11 +41,17 @@ class RouteInfo implements Arrayable, JsonSerializable
      */
     private $route;
 
+    /**
+     * @var bool
+     */
+    private $analyzeRequests;
+
     public function __construct($route, $options = [])
     {
         $this->route = $route;
         $this->options = $options;
         $this->addMeta = config('api-tester.route_meta');
+        $this->analyzeRequests = config('api-tester.analyze_requests');
     }
 
     /**
@@ -141,7 +147,7 @@ class RouteInfo implements Arrayable, JsonSerializable
             }
 
             // Если это форм-реквест.
-            if (is_subclass_of($class->name, FormRequest::class)) {
+            if (is_subclass_of($class->name, FormRequest::class && $this->analyzeRequests)) {
 
                 // Для вызова нестатического метода на объекте, нам необходим инстанс объекта.
                 // Мы используем build вместо make, чтобы избежать автоматического запуска валидации.

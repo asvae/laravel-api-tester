@@ -55,10 +55,23 @@ return [
     | !WARNING!
     | This sometimes causes fatal errors, rendering api tester unusable.
     | Set to false if that's your case.
-    |
     */
 
     'route_meta' => true,
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Request analysis
+    |--------------------------------------------------------------------------
+    | Display request rules..
+    |
+    | !WARNING!
+    | This sometimes causes fatal errors, rendering api tester unusable.
+    | Set to false if that's your case.
+    */
+
+    'request_rules' => true,
 
     /*
     |--------------------------------------------------------------------------
