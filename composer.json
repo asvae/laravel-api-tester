@@ -30,5 +30,12 @@
         "psr-4": {
             "Asvae\\ApiTester\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Asvae\\ApiTester\\ServiceProvider"
+            ]
+        }
     }
 }
