@@ -9,13 +9,13 @@
     <meta name="firebaseToken" content="{{ $firebaseToken }}">
     <meta name="firebaseSource" content="{{ $firebaseSource }}">
     <base href="{{ url(config('api-tester.route')).'/' }}">
-    <link media="all" type="text/css" rel="stylesheet" href="{{ route('api-tester.file', ['file' => 'api-tester.css']) }}">
+    <link media="all" type="text/css" rel="stylesheet" href="{{ route('api-tester.file', ['_file' => 'api-tester.css']) }}">
     <title>Laravel api tester</title>
 </head>
 <body>
 <div id="api-tester">
     <vm-api-tester-main></vm-api-tester-main>
 </div>
-  <script src="{{ route('api-tester.file', ['file' => 'api-tester.js']) }}"></script>
+  <script src="{{ route('api-tester.file', ['_file' => 'api-tester.js']) }}"></script>
 </body>
 </html>

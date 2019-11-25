@@ -4,6 +4,7 @@ namespace Asvae\ApiTester\Entities;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use JsonSerializable;
 
 /**
@@ -187,7 +188,7 @@ class RouteInfo implements Arrayable, JsonSerializable
         $uses = $this->route->getAction()['uses'];
 
         // Если это строка и она содержит @, значит мы имем дело с методом контроллера.
-        if (is_string($uses) && str_contains($uses, '@')) {
+        if (is_string($uses) && Str::contains($uses, '@')) {
             list($controller, $action) = explode('@', $uses);
 
             // Если нет контроллера.
