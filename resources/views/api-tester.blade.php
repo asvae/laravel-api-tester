@@ -16,6 +16,6 @@
 <div id="api-tester">
     <vm-api-tester-main></vm-api-tester-main>
 </div>
-  <script src="{{ route('api-tester.file', ['_file' => 'api-tester.js']) }}"></script>
+<script src="{{ route('api-tester.file', ['_file' => 'api-tester.js']) }}"></script>
 </body>
 </html>

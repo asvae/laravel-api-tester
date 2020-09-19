@@ -54,7 +54,7 @@ class JsonStorage implements StorageInterface
         $this->collection = $collection;
         $path = explode('/', $path);
         $this->filename = array_pop($path);
-        $this->path = implode($path, '/');
+        $this->path = implode('/'.$path);
     }
 
     /**

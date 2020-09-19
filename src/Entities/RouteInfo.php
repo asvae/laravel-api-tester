@@ -4,8 +4,8 @@ namespace Asvae\ApiTester\Entities;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 use JsonSerializable;
+use Illuminate\Support\Str;
 
 /**
  * Frontend ready route
