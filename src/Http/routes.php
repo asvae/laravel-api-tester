@@ -23,7 +23,7 @@ $router->group(['prefix' => 'assets'], function ($router) {
     $filePattern = '^([a-z0-9_\-\.]+)$';
 
     $router->get('fonts/{_file}', [
-        'as' => 'image',
+        'as' => 'font',
         'uses' => 'AssetsController@font'
     ])->where('_file', $filePattern);
 
