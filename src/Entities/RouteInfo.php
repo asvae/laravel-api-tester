@@ -135,7 +135,9 @@ class RouteInfo implements Arrayable, JsonSerializable
 
             // TODO Write the reasoning behind following lines.
             try {
-                $class = $parameter->getClass();
+                $class = $parameter->getType() && !$parameter->getType()->isBuiltin()
+                    ? new \ReflectionClass($parameter->getType()->getName())
+                    : null;
             } catch (\ReflectionException $e) {
                 break;
             }
